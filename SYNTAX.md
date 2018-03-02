@@ -30,7 +30,7 @@ i bims Begrüßung vong "Hallo, Welt!" her
 Auch Funktionen werden mit dem selben Verb deklariert.
 
 ```
-i bims [Identifikator] vong Funktionigkeit
+i bims [Identifikator] vong Funktionigkeit mit [(Parameter1, Parameter2, ...)]
   [Anweisungen]
 her
 ```
@@ -47,6 +47,8 @@ Die Vongsprache bietet Ihnen die folgende Kontrollstrukturen an. In der Vongspra
 
 ```
 bims [Variable] vong Wahrigkeit
+  [Anweisungen]
+am Sonstigkeit
   [Anweisungen]
 her
 ```
