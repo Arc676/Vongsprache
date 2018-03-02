@@ -1,16 +1,28 @@
-# Vongsprache Syntax
+# Syntax der Vongsprache
 
 ## Deklarationen
 
+### Identifikatoren
+
+Schlüsselwörter dürfen nicht als Identifikatoren benutzt werden.
+
 ### Variablen
+
+Die Vongsprache benutzt was jetzt auch [Duck Typing](https://de.wikipedia.org/wiki/Duck-Typing) genannt wird. Wie Python, die Vongsprache besitzt technisch gesehen eine starke Typisierung, aber Variablen dürfen in andere Typen umgewandelt werden.
 
 Variablen werden mit `bimsen` deklariert.
 
 ```
-i bims eine Ganzzahl vong 1 her
-i bims eine RationaleZahl vong 2.5 her
-i bims eine Bool vong Ja her
-i bims eine Zeichenfolge vong "Hallo, Welt!" her
+i bims [Identifikator] vong [Wert] her
+```
+
+Hier sind einige Beispiele.
+
+```
+i bims Alter vong 26 her
+i bims RationaleZahl vong 2.5 her
+i bims Bool vong Ja her
+i bims Begrüßung vong "Hallo, Welt!" her
 ```
 
 ### Funktionen
@@ -18,7 +30,7 @@ i bims eine Zeichenfolge vong "Hallo, Welt!" her
 Auch Funktionen werden mit dem selben Verb deklariert.
 
 ```
-i bims eine Funktion vong
+i bims [Identifikator] vong Funktionigkeit
   [Anweisungen]
 her
 ```
@@ -40,9 +52,15 @@ Die Vongsprache hat Zählschleifen und Kopfgesteuerte Schleifen. Die folgende Be
 #### Zählschleifen
 
 ```
-mit Zähler vong Start bis Ende
+mit [Zähler] vong [Start] bis [Ende]
   [Anweisungen]
 her
 ```
 
 #### Kopfgesteuerte Schleifen
+
+```
+solange [Variable] vong Wahrigkeit
+  [Anweisungen]
+her bims
+```
