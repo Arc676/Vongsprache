@@ -1,12 +1,10 @@
 # Vongsprache Syntax
 
-(i bims am gearbeitet werden)
-
 ## Deklarationen
 
 ### Variablen
 
-Variablen werden mit `bimsen` deklariert
+Variablen werden mit `bimsen` deklariert.
 
 ```
 i bims eine Ganzzahl vong 1 her
@@ -17,7 +15,7 @@ i bims eine Zeichenfolge vong "Hallo, Welt!" her
 
 ### Funktionen
 
-Auch Funktionen werden damit deklariert
+Auch Funktionen werden mit dem selben Verb deklariert.
 
 ```
 i bims eine Funktion vong
@@ -31,8 +29,20 @@ her
 
 ## Kontrollstruktur
 
+Die Vongsprache bietet Ihnen die folgende Kontrollstrukturen an.
+
+### Bedingte Anweisungen
+
 ### Schleifen
 
+Die Vongsprache hat Zählschleifen und Kopfgesteuerte Schleifen. Die folgende Beispiele zeigen, wie man diese Schleifen nutzt.
+
 #### Zählschleifen
+
+```
+mit Zähler vong Start bis Ende
+  [Anweisungen]
+her
+```
 
 #### Kopfgesteuerte Schleifen
