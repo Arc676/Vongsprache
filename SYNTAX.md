@@ -39,11 +39,17 @@ her
 
 ## Operatoren
 
-## Kontrollstruktur
+## Kontrollstrukturen
 
-Die Vongsprache bietet Ihnen die folgende Kontrollstrukturen an.
+Die Vongsprache bietet Ihnen die folgende Kontrollstrukturen an. In der Vongsprache gibt es keine boolesche Ausdrücke; deshalb brauchen bedingte Anweisungen und Schleifen boolesche Variablen.
 
 ### Bedingte Anweisungen
+
+```
+bims [Variable] vong Wahrigkeit
+  [Anweisungen]
+her
+```
 
 ### Schleifen
 
