@@ -34,12 +34,14 @@ typedef union {
     int intVal;
     float floatVal;
     char* charVal;
-    Token tokenVal;
+    Token* tokenVal1;
+    Token* tokenVal2;
+    Token* tokenVal3;
 } TokenData;
 
 typedef struct {
     TokenType type;
-    TokenData tokenData;
+    TokenData* tokenData;
 } Token;
 
 #endif
