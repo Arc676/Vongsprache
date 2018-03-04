@@ -30,18 +30,30 @@ typedef enum : int {
     OPERATOR
 } TokenType;
 
+typedef enum : uint32_t {
+    VALUE,
+    ARGUMENTS,
+    FUNCTION_BODY,
+    FUNCTION_CALL,
+    CONDITION,
+    THEN_BLOCK,
+    ELSE_BLOCK,
+    OPERATOR,
+    LEFT_VAR,
+    RIGHT_VAR,
+    PROG
+} TokenDataType;
+
 typedef union {
     int intVal;
     float floatVal;
     char* charVal;
-    Token* tokenVal1;
-    Token* tokenVal2;
-    Token* tokenVal3;
+    Token* tokenVal;
 } TokenData;
 
 typedef struct {
     TokenType type;
-    TokenData* tokenData;
+    hashtable_t* tokenData;
 } Token;
 
 #endif
