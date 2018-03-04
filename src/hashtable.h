@@ -1,101 +1,75 @@
-//Vongsprache interpreter
-// Copyright (c) 2018 LordKorea
-//Copyright (C) 2018 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
-
-//Permission is hereby granted, free of charge, to any person obtaining
-//a copy of this software and associated documentation files (the "Software"),
-//to deal in the Software without restriction, including without limitation the
-//rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-//sell copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
-
-//The above copyright notice and this permission notice shall be included in all
-//copies or substantial portions of the Software.
-
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-//FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-//COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-//IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-//CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// Hash table. Expects KEY_TYPE to be a value type.
-// Adaption for non-value KEY_TYPEs should be easy.
-
-#ifndef HASHTABLE_H
-#define HASHTABLE_H
+#ifndef HASHTABLE_H_
+#define HASHTABLE_H_
 
 #include <stddef.h>
 #include <stdint.h>
-#include <stdlib.h>
 
-// Provide defaults for key and value type.
-#ifndef KEY_TYPE
-#define KEY_TYPE uint32_t
-#endif
-#ifndef VALUE_TYPE
-#define VALUE_TYPE void*
-#endif
+#define HASHTABLE_KEY_TYPE uint32_t
+#define HASHTABLE_VALUE_TYPE void*
 
-// A hash code function.
-typedef uint32_t (*hash_code)(KEY_TYPE);
+// A hash code function, converting a key to a 32b integer.
+typedef uint32_t (*hashtable_hash_code)(HASHTABLE_KEY_TYPE);
 
-// A node of the table.
+// A function checking for equality of keys.
+typedef int (*hashtable_key_check)(HASHTABLE_KEY_TYPE, HASHTABLE_KEY_TYPE);
+
+// A single node (either bucket or overflow) of the hashtable.
 typedef struct hashtable_node_ts
 {
-    // 0: Not present 1: Present
-    uint8_t state;
-    KEY_TYPE key;
-    VALUE_TYPE val;
-    struct hashtable_node_ts* follow;
+  // Invariants:
+  // State is either 0 (absent) or 1 (present).
+  // The follow pointers make a null-terminated chain.
+  // Each node in a chain except for the first one does not need to have its
+  // state set to anything meaningful.
+  uint8_t state;
+  HASHTABLE_KEY_TYPE key;
+  HASHTABLE_VALUE_TYPE val;
+  struct hashtable_node_ts* follow;
 } hashtable_node_t;
 
-// A hash table.
+// The hashtable itself.
 typedef struct
 {
-    // Table data.
-    size_t size;
-    size_t capacity;
-    hashtable_node_t* backend;
+  // Table data.
+  size_t size;
+  size_t capacity;
+  size_t capacity_log;
+  hashtable_node_t* backend;
 
-    // Overflow management.
-    hashtable_node_t* overflow;
-    size_t overflow_ptr;
+  // Overflow management.
+  hashtable_node_t* overflow_heap;
+  size_t overflow_heap_ptr;
 
-    // Hash code function.
-    hash_code code_fun;
+  // Hash code function.
+  hashtable_hash_code hash_code_fun;
+
+  // Key equality check.
+  hashtable_key_check key_check_fun;
 } hashtable_t;
 
-void ht_insert(hashtable_t*, KEY_TYPE, VALUE_TYPE);
-
-// Identity function, default hash code.
-uint32_t ht_identity(uint32_t x);
-
 // Creates a hash table.
-void ht_create(hashtable_t* ht, hash_code hc);
+// The hash code function may be NULL if the HASHTABLE_KEY_TYPE can be converted
+// to a uint32_t.
+// If the key check is NULL, simple == equality will be checked.
+void ht_create(hashtable_t*, hashtable_hash_code, hashtable_key_check);
 
 // Destroys a hash table.
-void ht_destroy(hashtable_t* ht);
+void ht_destroy(hashtable_t*);
 
-// Hash function.
-size_t ht_hash(hashtable_t* ht, uint32_t key);
-
-// Finds a bucket for the given key.
-size_t ht_keyfind(hashtable_t* ht, KEY_TYPE key);
-
-// Rehashs the table if necessary.
-void ht_maybe_rehash(hashtable_t* ht);
-
-// Inserts something into the hash table.
-void ht_insert(hashtable_t* ht, KEY_TYPE key, VALUE_TYPE value);
+// Insert a key into the table. Overwrites the key if already present.
+// Might trigger a rehash.
+void ht_insert(hashtable_t*, HASHTABLE_KEY_TYPE, HASHTABLE_VALUE_TYPE);
 
 // Finds an entry in the hash table. Returns 0 on failure.
-VALUE_TYPE ht_find(hashtable_t* ht, KEY_TYPE key);
+HASHTABLE_VALUE_TYPE ht_find(hashtable_t*, HASHTABLE_KEY_TYPE);
+
+// Checks whether an entry is contained in the hash table.
+int ht_contains(hashtable_t*, HASHTABLE_KEY_TYPE);
 
 // Removes an entry from the hash table.
-void ht_remove(hashtable_t* ht, KEY_TYPE key);
+void ht_remove(hashtable_t*, HASHTABLE_KEY_TYPE);
 
-#undef KEY_TYPE
-#undef VALUE_TYPE
+// Fetches the size.
+size_t ht_size(hashtable_t*);
 
-#endif
+#endif  // HASHTABLE_H_
