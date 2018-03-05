@@ -29,6 +29,8 @@ const char** keywords = {
     "her"
 };
 
+const char* punctuation = "()[]{},"
+
 Token readNext(FILE* fp) {
     char current = peek(fp);
     while (isWhitespace(current)) {
@@ -51,6 +53,9 @@ Token readNext(FILE* fp) {
     }
     if (isValidIDStart(current)) {
         return readIdentifier(fp);
+    }
+    if (isPunc(current)) {
+        return createPunctuationToken(current);
     }
     char msg[30];
     sprintf(msg, "Parsing failed on character %c", current);
@@ -179,4 +184,13 @@ int isWhitespace(char c) {
 
 int isDigit(char c) {
     return c >= '0' && c <= '9';
+}
+
+int isPunc(char c) {
+    for (int i = 0; i < strlen(punctuation); i++) {
+        if (c == punctuation[i]) {
+            return 1;
+        }
+    }
+    return 0;
 }

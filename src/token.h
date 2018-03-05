@@ -62,17 +62,19 @@ typedef struct {
  * Utility function for initializing tokens
  * @param type the type of token
  */
-Token createToken(TokenType type);
+void initializeToken(TokenType type);
+
+Token createPunctuationToken(char punct);
 
 /**
  * Utility function for creating token data
- * @param dataType the data type stored in the token
+ * @param type the token type
  * @param floatVal float value to store, if any
  * @param charVal string value to store, if any
  * @param tokenVal token value to store, if any
  * @return a token with the specified data
  */
-TokenData* createTokenData(TokenType dataType, float floatVal,
+TokenData* createTokenData(TokenType type, float floatVal,
     char* charVal, Token* tokenVal);
 
 #endif

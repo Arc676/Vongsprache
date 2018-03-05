@@ -20,7 +20,7 @@
 
 #include "token.h"
 
-TokenData* createTokenData(TokenDataType dataType, float floatVal,
+TokenData* createTokenData(TokenDataType type, float floatVal,
     char* charVal, Token* tokenVal) {
     TokenData* data = (TokenData*)malloc(sizeof(TokenData));
     switch (dataType) {
@@ -41,6 +41,15 @@ TokenData* createTokenData(TokenDataType dataType, float floatVal,
             break;
     }
     return data;
+}
+
+Token createPunctuationToken(char punct) {
+    char str[2] = {punct, 0};
+    TokenData* data = createTokenData(PUNCTUATION, NULL, str, NULL);
+    Token token;
+    initializeToken(&token, PUNCTUATION);
+    ht_insert(token.tokenData, VALUE, data);
+    return token;
 }
 
 void initializeToken(Token* token, TokenType type) {

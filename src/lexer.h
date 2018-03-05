@@ -35,6 +35,11 @@
 const char** keywords;
 
 /**
+ * Acceptable punctuation characters
+ */
+const char* punctuation;
+
+/**
  * Token currently being parsed
  */
 Token currentToken = NULL;
@@ -138,5 +143,12 @@ int isWhitespace(char c);
  * @return whether the character matches [0-9]
  */
 int isDigit(char c);
+
+/**
+ * Determines whether a character is an acceptable punctuation mark
+ * @param c character to check
+ * @return whether the character is an accepted punctuation mark
+ */
+ int isPunc(char c);
 
 #endif
