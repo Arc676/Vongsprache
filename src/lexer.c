@@ -26,7 +26,12 @@ const char** keywords = {
     "vong",
     "bis",
     "mit",
-    "her"
+    "her",
+    "Funktionigkeit",
+    "am",
+    "Wahrigkeit",
+    "Sonstigkeit",
+    "solange",
 };
 
 const char* punctuation = "()[]{},"

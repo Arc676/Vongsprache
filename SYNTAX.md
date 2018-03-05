@@ -4,11 +4,26 @@
 
 ### Identifikatoren
 
-Schlüsselwörter dürfen nicht als Identifikatoren benutzt werden.
+Schlüsselwörter, die hier unten aufgezählt werden, dürfen nicht als Identifikatoren benutzt werden. Das erste Zeichen eines Identifikatoren muss ein Unterstrich oder ein Buchstabe sein.
+
+Schlüsselwörter:
+```
+i
+bims
+vong
+her
+mit
+bis
+Funktionigkeit
+am
+Wahrigkeit
+Sonstigkeit
+solange
+```
 
 ### Variablen
 
-Die Vongsprache benutzt was jetzt auch [Duck Typing](https://de.wikipedia.org/wiki/Duck-Typing) genannt wird. Wie Python, die Vongsprache besitzt technisch gesehen eine starke Typisierung, aber Variablen dürfen in andere Typen umgewandelt werden.
+Die Vongsprache benutzt was jetzt auch [Duck Typing](https://de.wikipedia.org/wiki/Duck-Typing) oder Dynamic Typing genannt wird. Wie Python, die Vongsprache besitzt technisch gesehen eine starke Typisierung, aber Variablen dürfen in andere Typen umgewandelt werden.
 
 Variablen werden mit `bimsen` deklariert.
 
@@ -21,7 +36,6 @@ Hier sind einige Beispiele.
 ```
 i bims Alter vong 26 her
 i bims RationaleZahl vong 2.5 her
-i bims Bool vong Ja her
 i bims Begrüßung vong "Hallo, Welt!" her
 ```
 

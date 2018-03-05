@@ -27,7 +27,7 @@
 #include "stream.h"
 #include "token.h"
 
-#define KEYWORD_COUNT 6
+#define KEYWORD_COUNT 11
 
 /**
  * List of all the reserved words
