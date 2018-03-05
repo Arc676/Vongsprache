@@ -36,6 +36,7 @@ const char* keywords[KEYWORD_COUNT] = {
 
 const char* punctuation = "()[]{},";
 const char* opChars = "%+-*/=&|<>!";
+Token* currentToken = NULL;
 
 Token* readNext(FILE* fp) {
     char current = peek(fp);
@@ -93,8 +94,8 @@ Token* readNumber(FILE* fp) {
     char* literal = (char*)malloc(100);
     memset(literal, 0, 100);
     int pos = 0;
-    char c = peek(fp);
     while (1) {
+    	char c = next(fp);
         if (c == '.') {
             if (hasDot) {
                 break;
@@ -103,9 +104,11 @@ Token* readNumber(FILE* fp) {
             literal[pos++] = c;
         } else if (isDigit(c)) {
             literal[pos++] = c;
-        }
+        } else {
+			break;
+		}
     }
-    float number = (float)strtol(literal, (char**)NULL, 0);
+    float number = strtof(literal, (char**)NULL);
     free(literal);
     TokenData* data = createTokenData(NUMBER, number, NULL, NULL);
     Token* token = createToken(NUMBER);
@@ -137,6 +140,7 @@ char* readEscaped(FILE* fp, char end) {
         }
         if (escaped) {
             str[pos++] = c;
+			escaped = 0;
         } else if (c == '\\') {
             escaped = 1;
         } else if (c == end) {
@@ -152,11 +156,8 @@ char* readEscaped(FILE* fp, char end) {
 void readWhile(FILE* fp, char* str, size_t size, int (*valid)(char)) {
     memset(str, 0, size);
     int pos = 0;
-    while (!eof(fp)) {
-        char c = next(fp);
-        if (valid(c)) {
-            str[pos++] = c;
-        }
+    while (!eof(fp) && valid(peek(fp))) {
+        str[pos++] = next(fp);
     }
 }
 

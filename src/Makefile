@@ -3,6 +3,9 @@ FLAGS=-c
 OBJS=main.o stream.o hashtable.o lexer.o token.o
 OUT=vongsprache
 
+debug: FLAGS += -g -O0
+debug: vongsprache
+
 vongsprache: $(OBJS)
 	$(CC) -o $(OUT) $(OBJS)
 

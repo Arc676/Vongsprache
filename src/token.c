@@ -47,6 +47,7 @@ TokenData* createTokenData(TokenType type, float floatVal,
 Token* createToken(TokenType type) {
 	Token* token = (Token*)malloc(sizeof(Token));
     token->type = type;
+	token->tokenData = (hashtable_t*)malloc(sizeof(hashtable_t));
     ht_create(token->tokenData, NULL, NULL);
 	return token;
 }
