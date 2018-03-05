@@ -60,7 +60,12 @@ Token readNext(FILE* fp) {
         return readIdentifier(fp);
     }
     if (isPunc(current)) {
-        return createPunctuationToken(current);
+        char str[2] = {current, 0};
+        TokenData* data = createTokenData(PUNCTUATION, NULL, str, NULL);
+        Token token;
+        initializeToken(&token, PUNCTUATION);
+        ht_insert(token.tokenData, VALUE, data);
+        return token;
     }
     if (isOpChar(current)) {
         char* operator = malloc(5);

@@ -64,8 +64,6 @@ typedef struct {
  */
 void initializeToken(TokenType type);
 
-Token createPunctuationToken(char punct);
-
 /**
  * Utility function for creating token data
  * @param type the token type

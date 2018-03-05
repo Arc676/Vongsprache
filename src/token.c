@@ -43,15 +43,6 @@ TokenData* createTokenData(TokenDataType type, float floatVal,
     return data;
 }
 
-Token createPunctuationToken(char punct) {
-    char str[2] = {punct, 0};
-    TokenData* data = createTokenData(PUNCTUATION, NULL, str, NULL);
-    Token token;
-    initializeToken(&token, PUNCTUATION);
-    ht_insert(token.tokenData, VALUE, data);
-    return token;
-}
-
 void initializeToken(Token* token, TokenType type) {
     token->type = type;
     ht_create(token->tokenData, NULL, NULL);
