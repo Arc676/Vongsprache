@@ -45,7 +45,6 @@ typedef enum : uint32_t {
 } TokenDataType;
 
 typedef union {
-    int intVal;
     float floatVal;
     char* charVal;
     Token* tokenVal;

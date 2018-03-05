@@ -21,6 +21,8 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include <stdlib.h>
+
 #include "stream.h"
 #include "token.h"
 
@@ -57,5 +59,28 @@ Token readNumber(FILE* fp);
  * @return identifier token
  */
 Token readIdentifier(FILE* fp);
+
+/**
+ * Reads from the stream until the end character is reached without
+ * being escaped by a backslash
+ * @param fp FILE* from which to read
+ * @param end character to end the read
+ * @return the text read from the stream
+ */
+char* readEscaped(FILE* fp, char end);
+
+/**
+ * Determine whether a character is whitespace
+ * @param c character to check
+ * @return whether the character is a space, tab, or newline
+ */
+int isWhitespace(char c);
+
+/**
+ * Determine whether a character is a digit
+ * @param c character to check
+ * @return whether the character matches [0-9]
+ */
+int isDigit(char c);
 
 #endif
