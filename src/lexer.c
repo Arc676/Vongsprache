@@ -29,6 +29,7 @@ Token readNext(FILE* fp) {
     if (eof(fp)) {
         return NULL;
     }
+    next(fp);
     if (current == '#') {
         skipComment(fp);
         return readNext(fp);
@@ -77,6 +78,29 @@ Token readNumber(FILE* fp) {
     initializeToken(&token, NUMBER);
     ht_insert(token.tokenData, VALUE, data);
     return token;
+}
+
+char* readEscaped(FILE* fp, char end) {
+    int escaped = 0;
+    char* str = malloc(100);
+    int pos = 0;
+    while (!eof(fp)) {
+        char c = next(fp);
+        if (pos >= sizeof(str)) {
+            str = realloc(sizeof(str) + 100);
+        }
+        if (escaped) {
+            str[pos++] = c;
+        } else if (c == '\\') {
+            escaped = 1;
+        } else if (c == end) {
+            break;
+        } else {
+            str[pos++] = c;
+        }
+    }
+    str[pos] = 0;
+    return str;
 }
 
 TokenData* createTokenData(TokenDataType dataType, float floatVal,
