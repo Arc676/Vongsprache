@@ -31,7 +31,6 @@ TokenData* createTokenData(TokenDataType dataType, float floatVal,
         case KEYWORD:
         case PUNCTUATION:
         case IDENTIFIER:
-        case VARIABLE:
             data->charVal = charVal;
             break;
         case BINARY:

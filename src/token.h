@@ -26,7 +26,6 @@ typedef enum : int {
     NUMBER,
     STRING,
     KEYWORD,
-    VARIABLE,
     IDENTIFIER,
     CALL,
     BINARY,
@@ -73,7 +72,7 @@ Token createToken(TokenType type);
  * @param tokenVal token value to store, if any
  * @return a token with the specified data
  */
-TokenData* createTokenData(TokenDataType dataType, float floatVal,
+TokenData* createTokenData(TokenType dataType, float floatVal,
     char* charVal, Token* tokenVal);
 
 #endif

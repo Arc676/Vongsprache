@@ -22,6 +22,7 @@
 #define LEXER_H
 
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "stream.h"
 #include "token.h"
@@ -94,6 +95,28 @@ Token readIdentifier(FILE* fp);
  * @return the text read from the stream
  */
 char* readEscaped(FILE* fp, char end);
+
+/**
+ * Determine whether a character is a valid initial character for an
+ * identifier in the language
+ * @param c character to check
+ * @return whether the character can be an identifier's initial character
+ */
+int isValidIDStart(char c);
+
+/**
+ * Determine whether a character can be used in an identifier
+ * @param c character to check
+ * @return whether the character can be used in an identifier
+ */
+int isValidIDChar(char c);
+
+/**
+ * Determine whether a word is a keyword
+ * @param str the word to check
+ * @return whether the word is a reserved word
+ */
+int isKeyword(char* str);
 
 /**
  * Determine whether a character is whitespace

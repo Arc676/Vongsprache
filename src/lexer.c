@@ -40,6 +40,9 @@ Token readNext(FILE* fp) {
     if (isDigit(current)) {
         return readNumber(fp);
     }
+    if (isValidIDStart(current)) {
+        return readIdentifier(fp);
+    }
     char msg[30];
     sprintf(msg, "Parsing failed on character %c", current);
     err(msg);
@@ -76,6 +79,24 @@ Token readNumber(FILE* fp) {
     TokenData* data = createTokenData(NUMBER, number, NULL, NULL);
     Token token;
     initializeToken(&token, NUMBER);
+    ht_insert(token.tokenData, VALUE, data);
+    return token;
+}
+
+Token readIdentifier(FILE* fp) {
+    char* str = malloc(100);
+    memset(str, 0, sizeof(str));
+    int pos = 0;
+    while (!eof(fp)) {
+        char c = next(fp);
+        if (isValidIDChar(c)) {
+            str[pos++] = c;
+        }
+    }
+    TokenType type = isKeyword(str) ? KEYWORD : IDENTIFIER;
+    TokenData* data = createTokenData(type, 0, str, NULL);
+    Token token;
+    initializeToken(&token, type);
     ht_insert(token.tokenData, VALUE, data);
     return token;
 }
@@ -124,6 +145,14 @@ Token lexer_next(FILE* fp) {
 
 int lexer_eof(FILE* fp) {
     return lexer_peek(fp) == NULL;
+}
+
+int isValidIDStart(char c) {
+    return c == '_' || isalpha(c);
+}
+
+int isValidIDChar(char c) {
+    return isValidIDStart(c) || isDigit(c);
 }
 
 int isWhitespace(char c) {
