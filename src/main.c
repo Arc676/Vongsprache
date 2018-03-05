@@ -17,3 +17,20 @@
 //COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+#include <stdio.h>
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: vongsprache script_file\n");
+        return 1;
+    }
+    FILE* file = fopen(argv[1], "r");
+	if (!file) {
+		fprintf(stderr, "Failed to open file!\n");
+		return 1;
+	}
+	// interpret the source file
+    fclose(file);
+    return 0;
+}

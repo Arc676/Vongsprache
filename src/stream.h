@@ -23,6 +23,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+
+#define PARSE_ERROR 2
 
 /**
  * Number of line being parsed
@@ -59,7 +62,8 @@ int eof(FILE* fp);
 /**
  * Raise an error
  * @param message error message
+ * @param code the exit code
  */
-void err(char* message);
+void err(char* message, int code);
 
 #endif

@@ -43,9 +43,8 @@ int eof(FILE* fp) {
     return peek(fp) == EOF;
 }
 
-void err(char* message) {
-    char msg[strlen(message) + 30];
-    sprintf(msg, "%s: line %d, col %d", message,
+void err(char* message, int code) {
+    fprintf(stderr, "%s: line %d, col %d\n", message,
             currentlyParsingLine, currentlyParsingCol);
-    perror(msg);
+    exit(code);
 }

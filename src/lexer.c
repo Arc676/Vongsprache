@@ -72,12 +72,12 @@ Token* readNext(FILE* fp) {
         readWhile(fp, operator, 5, isOpChar);
         TokenData* data = createTokenData(OPERATOR, 0, operator, NULL);
         Token* token = createToken(OPERATOR);
-        ht_insert(token->tokenData, VALUE, operator);
+        ht_insert(token->tokenData, VALUE, data);
         return token;
     }
     char msg[30];
     sprintf(msg, "Parsing failed on character %c", current);
-    err(msg);
+    err(msg, PARSE_ERROR);
 	return NULL;
 }
 
