@@ -114,6 +114,15 @@ Token readIdentifier(FILE* fp);
 char* readEscaped(FILE* fp, char end);
 
 /**
+ * Reads from the stream while the character is valid according to the
+ * given function pointer and stores the result in the given string
+ * @param fp FILE* from which to read
+ * @param str char* into which to read from the stream
+ * @param *valid pointer to a function to validate the read characters
+ */
+void readWhile(FILE* fp, char* str, int (*valid)(char));
+
+/**
  * Determine whether a character is a valid initial character for an
  * identifier in the language
  * @param c character to check

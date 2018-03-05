@@ -46,7 +46,6 @@ Token readNext(FILE* fp) {
     if (eof(fp)) {
         return NULL;
     }
-    next(fp);
     if (current == '#') {
         skipComment(fp);
         return readNext(fp);
@@ -65,15 +64,7 @@ Token readNext(FILE* fp) {
     }
     if (isOpChar(current)) {
         char* operator = malloc(5);
-        memset(operator, 0, sizeof(operator));
-        operator[0] = current;
-        int pos = 1;
-        while (!eof(fp)) {
-            char c = next(fp);
-            if (isOpChar(c)) {
-                operator[pos++] = c;
-            }
-        }
+        readWhile(fp, operator, isOpChar);
         TokenData* data = createTokenData(OPERATOR, NULL, operator, NULL);
         Token token;
         initializeToken(&token, OPERATOR);
@@ -122,14 +113,7 @@ Token readNumber(FILE* fp) {
 
 Token readIdentifier(FILE* fp) {
     char* str = malloc(100);
-    memset(str, 0, sizeof(str));
-    int pos = 0;
-    while (!eof(fp)) {
-        char c = next(fp);
-        if (isValidIDChar(c)) {
-            str[pos++] = c;
-        }
-    }
+    readWhile(fp, str, isValidIDChar);
     TokenType type = isKeyword(str) ? KEYWORD : IDENTIFIER;
     TokenData* data = createTokenData(type, 0, str, NULL);
     Token token;
@@ -139,6 +123,7 @@ Token readIdentifier(FILE* fp) {
 }
 
 char* readEscaped(FILE* fp, char end) {
+    next(fp);
     int escaped = 0;
     char* str = malloc(100);
     int pos = 0;
@@ -159,6 +144,17 @@ char* readEscaped(FILE* fp, char end) {
     }
     str[pos] = 0;
     return str;
+}
+
+void readWhile(FILE* fp, char* str, void (*valid)(char)) {
+    memset(str, 0, sizeof(str));
+    int pos = 0;
+    while (!eof(fp)) {
+        char c = next(fp);
+        if (valid(c)) {
+            str[pos++] = c;
+        }
+    }
 }
 
 void skipComment(FILE* fp) {
