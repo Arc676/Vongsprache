@@ -21,19 +21,24 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-typedef enum : int {
+#include <stdlib.h>
+
+#include "hashtable.h"
+
+typedef enum TokenType {
     PUNCTUATION,
     NUMBER,
     STRING,
     KEYWORD,
     IDENTIFIER,
+	OPERATOR,
     CALL,
     BINARY,
     IF,
     ASSIGN
 } TokenType;
 
-typedef enum : uint32_t {
+typedef enum TokenDataType {
     VALUE,
     ARGUMENTS,
     FUNCTION_BODY,
@@ -41,11 +46,16 @@ typedef enum : uint32_t {
     CONDITION,
     THEN_BLOCK,
     ELSE_BLOCK,
-    OPERATOR,
+    OP,
     LEFT_VAR,
     RIGHT_VAR,
     PROG
 } TokenDataType;
+
+typedef struct {
+    TokenType type;
+    hashtable_t* tokenData;
+} Token;
 
 typedef union {
     float floatVal;
@@ -53,16 +63,12 @@ typedef union {
     Token* tokenVal;
 } TokenData;
 
-typedef struct {
-    TokenType type;
-    hashtable_t* tokenData;
-} Token;
-
 /**
  * Utility function for initializing tokens
  * @param type the type of token
+ * @return an initialized token of the given type
  */
-void initializeToken(TokenType type);
+Token* createToken(TokenType type);
 
 /**
  * Utility function for creating token data

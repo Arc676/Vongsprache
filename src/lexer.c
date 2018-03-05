@@ -20,7 +20,7 @@
 
 #include "lexer.h"
 
-const char** keywords = {
+const char* keywords[KEYWORD_COUNT] = {
     "i",
     "bims",
     "vong",
@@ -37,7 +37,7 @@ const char** keywords = {
 const char* punctuation = "()[]{},";
 const char* opChars = "%+-*/=&|<>!";
 
-Token readNext(FILE* fp) {
+Token* readNext(FILE* fp) {
     char current = peek(fp);
     while (isWhitespace(current)) {
         next(fp);
@@ -61,39 +61,37 @@ Token readNext(FILE* fp) {
     }
     if (isPunc(current)) {
         char str[2] = {current, 0};
-        TokenData* data = createTokenData(PUNCTUATION, NULL, str, NULL);
-        Token token;
-        initializeToken(&token, PUNCTUATION);
-        ht_insert(token.tokenData, VALUE, data);
+        TokenData* data = createTokenData(PUNCTUATION, 0, str, NULL);
+        Token* token = createToken(PUNCTUATION);
+        ht_insert(token->tokenData, VALUE, data);
         return token;
     }
     if (isOpChar(current)) {
-        char* operator = malloc(5);
-        readWhile(fp, operator, isOpChar);
-        TokenData* data = createTokenData(OPERATOR, NULL, operator, NULL);
-        Token token;
-        initializeToken(&token, OPERATOR);
-        ht_insert(token.tokenData, VALUE, operator);
+        char* operator = (char*)malloc(5);
+        readWhile(fp, operator, 5, isOpChar);
+        TokenData* data = createTokenData(OPERATOR, 0, operator, NULL);
+        Token* token = createToken(OPERATOR);
+        ht_insert(token->tokenData, VALUE, operator);
         return token;
     }
     char msg[30];
     sprintf(msg, "Parsing failed on character %c", current);
     err(msg);
+	return NULL;
 }
 
-Token readString(FILE* fp) {
+Token* readString(FILE* fp) {
     char* literal = readEscaped(fp, '"');
-    TokenData* data = createTokenData(STRING, NULL, literal, NULL);
-    Token token;
-    initializeToken(&token, STRING);
-    ht_insert(token.tokenData, VALUE, data);
+    TokenData* data = createTokenData(STRING, 0, literal, NULL);
+    Token* token = createToken(STRING);
+    ht_insert(token->tokenData, VALUE, data);
     return token;
 }
 
-Token readNumber(FILE* fp) {
+Token* readNumber(FILE* fp) {
     int hasDot = 0;
-    char* literal = malloc(100);
-    memset(literal, 0, sizeof(literal));
+    char* literal = (char*)malloc(100);
+    memset(literal, 0, 100);
     int pos = 0;
     char c = peek(fp);
     while (1) {
@@ -110,32 +108,32 @@ Token readNumber(FILE* fp) {
     float number = (float)strtol(literal, (char**)NULL, 0);
     free(literal);
     TokenData* data = createTokenData(NUMBER, number, NULL, NULL);
-    Token token;
-    initializeToken(&token, NUMBER);
-    ht_insert(token.tokenData, VALUE, data);
+    Token* token = createToken(NUMBER);
+    ht_insert(token->tokenData, VALUE, data);
     return token;
 }
 
-Token readIdentifier(FILE* fp) {
-    char* str = malloc(100);
-    readWhile(fp, str, isValidIDChar);
+Token* readIdentifier(FILE* fp) {
+    char* str = (char*)malloc(100);
+    readWhile(fp, str, 100, isValidIDChar);
     TokenType type = isKeyword(str) ? KEYWORD : IDENTIFIER;
     TokenData* data = createTokenData(type, 0, str, NULL);
-    Token token;
-    initializeToken(&token, type);
-    ht_insert(token.tokenData, VALUE, data);
+    Token* token = createToken(type);
+    ht_insert(token->tokenData, VALUE, data);
     return token;
 }
 
 char* readEscaped(FILE* fp, char end) {
     next(fp);
     int escaped = 0;
-    char* str = malloc(100);
+	size_t size = 100;
+    char* str = (char*)malloc(size);
     int pos = 0;
     while (!eof(fp)) {
         char c = next(fp);
-        if (pos >= sizeof(str)) {
-            str = realloc(sizeof(str) + 100);
+        if (pos >= size) {
+			size += 100;
+            str = realloc(str, size);
         }
         if (escaped) {
             str[pos++] = c;
@@ -151,8 +149,8 @@ char* readEscaped(FILE* fp, char end) {
     return str;
 }
 
-void readWhile(FILE* fp, char* str, void (*valid)(char)) {
-    memset(str, 0, sizeof(str));
+void readWhile(FILE* fp, char* str, size_t size, int (*valid)(char)) {
+    memset(str, 0, size);
     int pos = 0;
     while (!eof(fp)) {
         char c = next(fp);
@@ -171,14 +169,21 @@ void skipComment(FILE* fp) {
     next(fp);
 }
 
-Token lexer_peek(FILE* fp) {
-    return current || (current = readNext(fp));
+Token* lexer_peek(FILE* fp) {
+	if (currentToken) {
+		return currentToken;
+	}
+	currentToken = readNext(fp);
+    return currentToken;
 }
 
-Token lexer_next(FILE* fp) {
-    Token token = current;
-    current = NULL;
-    return token || readNext(fp);
+Token* lexer_next(FILE* fp) {
+    Token* token = currentToken;
+    currentToken = NULL;
+	if (token) {
+		return token;
+	}
+    return readNext(fp);
 }
 
 int lexer_eof(FILE* fp) {
@@ -211,14 +216,14 @@ int isDigit(char c) {
 }
 
 int isPunc(char c) {
-    return charInString(c, punctuation)
+    return charInString(c, punctuation);
 }
 
 int isOpChar(char c) {
     return charInString(c, opChars);
 }
 
-int charInString(char c, char* str) {
+int charInString(char c, const char* str) {
     for (int i = 0; i < strlen(str); i++) {
         if (c == str[i]) {
             return 1;

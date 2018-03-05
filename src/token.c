@@ -20,10 +20,10 @@
 
 #include "token.h"
 
-TokenData* createTokenData(TokenDataType type, float floatVal,
+TokenData* createTokenData(TokenType type, float floatVal,
     char* charVal, Token* tokenVal) {
     TokenData* data = (TokenData*)malloc(sizeof(TokenData));
-    switch (dataType) {
+    switch (type) {
         case NUMBER:
             data->floatVal = floatVal;
             break;
@@ -31,6 +31,7 @@ TokenData* createTokenData(TokenDataType type, float floatVal,
         case KEYWORD:
         case PUNCTUATION:
         case IDENTIFIER:
+		case OPERATOR:
             data->charVal = charVal;
             break;
         case BINARY:
@@ -43,7 +44,9 @@ TokenData* createTokenData(TokenDataType type, float floatVal,
     return data;
 }
 
-void initializeToken(Token* token, TokenType type) {
+Token* createToken(TokenType type) {
+	Token* token = (Token*)malloc(sizeof(Token));
     token->type = type;
     ht_create(token->tokenData, NULL, NULL);
+	return token;
 }

@@ -21,7 +21,6 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include <stdlib.h>
 #include <ctype.h>
 
 #include "stream.h"
@@ -32,7 +31,7 @@
 /**
  * List of all the reserved words
  */
-const char** keywords;
+const char* keywords[KEYWORD_COUNT];
 
 /**
  * Acceptable punctuation characters
@@ -47,21 +46,21 @@ const char* opChars;
 /**
  * Token currently being parsed
  */
-Token currentToken = NULL;
+Token* currentToken;
 
 /**
  * Peek at current token without removing it from the stream
  * @param fp FILE* from which to peek
  * @return current token
  */
-Token lexer_peek(FILE* fp);
+Token* lexer_peek(FILE* fp);
 
 /**
  * Obtain and remove the next token in the stream
  * @param fp FILE* from which to peek
  * @return the next token in the stream
  */
-Token lexer_next(FILE* fp);
+Token* lexer_next(FILE* fp);
 
 /**
  * Determine whether the token stream has ended
@@ -75,7 +74,7 @@ int lexer_eof(FILE* fp);
  * @param fp FILE* from which to read
  * @return parsed token
  */
-Token readNext(FILE* fp);
+Token* readNext(FILE* fp);
 
 /**
  * Skips a comment in the source file by reading until newline
@@ -88,21 +87,21 @@ void skipComment(FILE* fp);
  * @param fp FILE* from which to read
  * @return string literal token
  */
-Token readString(FILE* fp);
+Token* readString(FILE* fp);
 
 /**
  * Reads a numerical literal from the source file
  * @param fp FILE* from which to read
  * @return numerical literal token
  */
-Token readNumber(FILE* fp);
+Token* readNumber(FILE* fp);
 
 /**
  * Reads an identifier from the source file
  * @param fp FILE* from which to read
  * @return identifier token
  */
-Token readIdentifier(FILE* fp);
+Token* readIdentifier(FILE* fp);
 
 /**
  * Reads from the stream until the end character is reached without
@@ -118,9 +117,10 @@ char* readEscaped(FILE* fp, char end);
  * given function pointer and stores the result in the given string
  * @param fp FILE* from which to read
  * @param str char* into which to read from the stream
+ * @param size size of the character buffer
  * @param *valid pointer to a function to validate the read characters
  */
-void readWhile(FILE* fp, char* str, int (*valid)(char));
+void readWhile(FILE* fp, char* str, size_t size, int (*valid)(char));
 
 /**
  * Determine whether a character is a valid initial character for an
@@ -178,6 +178,6 @@ int isDigit(char c);
  * @param str string in which to search
  * @return whether the character appears in the string
  */
- int charInString(char c, char* str);
+ int charInString(char c, const char* str);
 
 #endif

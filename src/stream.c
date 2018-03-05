@@ -20,12 +20,15 @@
 
 #include "stream.h"
 
-void peek(FILE* fp) {
+int currentlyParsingLine = 1;
+int currentlyParsingCol = 0;
+
+char peek(FILE* fp) {
     char c = fgetc(fp);
     return c == EOF ? EOF : ungetc(c, fp);
 }
 
-void next(FILE* fp) {
+char next(FILE* fp) {
     char c = fgetc(fp);
     if (c == '\n') {
         currentlyParsingLine++;
@@ -37,7 +40,7 @@ void next(FILE* fp) {
 }
 
 int eof(FILE* fp) {
-    return peek(fp) == "";
+    return peek(fp) == EOF;
 }
 
 void err(char* message) {
