@@ -27,6 +27,32 @@
 #include "token.h"
 
 /**
+ * Token currently being parsed
+ */
+Token currentToken = NULL;
+
+/**
+ * Peek at current token without removing it from the stream
+ * @param fp FILE* from which to peek
+ * @return current token
+ */
+Token lexer_peek(FILE* fp);
+
+/**
+ * Obtain and remove the next token in the stream
+ * @param fp FILE* from which to peek
+ * @return the next token in the stream
+ */
+Token lexer_next(FILE* fp);
+
+/**
+ * Determine whether the token stream has ended
+ * @param fp FILE* from which to read
+ * @return whether an EOF has been encountered
+ */
+int lexer_eof(FILE* fp);
+
+/**
  * Parses the stream for the next token
  * @param fp FILE* from which to read
  * @return parsed token

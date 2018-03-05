@@ -112,6 +112,20 @@ void skipComment(FILE* fp) {
     next(fp);
 }
 
+Token lexer_peek(FILE* fp) {
+    return current || (current = readNext(fp));
+}
+
+Token lexer_next(FILE* fp) {
+    Token token = current;
+    current = NULL;
+    return token || readNext(fp);
+}
+
+int lexer_eof(FILE* fp) {
+    return lexer_peek(fp) == NULL;
+}
+
 int isWhitespace(char c) {
     return c == ' ' || c == '\t' || c == '\n';
 }
