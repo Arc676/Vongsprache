@@ -26,8 +26,12 @@ typedef enum : int {
     NUMBER,
     STRING,
     KEYWORD,
+    VARIABLE,
     IDENTIFIER,
-    OPERATOR
+    CALL,
+    BINARY,
+    IF,
+    ASSIGN
 } TokenType;
 
 typedef enum : uint32_t {

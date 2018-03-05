@@ -61,6 +61,23 @@ Token readNumber(FILE* fp);
 Token readIdentifier(FILE* fp);
 
 /**
+ * Utility function for initializing tokens
+ * @param type the type of token
+ */
+Token createToken(TokenType type);
+
+/**
+ * Utility function for creating token data
+ * @param dataType the data type stored in the token
+ * @param floatVal float value to store, if any
+ * @param charVal string value to store, if any
+ * @param tokenVal token value to store, if any
+ * @return a token with the specified data
+ */
+TokenData* createTokenData(TokenDataType dataType, float floatVal,
+    char* charVal, Token* tokenVal);
+
+/**
  * Reads from the stream until the end character is reached without
  * being escaped by a backslash
  * @param fp FILE* from which to read

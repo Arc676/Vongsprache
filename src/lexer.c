@@ -46,11 +46,9 @@ Token readNext(FILE* fp) {
 
 Token readString(FILE* fp) {
     char* literal = readEscaped(fp, '"');
-    TokenData* data = (TokenData*)malloc(sizeof(TokenData));
-    data->charVal = literal;
+    TokenData* data = createTokenData(STRING, NULL, literal, NULL);
     Token token;
-    token.type = STRING;
-    ht_create(token.tokenData, NULL, NULL);
+    initializeToken(&token, STRING);
     ht_insert(token.tokenData, VALUE, data);
     return token;
 }
@@ -74,13 +72,40 @@ Token readNumber(FILE* fp) {
     }
     float number = (float)strtol(literal, (char**)NULL, 0);
     free(literal);
-    TokenData* data = (TokenData*)malloc(sizeof(TokenData));
-    data->floatVal = number;
+    TokenData* data = createTokenData(NUMBER, number, NULL, NULL);
     Token token;
-    token.type = NUMBER;
-    ht_create(token.tokenData, NULL, NULL);
+    initializeToken(&token, NUMBER);
     ht_insert(token.tokenData, VALUE, data);
     return token;
+}
+
+TokenData* createTokenData(TokenDataType dataType, float floatVal,
+    char* charVal, Token* tokenVal) {
+    TokenData* data = (TokenData*)malloc(sizeof(TokenData));
+    switch (dataType) {
+        case NUMBER:
+            data->floatVal = floatVal;
+            break;
+        case STRING:
+        case KEYWORD:
+        case PUNCTUATION:
+        case IDENTIFIER:
+        case VARIABLE:
+            data->charVal = charVal;
+            break;
+        case BINARY:
+        case CALL:
+        case ASSIGN:
+        case IF:
+            data->tokenVal = tokenVal;
+            break;
+    }
+    return data;
+}
+
+void initializeToken(Token* token, TokenType type) {
+    token->type = type;
+    ht_create(token->tokenData, NULL, NULL);
 }
 
 void skipComment(FILE* fp) {
