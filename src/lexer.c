@@ -34,7 +34,8 @@ const char** keywords = {
     "solange",
 };
 
-const char* punctuation = "()[]{},"
+const char* punctuation = "()[]{},";
+const char* opChars = "%+-*/=&|<>!";
 
 Token readNext(FILE* fp) {
     char current = peek(fp);
@@ -61,6 +62,23 @@ Token readNext(FILE* fp) {
     }
     if (isPunc(current)) {
         return createPunctuationToken(current);
+    }
+    if (isOpChar(current)) {
+        char* operator = malloc(5);
+        memset(operator, 0, sizeof(operator));
+        operator[0] = current;
+        int pos = 1;
+        while (!eof(fp)) {
+            char c = next(fp);
+            if (isOpChar(c)) {
+                operator[pos++] = c;
+            }
+        }
+        TokenData* data = createTokenData(OPERATOR, NULL, operator, NULL);
+        Token token;
+        initializeToken(&token, OPERATOR);
+        ht_insert(token.tokenData, VALUE, operator);
+        return token;
     }
     char msg[30];
     sprintf(msg, "Parsing failed on character %c", current);
@@ -192,8 +210,16 @@ int isDigit(char c) {
 }
 
 int isPunc(char c) {
-    for (int i = 0; i < strlen(punctuation); i++) {
-        if (c == punctuation[i]) {
+    return charInString(c, punctuation)
+}
+
+int isOpChar(char c) {
+    return charInString(c, opChars);
+}
+
+int charInString(char c, char* str) {
+    for (int i = 0; i < strlen(str); i++) {
+        if (c == str[i]) {
             return 1;
         }
     }

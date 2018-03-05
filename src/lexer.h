@@ -40,6 +40,11 @@ const char** keywords;
 const char* punctuation;
 
 /**
+ * Recognized operation characters
+ */
+const char* opChars;
+
+/**
  * Token currently being parsed
  */
 Token currentToken = NULL;
@@ -150,5 +155,20 @@ int isDigit(char c);
  * @return whether the character is an accepted punctuation mark
  */
  int isPunc(char c);
+
+/**
+ * Determines whether a character is a recognized operation character
+ * @param c character to check
+ * @return whether the character is a valid operation character
+ */
+ int isOpChar(char c);
+
+/**
+ * Determines whether a character appears in a string
+ * @param c character to search for
+ * @param str string in which to search
+ * @return whether the character appears in the string
+ */
+ int charInString(char c, char* str);
 
 #endif
