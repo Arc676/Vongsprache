@@ -20,6 +20,15 @@
 
 #include "lexer.h"
 
+const char** keywords = {
+    "i",
+    "bims",
+    "vong",
+    "bis",
+    "mit",
+    "her"
+};
+
 Token readNext(FILE* fp) {
     char current = peek(fp);
     while (isWhitespace(current)) {
@@ -145,6 +154,15 @@ Token lexer_next(FILE* fp) {
 
 int lexer_eof(FILE* fp) {
     return lexer_peek(fp) == NULL;
+}
+
+int isKeyword(char* str) {
+    for (int i = 0; i < KEYWORD_COUNT; i++) {
+        if (!strcmp(str, keywords[i])) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 int isValidIDStart(char c) {

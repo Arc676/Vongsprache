@@ -27,6 +27,13 @@
 #include "stream.h"
 #include "token.h"
 
+#define KEYWORD_COUNT 6
+
+/**
+ * List of all the reserved words
+ */
+const char** keywords;
+
 /**
  * Token currently being parsed
  */
