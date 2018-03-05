@@ -103,35 +103,6 @@ char* readEscaped(FILE* fp, char end) {
     return str;
 }
 
-TokenData* createTokenData(TokenDataType dataType, float floatVal,
-    char* charVal, Token* tokenVal) {
-    TokenData* data = (TokenData*)malloc(sizeof(TokenData));
-    switch (dataType) {
-        case NUMBER:
-            data->floatVal = floatVal;
-            break;
-        case STRING:
-        case KEYWORD:
-        case PUNCTUATION:
-        case IDENTIFIER:
-        case VARIABLE:
-            data->charVal = charVal;
-            break;
-        case BINARY:
-        case CALL:
-        case ASSIGN:
-        case IF:
-            data->tokenVal = tokenVal;
-            break;
-    }
-    return data;
-}
-
-void initializeToken(Token* token, TokenType type) {
-    token->type = type;
-    ht_create(token->tokenData, NULL, NULL);
-}
-
 void skipComment(FILE* fp) {
     char c = peek(fp);
     while (c != '\n') {

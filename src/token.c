@@ -18,62 +18,33 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#ifndef TOKEN_H
-#define TOKEN_H
+#include "token.h"
 
-typedef enum : int {
-    PUNCTUATION,
-    NUMBER,
-    STRING,
-    KEYWORD,
-    VARIABLE,
-    IDENTIFIER,
-    CALL,
-    BINARY,
-    IF,
-    ASSIGN
-} TokenType;
-
-typedef enum : uint32_t {
-    VALUE,
-    ARGUMENTS,
-    FUNCTION_BODY,
-    FUNCTION_CALL,
-    CONDITION,
-    THEN_BLOCK,
-    ELSE_BLOCK,
-    OPERATOR,
-    LEFT_VAR,
-    RIGHT_VAR,
-    PROG
-} TokenDataType;
-
-typedef union {
-    float floatVal;
-    char* charVal;
-    Token* tokenVal;
-} TokenData;
-
-typedef struct {
-    TokenType type;
-    hashtable_t* tokenData;
-} Token;
-
-/**
- * Utility function for initializing tokens
- * @param type the type of token
- */
-Token createToken(TokenType type);
-
-/**
- * Utility function for creating token data
- * @param dataType the data type stored in the token
- * @param floatVal float value to store, if any
- * @param charVal string value to store, if any
- * @param tokenVal token value to store, if any
- * @return a token with the specified data
- */
 TokenData* createTokenData(TokenDataType dataType, float floatVal,
-    char* charVal, Token* tokenVal);
+    char* charVal, Token* tokenVal) {
+    TokenData* data = (TokenData*)malloc(sizeof(TokenData));
+    switch (dataType) {
+        case NUMBER:
+            data->floatVal = floatVal;
+            break;
+        case STRING:
+        case KEYWORD:
+        case PUNCTUATION:
+        case IDENTIFIER:
+        case VARIABLE:
+            data->charVal = charVal;
+            break;
+        case BINARY:
+        case CALL:
+        case ASSIGN:
+        case IF:
+            data->tokenVal = tokenVal;
+            break;
+    }
+    return data;
+}
 
-#endif
+void initializeToken(Token* token, TokenType type) {
+    token->type = type;
+    ht_create(token->tokenData, NULL, NULL);
+}
