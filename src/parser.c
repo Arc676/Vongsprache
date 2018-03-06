@@ -104,11 +104,24 @@ void skipValue(FILE* fp, TokenType type, int count, ...) {
 			lexer_next(fp);
 		} else {
 			va_end(arglist);
+			Token* token = lexer_peek(fp);
 			char msg[100];
-			sprintf(msg, "Expecting %s token: \"%s\"", tokenTypeToString(type),
-				value);
-			err(msg, PARSE_ERROR);
+			sprintf(msg, "Expected %s token: \"%s\", found %s", tokenTypeToString(type),
+				value, tokenTypeToString(token->type));
+			err(msg, EXPECTED_TOKEN);
 		}
 	}
 	va_end(arglist);
+}
+
+void unexpected(Token* token) {
+	char msg[100];
+	sprintf(msg, "Unexpected %s token: ", tokenTypeToString(token->type));
+	TokenData* data = ht_find(token->tokenData, VALUE);
+	if (token->type == NUMBER) {
+		sprintf(msg, "%s%d", msg, data->floatVal);
+	} else {
+		sprintf(msg, "%s%s", msg, data->charVal);
+	}
+	err(msg, UNEXPECTED_TOKEN);
 }

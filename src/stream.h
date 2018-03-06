@@ -26,6 +26,8 @@
 #include <stdlib.h>
 
 #define PARSE_ERROR 2
+#define EXPECTED_TOKEN 3
+#define UNEXPECTED_TOKEN 4
 
 /**
  * Number of line being parsed

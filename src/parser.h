@@ -136,7 +136,8 @@ void skipValue(FILE* fp, TokenType type, int count, ...);
 
 /**
  * Throw an error if the current token is an unexpected token
+ * @param token the unexpected token
  */
-void unexpected();
+void unexpected(Token* token);
 
 #endif
