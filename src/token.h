@@ -89,4 +89,11 @@ TokenData* createTokenData(TokenType type, float floatVal,
  */
 char* tokenTypeToString(TokenType type);
 
+/**
+ * Stores a human readable description of a token in a given string
+ * @param token relevant token
+ * @param str string into which the description should be stored
+ */
+ void tokenToString(Token* token, char* str);
+
 #endif

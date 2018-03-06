@@ -79,3 +79,29 @@ char* tokenTypeToString(TokenType type) {
 			return "statement sequence";
 	}
 }
+
+void tokenToString(Token* token, char* str) {
+	sprintf(str, "%s token", tokenTypeToString(token->type));
+	TokenData* data = ht_find(token->tokenData, VALUE);
+	switch (token->type) {
+        case NUMBER:
+            sprintf(msg, "%s (%d)", msg, data->floatVal);
+            break;
+        case STRING:
+        case KEYWORD:
+        case PUNCTUATION:
+        case IDENTIFIER:
+		case OPERATOR:
+            sprintf(msg, "%s (%s)", msg, data->charVal);
+            break;
+        case BINARY:
+        case CALL:
+        case ASSIGN:
+        case IF:
+		case PROGRAM:
+            char sub[200];
+			tokenToString(data->tokenVal, sub);
+			sprintf(msg, "%s (%s)", msg, sub);
+            break;
+    }
+}
