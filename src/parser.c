@@ -95,7 +95,7 @@ int parser_isValue(FILE* fp, TokenType type, char* value) {
 	return 0;
 }
 
-void skipValue(FILE* fp, TokenType type, int count, char* values...) {
+void skipValue(FILE* fp, TokenType type, int count, ...) {
 	va_list arglist;
 	va_start(arglist, count);
 	for (int i = 0; i < count; i++) {
@@ -105,7 +105,8 @@ void skipValue(FILE* fp, TokenType type, int count, char* values...) {
 		} else {
 			va_end(arglist);
 			char msg[100];
-			sprintf(msg, "Expecting %s token: \"%s\"", msg, tokenTypeToString(type), value);
+			sprintf(msg, "Expecting %s token: \"%s\"", tokenTypeToString(type),
+				value);
 			err(msg, PARSE_ERROR);
 		}
 	}

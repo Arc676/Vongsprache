@@ -21,6 +21,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <stdarg.h>
+
 #include "lexer.h"
 
 #define INITIAL_STATEMENT_COUNT 100
@@ -128,9 +130,9 @@ int parser_isValue(FILE* fp, TokenType type, char* value);
  * @param fp FILE* from which to read
  * @param type desired token type
  * @param count number of tokens to search for and skip
- * @param values variadic list of desired values
+ * @param ... variadic list of desired values
  */
-void skipValue(FILE* fp, TokenType type, int count, char* values...);
+void skipValue(FILE* fp, TokenType type, int count, ...);
 
 /**
  * Throw an error if the current token is an unexpected token
