@@ -112,28 +112,14 @@ Token** parseDelimited(FILE* fp, char start, char end, char sep,
 	Token* (*parse)(FILE*));
 
 /**
- * Check whether the current token is a given punctuation character
+ * Check whether the current token is of a given type and contains a given
+ * string in the TokenData charVal of data stored with the VALUE key
  * @param fp FILE* from which to read
- * @param c desired punctuation character
- * @return whether the current token matches the character
+ * @param type desired token type
+ * @param c desired string value
+ * @return whether the current token matches
  */
-int parser_isPunc(FILE* fp, char c);
-
-/**
- * Check whether the current token is a given keyword
- * @param fp FILE* from which to read
- * @param keyword desired keyword
- * @return whether the current token matches the keyword
- */
-int parser_isKeyword(FILE* fp, char* keyword);
-
-/**
- * Check whether the current token is a given operator
- * @param fp FILE* from which to read
- * @param op desired operator
- * @return whether the current token matches the operator
- */
-int parser_isOperator(FILE* fp, char* op);
+int parser_isValue(FILE* fp, TokenType type, char* c);
 
 /**
  * Confirm that the next token is the desired punctuation mark and remove it

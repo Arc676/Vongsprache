@@ -60,3 +60,12 @@ Token** parseDelimited(FILE* fp, char start, char end, char sep,
 	skipPunctuation(fp, stop);
 	return tokens;
 }
+
+int parser_isValue(FILE* fp, TokenType type, char c) {
+	Token* token = lexer_peek(fp);
+	if (token && token->type == type) {
+		TokenData* data = ht_find(token->tokenData, VALUE);
+		return !strcmp(data->charVal, keyword);
+	}
+	return 0;
+}
