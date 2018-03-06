@@ -122,13 +122,15 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 int parser_isValue(FILE* fp, TokenType type, char* value);
 
 /**
- * Confirm that the next token matches the corresponding is* function and
- * remove it from the stream
+ * Confirm that the next tokens match the corresponding is* function and
+ * remove them from the stream. Only values with matching token types can be
+ * searched for and removed with a single function call.
  * @param fp FILE* from which to read
  * @param type desired token type
- * @param value desired value
+ * @param count number of tokens to search for and skip
+ * @param values variadic list of desired values
  */
-void skipValue(FILE* fp, TokenType type, char* value);
+void skipValue(FILE* fp, TokenType type, int count, char* values...);
 
 /**
  * Throw an error if the current token is an unexpected token

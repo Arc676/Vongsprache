@@ -36,16 +36,15 @@ Token* parseTopLevel(FILE* fp) {
 }
 
 Token* parseIf(FILE* fp) {
-	skipValue(fp, KEYWORD, "bims");
+	skipValue(fp, KEYWORD, 1, "bims");
 	Token* cond = parseExpression(fp);
-	skipValue(fp, KEYWORD, "vong");
-	skipValue(fp, KEYWORD, "Wahrigkeit");
+	skipValue(fp, KEYWORD, 2, "vong", "Wahrigkeit");
 	Token* then = parseProg(fp);
 	Token* ret = createToken(IF);
 	ht_insert(ret->tokenData, CONDITION, cond);
 	ht_insert(ret->tokenData, THEN_BLOCK, then);
 	if (parser_isValue(fp, KEYWORD, "am")) {
-		skipValue(fp, KEYWORD, "Sonstigkeit");
+		skipValue(fp, KEYWORD, 1, "Sonstigkeit");
 		Token* els = parseProg(fp);
 		ht_insert(ret->tokenData, ELSE_BLOCK, els);
 	}
@@ -68,7 +67,7 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 	Token** tokens = (Token**)malloc(size);
 	memset(tokens, 0, size);
 
-	skipValue(fp, PUNCTUATION, start);
+	skipValue(fp, PUNCTUATION, 1, start);
 	while (!eof(fp)) {
 		if (parser_isValue(fp, PUNCTUATION, end)) {
 			break;
@@ -76,14 +75,14 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 		if (first) {
 			first = 0;
 		} else {
-			skipValue(fp, PUNCTUATION, sep);
+			skipValue(fp, PUNCTUATION, 1, sep);
 		}
 		if (parser_isValue(fp, PUNCTUATION, end)) {
 			break;
 		}
 		Token* token = parse(fp);
 	}
-	skipValue(fp, PUNCTUATION, end);
+	skipValue(fp, PUNCTUATION, 1, end);
 	return tokens;
 }
 
@@ -96,12 +95,19 @@ int parser_isValue(FILE* fp, TokenType type, char* value) {
 	return 0;
 }
 
-void skipValue(FILE* fp, TokenType type, char* value) {
-	if (parser_isValue(fp, type, value)) {
-		lexer_next(fp);
-	} else {
-		char msg[100];
-		sprintf(msg, "Expecting %s token: \"%s\"", tokenTypeToString(type), value);
-		err(msg, PARSE_ERROR);
+void skipValue(FILE* fp, TokenType type, int count, char* values...) {
+	va_list arglist;
+	va_start(arglist, count);
+	for (int i = 0; i < count; i++) {
+		char* value = va_arg(arglist, char*);
+		if (parser_isValue(fp, type, value)) {
+			lexer_next(fp);
+		} else {
+			va_end(arglist);
+			char msg[100];
+			sprintf(msg, "Expecting %s token: \"%s\"", msg, tokenTypeToString(type), value);
+			err(msg, PARSE_ERROR);
+		}
 	}
+	va_end(arglist);
 }
