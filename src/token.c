@@ -38,6 +38,7 @@ TokenData* createTokenData(TokenType type, float floatVal,
         case CALL:
         case ASSIGN:
         case IF:
+		case PROGRAM:
             data->tokenVal = tokenVal;
             break;
     }

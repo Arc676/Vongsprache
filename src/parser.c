@@ -58,7 +58,7 @@ char* parseVariableName(FILE* fp) {
 		err("Expected variable name", PARSE_ERROR);
 	}
 	TokenData* data = ht_find(var->tokenData, VALUE);
-	return data.charVal;
+	return data->charVal;
 }
 
 Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
@@ -68,22 +68,22 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 	Token** tokens = (Token**)malloc(size);
 	memset(tokens, 0, size);
 
-	skipValue(fp, PUNCUTATION, start);
+	skipValue(fp, PUNCTUATION, start);
 	while (!eof(fp)) {
-		if (parser_isValue(fp, PUNCUTATION, stop)) {
+		if (parser_isValue(fp, PUNCTUATION, end)) {
 			break;
 		}
 		if (first) {
 			first = 0;
 		} else {
-			skipValue(fp, PUNCUTATION, sep);
+			skipValue(fp, PUNCTUATION, sep);
 		}
-		if (parser_isValue(fp, PUNCUTATION, stop)) {
+		if (parser_isValue(fp, PUNCTUATION, end)) {
 			break;
 		}
 		Token* token = parse(fp);
 	}
-	skipValue(fp, PUNCUTATION, stop);
+	skipValue(fp, PUNCTUATION, end);
 	return tokens;
 }
 
@@ -101,7 +101,7 @@ void skipValue(FILE* fp, TokenType type, char* value) {
 		lexer_next(fp);
 	} else {
 		char msg[100];
-		sprintf(msg, "Expecting %s token: \"%s\"", msg, tokenTypeToString(type), value);
+		sprintf(msg, "Expecting %s token: \"%s\"", tokenTypeToString(type), value);
 		err(msg, PARSE_ERROR);
 	}
 }
