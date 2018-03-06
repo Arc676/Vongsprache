@@ -71,9 +71,9 @@ Token* parseProg(FILE* fp);
 /**
  * Parse the token stream for a variable name
  * @param fp FILE* from which to read
- * @return variable token
+ * @return identifier of the variable
  */
-Token* parseVariableName(FILE* fp);
+char* parseVariableName(FILE* fp);
 
 /**
  * Parse the next expression contained in the token stream

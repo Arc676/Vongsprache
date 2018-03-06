@@ -35,6 +35,32 @@ Token* parseTopLevel(FILE* fp) {
 	return program;
 }
 
+Token* parseIf(FILE* fp) {
+	skipValue(fp, KEYWORD, "bims");
+	Token* cond = parseExpression(fp);
+	skipValue(fp, KEYWORD, "vong");
+	skipValue(fp, KEYWORD, "Wahrigkeit");
+	Token* then = parseProg(fp);
+	Token* ret = createToken(IF);
+	ht_insert(ret->tokenData, CONDITION, cond);
+	ht_insert(ret->tokenData, THEN_BLOCK, then);
+	if (parser_isValue(fp, KEYWORD, "am")) {
+		skipValue(fp, KEYWORD, "Sonstigkeit");
+		Token* els = parseProg(fp);
+		ht_insert(ret->tokenData, ELSE_BLOCK, els);
+	}
+	return ret;
+}
+
+char* parseVariableName(FILE* fp) {
+	Token* var = lexer_next(fp);
+	if (var->type != IDENTIFIER) {
+		err("Expected variable name", PARSE_ERROR);
+	}
+	TokenData* data = ht_find(var->tokenData, VALUE);
+	return data.charVal;
+}
+
 Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 	Token* (*parse)(FILE*)) {
 	int first = 0;

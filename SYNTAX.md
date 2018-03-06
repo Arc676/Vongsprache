@@ -62,7 +62,7 @@ Die Vongsprache bietet Ihnen die folgende Kontrollstrukturen an. In der Vongspra
 ```
 bims [Variable] vong Wahrigkeit
   [Anweisungen]
-am Sonstigkeit
+her am Sonstigkeit
   [Anweisungen]
 her
 ```
