@@ -102,13 +102,13 @@ Token* potentialBinary(FILE* fp, Token* token, int prec);
  * Parse the stream for a list of tokens between a specified start and end
  * characters delimited by the specified separator
  * @param fp FILE* from which to read
- * @param start starting character for the list
- * @param end ending character for the list
- * @param sep delimiter character for the list
+ * @param start starting character for the list (as string)
+ * @param end ending character for the list (as string)
+ * @param sep delimiter character for the list (as string)
  * @param parse parse function to parse the delimited tokens
  * @return an array containing the parsed tokens
  */
-Token** parseDelimited(FILE* fp, char start, char end, char sep,
+Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 	Token* (*parse)(FILE*));
 
 /**

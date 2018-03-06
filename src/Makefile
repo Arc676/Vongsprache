@@ -1,6 +1,6 @@
 CC=gcc
 FLAGS=-c
-OBJS=main.o stream.o hashtable.o lexer.o token.o
+OBJS=main.o stream.o hashtable.o lexer.o token.o parser.o
 OUT=vongsprache
 
 debug: FLAGS += -g -O0
@@ -23,6 +23,9 @@ lexer.o:
 
 token.o:
 	$(CC) $(FLAGS) token.c
+
+parser.o:
+	$(CC) $(FLAGS) parser.c
 
 clean:
 	rm -f $(OBJS) $(OUT)

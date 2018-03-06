@@ -35,29 +35,29 @@ Token* parseTopLevel(FILE* fp) {
 	return program;
 }
 
-Token** parseDelimited(FILE* fp, char start, char end, char sep,
+Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 	Token* (*parse)(FILE*)) {
 	int first = 0;
 	size_t size = INITIAL_DELIM_COUNT * sizeof(Token*);
 	Token** tokens = (Token**)malloc(size);
 	memset(tokens, 0, size);
 
-	skipPunctuation(fp, start);
+	skipValue(fp, PUNCUTATION, start);
 	while (!eof(fp)) {
-		if (parser_isPunc(fp, stop)) {
+		if (parser_isValue(fp, PUNCUTATION, stop)) {
 			break;
 		}
 		if (first) {
 			first = 0;
 		} else {
-			skipPunctuation(fp, sep);
+			skipValue(fp, PUNCUTATION, sep);
 		}
-		if (parser_isPunc(fp, stop)) {
+		if (parser_isValue(fp, PUNCUTATION, stop)) {
 			break;
 		}
 		Token* token = parse(fp);
 	}
-	skipPunctuation(fp, stop);
+	skipValue(fp, PUNCUTATION, stop);
 	return tokens;
 }
 
