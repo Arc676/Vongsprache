@@ -4,7 +4,8 @@
 
 ### Identifikatoren
 
-Schlüsselwörter, die hier unten aufgezählt werden, dürfen nicht als Identifikatoren benutzt werden. Das erste Zeichen eines Identifikatoren muss ein Unterstrich oder ein Buchstabe sein.
+Schlüsselwörter, die hier unten aufgezählt werden, dürfen nicht als Identifikatoren benutzt werden.
+Das erste Zeichen eines Identifikatoren muss ein Unterstrich oder ein Buchstabe sein.
 
 Schlüsselwörter:
 ```
@@ -23,9 +24,10 @@ solange
 
 ### Variablen
 
-Die Vongsprache benutzt was jetzt auch [Duck Typing](https://de.wikipedia.org/wiki/Duck-Typing) oder Dynamic Typing genannt wird. Wie Python, die Vongsprache besitzt technisch gesehen eine starke Typisierung, aber Variablen dürfen in andere Typen umgewandelt werden.
+Die Vongsprache benutzt, was entweder [Duck Typing](https://de.wikipedia.org/wiki/Duck-Typing) oder Dynamic Typing genannt wird. Außerdem besitzt sie technisch gesehen eine starke Typisierung, genau so wie Python.
+Variablen dürfen allerdings in andere Typen umgewandelt werden.
 
-Variablen werden mit `bimsen` deklariert.
+Diese werden mit `bimsen` deklariert.
 
 ```
 i bims [Identifikator] vong [Wert] her
@@ -41,7 +43,7 @@ i bims Begrüßung vong "Hallo, Welt!" her
 
 ### Funktionen
 
-Auch Funktionen werden mit dem selben Verb deklariert.
+Auch Funktionen werden mit demselben Verb deklariert.
 
 ```
 i bims [Identifikator] vong Funktionigkeit mit [(Parameter1, Parameter2, ...)]
@@ -55,7 +57,8 @@ her
 
 ## Kontrollstrukturen
 
-Die Vongsprache bietet Ihnen die folgende Kontrollstrukturen an. In der Vongsprache gibt es keine boolesche Ausdrücke; deshalb brauchen bedingte Anweisungen und Schleifen boolesche Variablen.
+Die Vongsprache bietet folgende Kontrollstrukturen an. In der Vongsprache gibt es keine booleschen Ausdrücke.
+Deshalb brauchen bedingte Anweisungen und Schleifen boolesche Variablen.
 
 ### Bedingte Anweisungen
 
@@ -69,7 +72,7 @@ her
 
 ### Schleifen
 
-Die Vongsprache hat Zählschleifen und Kopfgesteuerte Schleifen. Die folgende Beispiele zeigen, wie man diese Schleifen nutzt.
+Die Vongsprache hat Zählschleifen und kopfgesteuerte Schleifen. Die folgenden Beispiele zeigen, wie man diese nutzt.
 
 #### Zählschleifen
 
