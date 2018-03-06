@@ -51,3 +51,30 @@ Token* createToken(TokenType type) {
     ht_create(token->tokenData, NULL, NULL);
 	return token;
 }
+
+char* tokenTypeToString(TokenType type) {
+	switch (type) {
+		case PUNCTUATION:
+			return "punctuation";
+	    case NUMBER:
+			return "numerical";
+	    case STRING:
+			return "string";
+	    case KEYWORD:
+			return "keyword";
+	    case IDENTIFIER:
+			return "identifier";
+		case OPERATOR:
+			return "operator";
+	    case CALL:
+			return "function call";
+	    case BINARY:
+			return "binary expression";
+	    case IF:
+			return "if-block";
+	    case ASSIGN:
+			return "assignment";
+		case PROGRAM:
+			return "statement sequence";
+	}
+}

@@ -61,11 +61,21 @@ Token** parseDelimited(FILE* fp, char start, char end, char sep,
 	return tokens;
 }
 
-int parser_isValue(FILE* fp, TokenType type, char c) {
+int parser_isValue(FILE* fp, TokenType type, char* value) {
 	Token* token = lexer_peek(fp);
 	if (token && token->type == type) {
 		TokenData* data = ht_find(token->tokenData, VALUE);
-		return !strcmp(data->charVal, keyword);
+		return !strcmp(data->charVal, value);
 	}
 	return 0;
+}
+
+void skipValue(FILE* fp, TokenType type, char* value) {
+	if (parser_isValue(fp, type, value)) {
+		lexer_next(fp);
+	} else {
+		char msg[100];
+		sprintf(msg, "Expecting %s token: \"%s\"", msg, tokenTypeToString(type), value);
+		err(msg, PARSE_ERROR);
+	}
 }

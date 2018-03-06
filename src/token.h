@@ -82,4 +82,11 @@ Token* createToken(TokenType type);
 TokenData* createTokenData(TokenType type, float floatVal,
     char* charVal, Token* tokenVal);
 
+/**
+ * Obtain a human readable string for a token type
+ * @param desired token type
+ * @return human readable name for given type
+ */
+char* tokenTypeToString(TokenType type);
+
 #endif

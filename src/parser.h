@@ -116,34 +116,19 @@ Token** parseDelimited(FILE* fp, char start, char end, char sep,
  * string in the TokenData charVal of data stored with the VALUE key
  * @param fp FILE* from which to read
  * @param type desired token type
- * @param c desired string value
+ * @param value desired string value
  * @return whether the current token matches
  */
-int parser_isValue(FILE* fp, TokenType type, char* c);
+int parser_isValue(FILE* fp, TokenType type, char* value);
 
 /**
- * Confirm that the next token is the desired punctuation mark and remove it
- * from the stream
+ * Confirm that the next token matches the corresponding is* function and
+ * remove it from the stream
  * @param fp FILE* from which to read
- * @param c desired punctuation mark
+ * @param type desired token type
+ * @param value desired value
  */
-void skipPunctuation(FILE* fp, char c);
-
-/**
- * Confirm that the next token is the desired keyword and remove it from
- * the stream
- * @param fp FILE* from which to read
- * @param keyword desired keyword
- */
-void skipKeyword(FILE* fp, char* keyword);
-
-/**
- * Confirm that the next token is the desired operator and remove it from the
- * stream
- * @param fp FILE* from which to read
- * @param op desired operator
- */
-void skipOperator(FILE* fp, char* op);
+void skipValue(FILE* fp, TokenType type, char* value);
 
 /**
  * Throw an error if the current token is an unexpected token
