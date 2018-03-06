@@ -18,7 +18,13 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#ifndef PARSER_H
+#define PARSER_H
+
 #include "lexer.h"
+
+#define INITIAL_STATEMENT_COUNT 100
+#define INITIAL_DELIM_COUNT 10
 
 /**
  * Top-level parse function to parse the whole script
@@ -104,3 +110,58 @@ Token* potentialBinary(FILE* fp, Token* token, int prec);
  */
 Token** parseDelimited(FILE* fp, char start, char end, char sep,
 	Token* (*parse)(FILE*));
+
+/**
+ * Check whether the current token is a given punctuation character
+ * @param fp FILE* from which to read
+ * @param c desired punctuation character
+ * @return whether the current token matches the character
+ */
+int parser_isPunc(FILE* fp, char c);
+
+/**
+ * Check whether the current token is a given keyword
+ * @param fp FILE* from which to read
+ * @param keyword desired keyword
+ * @return whether the current token matches the keyword
+ */
+int parser_isKeyword(FILE* fp, char* keyword);
+
+/**
+ * Check whether the current token is a given operator
+ * @param fp FILE* from which to read
+ * @param op desired operator
+ * @return whether the current token matches the operator
+ */
+int parser_isOperator(FILE* fp, char* op);
+
+/**
+ * Confirm that the next token is the desired punctuation mark and remove it
+ * from the stream
+ * @param fp FILE* from which to read
+ * @param c desired punctuation mark
+ */
+void skipPunctuation(FILE* fp, char c);
+
+/**
+ * Confirm that the next token is the desired keyword and remove it from
+ * the stream
+ * @param fp FILE* from which to read
+ * @param keyword desired keyword
+ */
+void skipKeyword(FILE* fp, char* keyword);
+
+/**
+ * Confirm that the next token is the desired operator and remove it from the
+ * stream
+ * @param fp FILE* from which to read
+ * @param op desired operator
+ */
+void skipOperator(FILE* fp, char* op);
+
+/**
+ * Throw an error if the current token is an unexpected token
+ */
+void unexpected();
+
+#endif

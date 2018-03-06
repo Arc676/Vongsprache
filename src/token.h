@@ -35,7 +35,8 @@ typedef enum TokenType {
     CALL,
     BINARY,
     IF,
-    ASSIGN
+    ASSIGN,
+	PROGRAM
 } TokenType;
 
 typedef enum TokenDataType {
