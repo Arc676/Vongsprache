@@ -57,13 +57,6 @@ Token* parseIf(FILE* fp);
 Token* parseCall(FILE* fp);
 
 /**
- * Parse depending on the current token
- * @param fp FILE* from which to read
- * @return token returned by the called delegate function
- */
-Token* parseAtom(FILE* fp);
-
-/**
  * Parse a sequence of statements
  * @param fp FILE* from which to read
  * @return program token containing statements
@@ -83,13 +76,6 @@ char* parseVariableName(FILE* fp);
  * @return token representing the next expression in the stream
  */
 Token* parseExpression(FILE* fp);
-
-/**
- * Parse the stream for a function call or identifier
- * @param fp FILE* from which to read
- * @return the corresponding token
- */
-Token* potentialCall(FILE* fp);
 
 /**
  * Parse the stream for a potential binary expression

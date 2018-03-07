@@ -60,6 +60,35 @@ char* parseVariableName(FILE* fp) {
 	return data->charVal;
 }
 
+Token* parseExpression(FILE* fp) {
+	if (parser_isValue(fp, KEYWORD, "i")) {
+		skipValue(fp, KEYWORD, 1, "bims");
+		Token* identifier = lexer_next(fp);
+		if (identifier->type != IDENTIFIER) {
+			err("Expected identifier", EXPECTED_TOKEN);
+			return NULL;
+		}
+		skipValue(fp, KEYWORD, 1, "vong");
+		if (parser_isValue(fp, KEYWORD, "Funktionigkeit")) {
+			skipValue(fp, KEYWORD, 1, "mit");
+			return parseProg(fp);
+		}
+	}
+	if (parser_isValue(fp, KEYWORD, "bims")) {
+		return parseIf(fp);
+	}
+	Token* token = lexer_next(fp);
+	switch (token->type) {
+		case IDENTIFIER:
+		case STRING:
+		case NUMBER:
+			return token;
+		default:
+			unexpected(token);
+			return NULL;
+	}
+}
+
 Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 	Token* (*parse)(FILE*)) {
 	int first = 0;
