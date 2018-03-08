@@ -32,6 +32,7 @@ const char* keywords[KEYWORD_COUNT] = {
     "Wahrigkeit",
     "Sonstigkeit",
     "solange",
+	"bidde"
 };
 
 const char* punctuation = "()[]{},";
