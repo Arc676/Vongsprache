@@ -36,7 +36,6 @@ Token* parseTopLevel(FILE* fp) {
 }
 
 Token* parseIf(FILE* fp) {
-	skipValue(fp, KEYWORD, 1, "bims");
 	Token* cond = parseExpression(fp);
 	skipValue(fp, KEYWORD, 2, "vong", "Wahrigkeit");
 	Token* then = parseProg(fp);
@@ -55,9 +54,25 @@ char* parseVariableName(FILE* fp) {
 	Token* var = lexer_next(fp);
 	if (var->type != IDENTIFIER) {
 		err("Expected variable name", PARSE_ERROR);
+		return NULL;
 	}
 	TokenData* data = ht_find(var->tokenData, VALUE);
 	return data->charVal;
+}
+
+Token* parseCall(FILE* fp) {
+	Token* token = createToken(CALL);
+	Token* funcIdentifier = lexer_next(fp);
+	if (funcIdentifier->type == IDENTIFIER) {
+		ht_insert(token->tokenData, FUNCTION_CALL, funcIdentifier);
+		if (parser_isValue(fp, KEYWORD, "mit")) {
+			Token** args = parseDelimited(fp, "(", ")", parseExpression);
+			ht_insert(token->tokenData, ARGUMENTS, args);
+		}
+		return token;
+	}
+	err("Expected function identifier", EXPECTED_TOKEN);
+	return NULL;
 }
 
 Token* parseExpression(FILE* fp) {
@@ -75,7 +90,12 @@ Token* parseExpression(FILE* fp) {
 		}
 	}
 	if (parser_isValue(fp, KEYWORD, "bims")) {
+		lexer_next(fp);
 		return parseIf(fp);
+	}
+	if (parser_isValue(fp, KEYWORD, "bidde")) {
+		lexer_next(fp);
+		return parseCall(fp);
 	}
 	Token* token = lexer_next(fp);
 	switch (token->type) {
