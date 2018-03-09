@@ -60,6 +60,10 @@ Token* parseProg(FILE* fp) {
 		if (parser_isValue(fp, KEYWORD, "her")) {
 			break;
 		}
+		if (pos >= size / sizeof(Token*)) {
+			size += INITIAL_FUNCTION_STATEMENT_COUNT * sizeof(Token*);
+			statements = realloc(statements, size);
+		}
 		statements[pos++] = parseExpression(fp);
 	}
 	Token* prog = createToken(PROGRAM);
@@ -132,10 +136,15 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 	Token** tokens = (Token**)malloc(size);
 	memset(tokens, 0, size);
 
+	int pos = 0;
 	skipValue(fp, PUNCTUATION, 1, start);
 	while (!eof(fp)) {
 		if (parser_isValue(fp, PUNCTUATION, end)) {
 			break;
+		}
+		if (pos >= size / sizeof(Token*)) {
+			size += INITIAL_DELIM_COUNT * sizeof(Token*);
+			tokens = realloc(tokens, size);
 		}
 		if (first) {
 			first = 0;
@@ -145,7 +154,7 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 		if (parser_isValue(fp, PUNCTUATION, end)) {
 			break;
 		}
-		Token* token = parse(fp);
+		tokens[pos++] = parse(fp);
 	}
 	skipValue(fp, PUNCTUATION, 1, end);
 	return tokens;
