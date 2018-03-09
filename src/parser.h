@@ -27,6 +27,7 @@
 
 #define INITIAL_STATEMENT_COUNT 100
 #define INITIAL_DELIM_COUNT 10
+#define INITIAL_FUNCTION_STATEMENT_COUNT 10
 
 /**
  * Top-level parse function to parse the whole script

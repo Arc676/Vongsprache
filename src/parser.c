@@ -50,6 +50,22 @@ Token* parseIf(FILE* fp) {
 	return ret;
 }
 
+Token* parseProg(FILE* fp) {
+	size_t size = INITIAL_FUNCTION_STATEMENT_COUNT * sizeof(Token*);
+	Token** statements = (Token**)malloc(size);
+	memset(statements, 0, size);
+
+	int pos = 0;
+	while (!eof(fp)) {
+		if (parser_isValue(fp, KEYWORD, "her")) {
+			break;
+		}
+		statements[pos++] = parseExpression(fp);
+	}
+	Token* prog = createToken(PROGRAM);
+	ht_insert(prog->tokenData, FUNCTION_BODY, statements);
+}
+
 char* parseVariableName(FILE* fp) {
 	Token* var = lexer_next(fp);
 	if (var->type != IDENTIFIER) {
