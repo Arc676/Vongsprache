@@ -25,12 +25,43 @@ typedef struct {
 	hashtable_t* variables;
 } Scope;
 
+/**
+ * Create a new scope object with the given parent scope
+ * @param parent desired parent scope
+ * @return the newly created scope object
+ */
 Scope* createScope(Scope* parent);
 
+/**
+ * Find the scope in which a variable is declared
+ * @param scope scope from which to start searching
+ * @param identifier variable identifier
+ * @return scope in which variable is declared, NULL if none
+ */
 Scope* lookup(Scope* scope, char* identifier);
 
+/**
+ * Get the token object representing a given variable
+ * @param scope scope in which to search
+ * @param identifier variable identifier
+ * @return variable object
+ */
 Token* getVariable(Scope* scope, char* identifier);
 
+/**
+ * Sets the value of a given variable
+ * @param scope scope in which variable should be defined
+ * @param identifier variable identifier
+ * @param value the new value for the variable
+ * @return the new value of the variable
+ */
 Token* setVariable(Scope* scope, char* identifier, Token* value);
 
+/**
+ * Define a new variable in a scope
+ * @param scope scope in which to define the variable
+ * @param identifier variable identifier
+ * @param value initial value to give to the variable
+ * @return value of the new variable
+ */
 Token* defineVariable(Scope* scope, char* identifier, Token* value);
