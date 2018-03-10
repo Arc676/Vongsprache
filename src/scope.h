@@ -18,6 +18,8 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#include <stdlib.h>
+
 #include "hashtable.h"
 
 typedef struct {
@@ -38,7 +40,7 @@ Scope* createScope(Scope* parent);
  * @param identifier variable identifier
  * @return scope in which variable is declared, NULL if none
  */
-Scope* lookup(Scope* scope, char* identifier);
+Scope* lookupScope(Scope* scope, char* identifier);
 
 /**
  * Get the token object representing a given variable
