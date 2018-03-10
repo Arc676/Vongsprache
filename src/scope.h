@@ -18,6 +18,9 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#ifndef SCOPE_H
+#define SCOPE_H
+
 #include <stdlib.h>
 
 #include "hashtable.h"
@@ -67,3 +70,5 @@ Token* setVariable(Scope* scope, char* identifier, Token* value);
  * @return value of the new variable
  */
 Token* defineVariable(Scope* scope, char* identifier, Token* value);
+
+#endif

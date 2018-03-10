@@ -22,6 +22,12 @@
 
 #include "parser.h"
 
+void runtimeErr(char* message) {
+	fprintf(stderr, "%s: line %d, col %d\n", message,
+            currentlyParsingLine, currentlyParsingCol);
+    exit(code);
+}
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         fprintf(stderr, "Usage: vongsprache script_file\n");
