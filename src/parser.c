@@ -28,6 +28,10 @@ Token* parseTopLevel(FILE* fp) {
 
 	int pos = 0;
 	while (!eof(fp)) {
+		if (pos >= size * sizeof(Token*)) {
+			size += INITIAL_STATEMENT_COUNT * sizeof(Token*);
+			progs = (Token**)realloc(progs, size);
+		}
 		Token* token = parseExpression(fp);
 		progs[pos++] = token;
 	}
@@ -62,7 +66,7 @@ Token* parseProg(FILE* fp) {
 		}
 		if (pos >= size / sizeof(Token*)) {
 			size += INITIAL_FUNCTION_STATEMENT_COUNT * sizeof(Token*);
-			statements = realloc(statements, size);
+			statements = (Token**)realloc(statements, size);
 		}
 		statements[pos++] = parseExpression(fp);
 	}
@@ -144,7 +148,7 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 		}
 		if (pos >= size / sizeof(Token*)) {
 			size += INITIAL_DELIM_COUNT * sizeof(Token*);
-			tokens = realloc(tokens, size);
+			tokens = (Token**)realloc(tokens, size);
 		}
 		if (first) {
 			first = 0;
