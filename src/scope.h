@@ -18,21 +18,19 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include <stdio.h>
+#include "hashtable.h"
 
-#include "parser.h"
+typedef struct {
+	Scope* parentScope;
+	hashtable_t* variables;
+} Scope;
 
-int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: vongsprache script_file\n");
-        return 1;
-    }
-    FILE* file = fopen(argv[1], "r");
-	if (!file) {
-		fprintf(stderr, "Failed to open file!\n");
-		return 1;
-	}
-	Token* topLevel = parseTopLevel(file);
-    fclose(file);
-    return 0;
-}
+Scope* createScope(Scope* parent);
+
+Scope* lookup(Scope* scope, char* identifier);
+
+Token* getVariable(Scope* scope, char* identifier);
+
+Token* setVariable(Scope* scope, char* identifier, Token* value);
+
+Token* defineVariable(Scope* scope, char* identifier, Token* value);
