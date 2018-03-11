@@ -24,37 +24,42 @@ Scope* createScope(Scope* parent) {
 	Scope* scope = (Scope*)malloc(sizeof(Scope*));
 	scope->parentScope = parent;
 	scope->variables = (hashtable_t*)malloc(sizeof(hashtable_t));
-	ht_create(scope->variables, NULL, NULL);
+	ht_create(scope->variables, ht_char_hash, ht_char_equals);
 	return scope;
 }
 
 Scope* lookupScope(Scope* scope, char* identifier) {
 	Scope* found = scope;
 	while (found) {
-		// return scope if variable found
+		if (ht_contains(found->variables, identifier)) {
+			return found;
+		}
 		found = scope->parentScope;
 	}
 	return NULL;
 }
 
 Token* getVariable(Scope* scope, char* identifier) {
+	Scope* declaration = lookupScope(scope, identifier);
+	if (declaration) {
+		return ht_find(declaration->variables, identifier);
+	}
 	return NULL;
 }
 
 Token* setVariable(Scope* scope, char* identifier, Token* value) {
 	Scope* defined = lookupScope(scope, identifier);
-	if (!defined && scope->parentScope) {
-		return NULL;
+	if (defined) {
+		ht_insert(defined->variables, identifier, value);
+		return value;
 	}
-	if (defined == scope) {
-		// set the value and return it
-		return NULL;
-	} else {
-		return setVariable(defined, identifier, value);
-	}
+	return NULL;
 }
 
 Token* defineVariable(Scope* scope, char* identifier, Token* value) {
-	// create the variable and return the value
+	if (!getVariable(scope, identifier)) {
+		ht_insert(scope->variables, identifier, value);
+		return value;
+	}
 	return NULL;
 }

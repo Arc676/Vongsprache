@@ -24,6 +24,7 @@
 #include <stdlib.h>
 
 #include "hashtable.h"
+#include "ht_ext.h"
 
 typedef struct {
 	Scope* parentScope;
@@ -58,7 +59,7 @@ Token* getVariable(Scope* scope, char* identifier);
  * @param scope scope in which variable should be defined
  * @param identifier variable identifier
  * @param value the new value for the variable
- * @return the new value of the variable
+ * @return the new value of the variable, NULL if setting failed
  */
 Token* setVariable(Scope* scope, char* identifier, Token* value);
 
@@ -67,7 +68,7 @@ Token* setVariable(Scope* scope, char* identifier, Token* value);
  * @param scope scope in which to define the variable
  * @param identifier variable identifier
  * @param value initial value to give to the variable
- * @return value of the new variable
+ * @return value of the new variable, NULL if the variable already existed
  */
 Token* defineVariable(Scope* scope, char* identifier, Token* value);
 
