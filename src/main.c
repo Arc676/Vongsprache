@@ -28,6 +28,34 @@ void runtimeErr(char* message) {
     exit(code);
 }
 
+Token* eval(Token* exp, Scope* scope) {
+	switch (exp->type) {
+		case NUMBER:
+		case STRING:
+			return exp;
+		case IDENTIFIER:
+		{
+			TokenData* data = ht_find(exp->tokenData, VALUE);
+			return getVariable(scope, data->charVal);
+		}
+		case ASSIGN:
+		{
+			TokenData* left = ht_find(exp->tokenData, LEFT_VAR);
+			Token* leftVal = left->tokenVal;
+			if (leftVal->type == IDENTIFIER) {
+				left = ht_find(leftVal->tokenData, VALUE);
+				TokenData* right = ht_find(exp->tokenData, RIGHT_VAR);
+				return setVariable(scope, left->charVal, eval(right->tokenVal));
+			} else {
+				char msg[100];
+				tokenToString(leftVal, msg);
+				sprintf(msg, "Can't assign to %s", msg);
+				runtimeErr(msg);
+			}
+		}
+	}
+}
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         fprintf(stderr, "Usage: vongsprache script_file\n");
