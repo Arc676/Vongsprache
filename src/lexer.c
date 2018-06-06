@@ -40,11 +40,8 @@ const char* opChars = "%+-*/=&|<>!";
 Token* currentToken = NULL;
 
 Token* readNext(FILE* fp) {
+    readWhile(fp, NULL, 0, isWhitespace);
     char current = peek(fp);
-    while (isWhitespace(current)) {
-        next(fp);
-        current = peek(fp);
-    }
     if (eof(fp)) {
         return NULL;
     }
@@ -62,7 +59,9 @@ Token* readNext(FILE* fp) {
         return readIdentifier(fp);
     }
     if (isPunc(current)) {
-        char str[2] = {current, 0};
+        char* str = (char*)malloc(2);
+        sprintf(str, "%c", current);
+        next(fp);
         TokenData* data = createTokenData(PUNCTUATION, 0, str, NULL);
         Token* token = createToken(PUNCTUATION);
         ht_insert_token(token->tokenData, VALUE, data);
@@ -155,10 +154,15 @@ char* readEscaped(FILE* fp, char end) {
 }
 
 void readWhile(FILE* fp, char* str, size_t size, int (*valid)(char)) {
-    memset(str, 0, size);
+    if (str) {
+        memset(str, 0, size);
+    }
     int pos = 0;
     while (!eof(fp) && valid(peek(fp))) {
-        str[pos++] = next(fp);
+        char c = next(fp);
+        if (str) {
+            str[pos++] = c;
+        }
     }
 }
 

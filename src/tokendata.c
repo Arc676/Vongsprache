@@ -42,7 +42,5 @@ char* tokenDataTypeToString(TokenDataType type) {
             return "LinkeVariable";
         case RIGHT_VAR:
             return "RechteVariable";
-        case PROG:
-            return "Programm";
     }
 }

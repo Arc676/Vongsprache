@@ -31,8 +31,7 @@ typedef enum TokenDataType {
     ELSE_BLOCK,
     OP,
     LEFT_VAR,
-    RIGHT_VAR,
-    PROG
+    RIGHT_VAR
 } TokenDataType;
 
 /**

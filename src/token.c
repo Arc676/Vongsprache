@@ -81,18 +81,19 @@ char* tokenTypeToString(TokenType type) {
 }
 
 void tokenToString(Token* token, char* str) {
-	sprintf(str, "%s token", tokenTypeToString(token->type));
+    char s[50];
+	sprintf(s, "%s-Token", tokenTypeToString(token->type));
 	TokenData* data = ht_find_token(token->tokenData, VALUE);
 	switch (token->type) {
         case NUMBER:
-            sprintf(str, "%s (%f)", str, data->floatVal);
+            sprintf(str, "%s (%f)", s, data->floatVal);
             break;
         case STRING:
         case KEYWORD:
         case PUNCTUATION:
         case IDENTIFIER:
 		case OPERATOR:
-            sprintf(str, "%s (%s)", str, data->charVal);
+            sprintf(str, "%s (\"%s\")", s, data->charVal);
             break;
         case BINARY:
         case CALL:
@@ -102,7 +103,7 @@ void tokenToString(Token* token, char* str) {
         {
             char sub[200];
 			tokenToString(data->tokenVal, sub);
-			sprintf(str, "%s (%s)", str, sub);
+			sprintf(str, "%s (%s)", s, sub);
             break;
         }
     }

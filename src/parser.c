@@ -33,9 +33,13 @@ Token* parseTopLevel(FILE* fp) {
 			progs = (Token**)realloc(progs, size);
 		}
 		Token* token = parseExpression(fp);
-		progs[pos++] = token;
+		if (token) {
+			progs[pos++] = token;
+		}
 	}
-	ht_insert_token(program->tokenData, PROG, progs);
+	TokenData* data = createTokenData(NUMBER, pos, NULL, NULL);
+	ht_insert_token(program->tokenData, VALUE, data);
+	ht_insert_token(program->tokenData, FUNCTION_BODY, progs);
 	return program;
 }
 
@@ -47,6 +51,7 @@ Token* parseIf(FILE* fp) {
 	ht_insert_token(ret->tokenData, CONDITION, cond);
 	ht_insert_token(ret->tokenData, THEN_BLOCK, then);
 	if (parser_isValue(fp, KEYWORD, "am")) {
+		lexer_next(fp);
 		skipValue(fp, KEYWORD, 1, "Sonstigkeit");
 		Token* els = parseProg(fp);
 		ht_insert_token(ret->tokenData, ELSE_BLOCK, els);
@@ -78,8 +83,7 @@ Token* parseProg(FILE* fp) {
 	}
 	Token* prog = createToken(PROGRAM);
 	ht_insert_token(prog->tokenData, FUNCTION_BODY, statements);
-	TokenData* data = (TokenData*)malloc(sizeof(TokenData));
-	data->floatVal = pos;
+	TokenData* data = createTokenData(NUMBER, pos, NULL, NULL);
 	ht_insert_token(prog->tokenData, VALUE, data);
 	return prog;
 }
@@ -99,10 +103,15 @@ Token* parseCall(FILE* fp) {
 	Token* funcIdentifier = lexer_next(fp);
 	if (funcIdentifier->type == IDENTIFIER) {
 		ht_insert_token(token->tokenData, FUNCTION_CALL, funcIdentifier);
+		TokenData* data = createTokenData(NUMBER, 0, NULL, NULL);
 		if (parser_isValue(fp, KEYWORD, "mit")) {
-			Token** args = parseDelimited(fp, "(", ")", ",", parseExpression);
+			lexer_next(fp);
+			int argc;
+			Token** args = parseDelimited(fp, "(", ")", ",", &argc, parseExpression);
+			data->floatVal = (float)argc;
 			ht_insert_token(token->tokenData, ARGUMENTS, args);
 		}
+		ht_insert_token(token->tokenData, VALUE, data);
 		return token;
 	}
 	err("Erwartete Funktionsidentifikator", EXPECTED_TOKEN);
@@ -111,7 +120,7 @@ Token* parseCall(FILE* fp) {
 
 Token* parseExpression(FILE* fp) {
 	if (parser_isValue(fp, KEYWORD, "i")) {
-		skipValue(fp, KEYWORD, 1, "bims");
+		lexer_next(fp);
 		Token* identifier = lexer_next(fp);
 		if (identifier->type != IDENTIFIER) {
 			err("Erwartete Identifikator", EXPECTED_TOKEN);
@@ -119,6 +128,7 @@ Token* parseExpression(FILE* fp) {
 		}
 		skipValue(fp, KEYWORD, 1, "vong");
 		if (parser_isValue(fp, KEYWORD, "Funktionigkeit")) {
+			lexer_next(fp);
 			skipValue(fp, KEYWORD, 1, "mit");
 			return parseProg(fp);
 		}
@@ -132,6 +142,9 @@ Token* parseExpression(FILE* fp) {
 		return parseCall(fp);
 	}
 	Token* token = lexer_next(fp);
+	if (token == NULL) {
+		return NULL;
+	}
 	switch (token->type) {
 		case IDENTIFIER:
 		case STRING:
@@ -143,12 +156,11 @@ Token* parseExpression(FILE* fp) {
 	}
 }
 
-Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
+Token** parseDelimited(FILE* fp, char* start, char* end, char* sep, int* count,
 	Token* (*parse)(FILE*)) {
-	int first = 0;
+	int first = 1;
 	size_t size = INITIAL_DELIM_COUNT * sizeof(Token*);
 	Token** tokens = (Token**)malloc(size);
-	memset(tokens, 0, size);
 
 	int pos = 0;
 	skipValue(fp, PUNCTUATION, 1, start);
@@ -158,19 +170,22 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 		}
 		if (pos >= size / sizeof(Token*)) {
 			size += INITIAL_DELIM_COUNT * sizeof(Token*);
-			tokens = (Token**)realloc(tokens, size);
+			Token** new = (Token**)realloc(tokens, size);
+			if (new) {
+				tokens = new;
+			} else {
+				err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
+				return NULL;
+			}
 		}
-		if (first) {
-			first = 0;
-		} else {
-			skipValue(fp, PUNCTUATION, 1, sep);
-		}
+		first ? first = 0 : skipValue(fp, PUNCTUATION, 1, sep);
 		if (parser_isValue(fp, PUNCTUATION, end)) {
 			break;
 		}
 		tokens[pos++] = parse(fp);
 	}
 	skipValue(fp, PUNCTUATION, 1, end);
+	*count = pos;
 	return tokens;
 }
 
@@ -192,10 +207,11 @@ void skipValue(FILE* fp, TokenType type, int count, ...) {
 			lexer_next(fp);
 		} else {
 			va_end(arglist);
+			char token[100];
 			char msg[200];
-			tokenToString(lexer_peek(fp), msg);
-			sprintf(msg, "Erwartete %s-Zeichen: \"%s\", %s gefunden",
-				tokenTypeToString(type), value, msg);
+			tokenToString(lexer_peek(fp), token);
+			sprintf(msg, "Erwartete %s-Token: \"%s\", %s gefunden",
+				tokenTypeToString(type), value, token);
 			err(msg, EXPECTED_TOKEN);
 		}
 	}
@@ -204,7 +220,8 @@ void skipValue(FILE* fp, TokenType type, int count, ...) {
 
 void unexpected(Token* token) {
 	char msg[200];
-	tokenToString(token, msg);
-	sprintf(msg, "Unerwartetes Zeichen %s", msg);
+	char tk[100];
+	tokenToString(token, tk);
+	sprintf(msg, "Unerwartetes Token: %s", tk);
 	err(msg, UNEXPECTED_TOKEN);
 }

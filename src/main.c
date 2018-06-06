@@ -44,8 +44,9 @@ Token* eval(Token* exp, Scope* scope) {
 									eval(right->tokenVal, scope));
 			} else {
 				char msg[100];
-				tokenToString(leftVal, msg);
-				sprintf(msg, "Dem Zeichen %s kann nicht zugeschrieben werden", msg);
+				char token[100];
+				tokenToString(leftVal, token);
+				sprintf(msg, "Dem Token %s kann nicht zugeschrieben werden", token);
 				err(msg, ASSIGN_FAILED);
 				break;
 			}
@@ -84,10 +85,42 @@ Token* eval(Token* exp, Scope* scope) {
 			}
 			return val;
 		}
+		case CALL:
+		{
+			Token* funcId = ht_find_token(exp->tokenData, FUNCTION_CALL);
+			TokenData* funcIDData = ht_find_token(funcId->tokenData, VALUE);
+			if (!strcmp(funcIDData->charVal, "drucken")) {
+				Token** args = ht_find_token(exp->tokenData, ARGUMENTS);
+				TokenData* data = ht_find_token(exp->tokenData, VALUE);
+				int argc = (int)data->floatVal;
+				for (int i = 0; i < argc; i++) {
+					Token* val = eval(args[i], scope);
+					TokenData* valData = ht_find_token(val->tokenData, VALUE);
+					switch (val->type) {
+						case STRING:
+							printf("%s", valData->charVal);
+							break;
+						case NUMBER:
+							printf("%f", valData->floatVal);
+							break;
+						default:
+						{
+							char msg[100];
+							tokenToString(val, msg);
+							printf("%s", msg);
+							break;
+						}
+					}
+				}
+				printf("\n");
+			} else {
+			}
+			break;
+		}
 		default:
 		{
 			char msg[100];
-			sprintf(msg, "Zeichen mit unerwartetem Typ %s gefunden",
+			sprintf(msg, "Token mit unerwartetem Typ %s gefunden",
 					tokenTypeToString(exp->type));
 			err(msg, UNKNOWN_TOKEN_TYPE);
 		}
@@ -106,6 +139,8 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 	Token* ast = parseTopLevel(file);
+	Scope* global = createScope(NULL);
+	eval(ast, global);
 	fclose(file);
 	return 0;
 }

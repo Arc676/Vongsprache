@@ -94,10 +94,11 @@ Token* potentialBinary(FILE* fp, Token* token, int prec);
  * @param start Starting character for the list (as string)
  * @param end Ending character for the list (as string)
  * @param sep Delimiter character for the list (as string)
+ * @param count Pointer to int in which to store parsed token count 
  * @param parse Parse function to parse the delimited tokens
  * @return An array containing the parsed tokens
  */
-Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
+Token** parseDelimited(FILE* fp, char* start, char* end, char* sep, int* count,
 	Token* (*parse)(FILE*));
 
 /**
