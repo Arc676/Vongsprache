@@ -35,7 +35,7 @@ Token* parseTopLevel(FILE* fp) {
 		Token* token = parseExpression(fp);
 		progs[pos++] = token;
 	}
-	ht_insert(program->tokenData, PROG, progs);
+	ht_insert_token(program->tokenData, PROG, progs);
 	return program;
 }
 
@@ -44,12 +44,12 @@ Token* parseIf(FILE* fp) {
 	skipValue(fp, KEYWORD, 2, "vong", "Wahrigkeit");
 	Token* then = parseProg(fp);
 	Token* ret = createToken(IF);
-	ht_insert(ret->tokenData, CONDITION, cond);
-	ht_insert(ret->tokenData, THEN_BLOCK, then);
+	ht_insert_token(ret->tokenData, CONDITION, cond);
+	ht_insert_token(ret->tokenData, THEN_BLOCK, then);
 	if (parser_isValue(fp, KEYWORD, "am")) {
 		skipValue(fp, KEYWORD, 1, "Sonstigkeit");
 		Token* els = parseProg(fp);
-		ht_insert(ret->tokenData, ELSE_BLOCK, els);
+		ht_insert_token(ret->tokenData, ELSE_BLOCK, els);
 	}
 	return ret;
 }
@@ -71,7 +71,7 @@ Token* parseProg(FILE* fp) {
 		statements[pos++] = parseExpression(fp);
 	}
 	Token* prog = createToken(PROGRAM);
-	ht_insert(prog->tokenData, FUNCTION_BODY, statements);
+	ht_insert_token(prog->tokenData, FUNCTION_BODY, statements);
 	return prog;
 }
 
@@ -81,7 +81,7 @@ char* parseVariableName(FILE* fp) {
 		err("Expected variable name", PARSE_ERROR);
 		return NULL;
 	}
-	TokenData* data = ht_find(var->tokenData, VALUE);
+	TokenData* data = ht_find_token(var->tokenData, VALUE);
 	return data->charVal;
 }
 
@@ -89,10 +89,10 @@ Token* parseCall(FILE* fp) {
 	Token* token = createToken(CALL);
 	Token* funcIdentifier = lexer_next(fp);
 	if (funcIdentifier->type == IDENTIFIER) {
-		ht_insert(token->tokenData, FUNCTION_CALL, funcIdentifier);
+		ht_insert_token(token->tokenData, FUNCTION_CALL, funcIdentifier);
 		if (parser_isValue(fp, KEYWORD, "mit")) {
 			Token** args = parseDelimited(fp, "(", ")", ",", parseExpression);
-			ht_insert(token->tokenData, ARGUMENTS, args);
+			ht_insert_token(token->tokenData, ARGUMENTS, args);
 		}
 		return token;
 	}
@@ -168,7 +168,7 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 int parser_isValue(FILE* fp, TokenType type, char* value) {
 	Token* token = lexer_peek(fp);
 	if (token && token->type == type) {
-		TokenData* data = ht_find(token->tokenData, VALUE);
+		TokenData* data = ht_find_token(token->tokenData, VALUE);
 		return !strcmp(data->charVal, value);
 	}
 	return 0;

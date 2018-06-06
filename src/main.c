@@ -39,16 +39,16 @@ Token* eval(Token* exp, Scope* scope) {
 			return exp;
 		case IDENTIFIER:
 		{
-			TokenData* data = ht_find(exp->tokenData, VALUE);
+			TokenData* data = ht_find_token(exp->tokenData, VALUE);
 			return getVariable(scope, data->charVal);
 		}
 		case ASSIGN:
 		{
-			TokenData* left = ht_find(exp->tokenData, LEFT_VAR);
+			TokenData* left = ht_find_token(exp->tokenData, LEFT_VAR);
 			Token* leftVal = left->tokenVal;
 			if (leftVal->type == IDENTIFIER) {
-				left = ht_find(leftVal->tokenData, VALUE);
-				TokenData* right = ht_find(exp->tokenData, RIGHT_VAR);
+				left = ht_find_token(leftVal->tokenData, VALUE);
+				TokenData* right = ht_find_token(exp->tokenData, RIGHT_VAR);
 				return setVariable(scope, left->charVal, eval(right->tokenVal, scope));
 			} else {
 				char msg[100];

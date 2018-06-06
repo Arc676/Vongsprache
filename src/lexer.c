@@ -65,7 +65,7 @@ Token* readNext(FILE* fp) {
         char str[2] = {current, 0};
         TokenData* data = createTokenData(PUNCTUATION, 0, str, NULL);
         Token* token = createToken(PUNCTUATION);
-        ht_insert(token->tokenData, VALUE, data);
+        ht_insert_token(token->tokenData, VALUE, data);
         return token;
     }
     if (isOpChar(current)) {
@@ -73,7 +73,7 @@ Token* readNext(FILE* fp) {
         readWhile(fp, operator, 5, isOpChar);
         TokenData* data = createTokenData(OPERATOR, 0, operator, NULL);
         Token* token = createToken(OPERATOR);
-        ht_insert(token->tokenData, VALUE, data);
+        ht_insert_token(token->tokenData, VALUE, data);
         return token;
     }
     char msg[30];
@@ -86,7 +86,7 @@ Token* readString(FILE* fp) {
     char* literal = readEscaped(fp, '"');
     TokenData* data = createTokenData(STRING, 0, literal, NULL);
     Token* token = createToken(STRING);
-    ht_insert(token->tokenData, VALUE, data);
+    ht_insert_token(token->tokenData, VALUE, data);
     return token;
 }
 
@@ -113,7 +113,7 @@ Token* readNumber(FILE* fp) {
     free(literal);
     TokenData* data = createTokenData(NUMBER, number, NULL, NULL);
     Token* token = createToken(NUMBER);
-    ht_insert(token->tokenData, VALUE, data);
+    ht_insert_token(token->tokenData, VALUE, data);
     return token;
 }
 
@@ -123,7 +123,7 @@ Token* readIdentifier(FILE* fp) {
     TokenType type = isKeyword(str) ? KEYWORD : IDENTIFIER;
     TokenData* data = createTokenData(type, 0, str, NULL);
     Token* token = createToken(type);
-    ht_insert(token->tokenData, VALUE, data);
+    ht_insert_token(token->tokenData, VALUE, data);
     return token;
 }
 

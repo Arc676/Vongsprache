@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "tokendata.h"
+
 #define HASHTABLE_KEY_TYPE void*
 #define HASHTABLE_VALUE_TYPE void*
 
@@ -82,8 +84,12 @@ void ht_destroy(hashtable_t*);
 // Might trigger a rehash.
 void ht_insert(hashtable_t*, HASHTABLE_KEY_TYPE, HASHTABLE_VALUE_TYPE);
 
+void ht_insert_token(hashtable_t*, TokenDataType, HASHTABLE_VALUE_TYPE);
+
 // Finds an entry in the hash table. Returns 0 on failure.
 HASHTABLE_VALUE_TYPE ht_find(hashtable_t*, HASHTABLE_KEY_TYPE);
+
+HASHTABLE_VALUE_TYPE ht_find_token(hashtable_t*, TokenDataType);
 
 // Checks whether an entry is contained in the hash table.
 int ht_contains(hashtable_t*, HASHTABLE_KEY_TYPE);

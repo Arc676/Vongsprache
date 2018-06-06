@@ -82,7 +82,7 @@ char* tokenTypeToString(TokenType type) {
 
 void tokenToString(Token* token, char* str) {
 	sprintf(str, "%s token", tokenTypeToString(token->type));
-	TokenData* data = ht_find(token->tokenData, VALUE);
+	TokenData* data = ht_find_token(token->tokenData, VALUE);
 	switch (token->type) {
         case NUMBER:
             sprintf(str, "%s (%f)", str, data->floatVal);

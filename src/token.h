@@ -25,6 +25,7 @@
 #include <stdio.h>
 
 #include "hashtable.h"
+#include "tokendata.h"
 
 typedef enum TokenType {
     PUNCTUATION,
@@ -39,20 +40,6 @@ typedef enum TokenType {
     ASSIGN,
 	PROGRAM
 } TokenType;
-
-typedef enum TokenDataType {
-    VALUE,
-    ARGUMENTS,
-    FUNCTION_BODY,
-    FUNCTION_CALL,
-    CONDITION,
-    THEN_BLOCK,
-    ELSE_BLOCK,
-    OP,
-    LEFT_VAR,
-    RIGHT_VAR,
-    PROG
-} TokenDataType;
 
 typedef struct {
     TokenType type;

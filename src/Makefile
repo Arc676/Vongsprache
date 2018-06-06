@@ -3,7 +3,7 @@ FLAGS=-c
 
 ODIR=../obj
 
-OBJS=main.o stream.o hashtable.o ht_ext.o lexer.o token.o parser.o scope.o
+OBJS=main.o stream.o hashtable.o lexer.o token.o tokendata.o parser.o scope.o
 _OBJS=$(patsubst %, $(ODIR)/%, $(OBJS))
 
 OUT=vongsprache

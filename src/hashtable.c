@@ -152,6 +152,10 @@ void ht_maybe_rehash(hashtable_t* ht) {
     // INVARIANT: ht is initialized, there are empty nodes on the overflow heap.
 }
 
+void ht_insert_token(hashtable_t* ht, TokenDataType type, HASHTABLE_VALUE_TYPE val) {
+    ht_insert(ht, tokenDataTypeToString(type), val);
+}
+
 // Insert a key into the table. Overwrites the key if already present.
 // Might trigger a rehash.
 void ht_insert(hashtable_t* ht, HASHTABLE_KEY_TYPE key, HASHTABLE_VALUE_TYPE val) {
@@ -198,6 +202,10 @@ void ht_insert(hashtable_t* ht, HASHTABLE_KEY_TYPE key, HASHTABLE_VALUE_TYPE val
         ht->size++;
     }
     // INVARIANT: ht is initialized.
+}
+
+HASHTABLE_VALUE_TYPE ht_find_token(hashtable_t* ht, TokenDataType key) {
+    return ht_find(ht, tokenDataTypeToString(key));
 }
 
 // Finds an entry in the hash table. Returns 0 on failure.
