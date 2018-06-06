@@ -42,9 +42,3 @@ char next(FILE* fp) {
 int eof(FILE* fp) {
     return peek(fp) == EOF;
 }
-
-void err(char* message, int code) {
-    fprintf(stderr, "%s: line %d, col %d\n", message,
-            currentlyParsingLine, currentlyParsingCol);
-    exit(code);
-}

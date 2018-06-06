@@ -18,19 +18,10 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#define ASSIGN_FAILED 1
-#define UNKNOWN_TOKEN_TYPE 2
-
 #include <stdio.h>
 
 #include "parser.h"
 #include "scope.h"
-
-void runtimeErr(char* message, int code) {
-	fprintf(stderr, "%s: line %d, col %d\n", message,
-            currentlyParsingLine, currentlyParsingCol);
-	exit(code);
-}
 
 Token* eval(Token* exp, Scope* scope) {
 	switch (exp->type) {
@@ -54,7 +45,7 @@ Token* eval(Token* exp, Scope* scope) {
 				char msg[100];
 				tokenToString(leftVal, msg);
 				sprintf(msg, "Can't assign to %s", msg);
-				runtimeErr(msg, ASSIGN_FAILED);
+				err(msg, ASSIGN_FAILED);
 			}
 		}
 		default:
@@ -62,7 +53,7 @@ Token* eval(Token* exp, Scope* scope) {
 			char msg[100];
 			tokenToString(exp, msg);
 			sprintf(msg, "Encountered token with unexpected type %s", msg);
-			runtimeErr(msg, UNKNOWN_TOKEN_TYPE);
+			err(msg, UNKNOWN_TOKEN_TYPE);
 		}
 	}
 	return NULL;

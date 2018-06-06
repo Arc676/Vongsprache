@@ -18,45 +18,13 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#ifndef STREAM_H
-#define STREAM_H
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
 #include "error.h"
 
-/**
- * Number of line being parsed
- */
-int currentlyParsingLine;
+extern int currentlyParsingCol;
+extern int currentlyParsingLine;
 
-/**
- * Number of column being parsed
- */
-int currentlyParsingCol;
-
-/**
- * Peek at the next character in the stream without
- * removing it
- * @param fp FILE* from which to peek
- * @return The character at the current position in the file
- */
-char peek(FILE* fp);
-
-/**
- * Obtain the next character in the stream and remove it
- * @param fp FILE* from which to read
- * @return The next character in the stream
- */
-char next(FILE* fp);
-
-/**
- * Determine whether the file is done being read
- * @param fp FILE* to check
- * @return Whether the current character is EOF
- */
-int eof(FILE* fp);
-
-#endif
+void err(char* message, int code) {
+    fprintf(stderr, "%s: line %d, col %d\n", message,
+            currentlyParsingLine, currentlyParsingCol);
+    exit(code);
+}
