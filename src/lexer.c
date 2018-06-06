@@ -77,7 +77,7 @@ Token* readNext(FILE* fp) {
         return token;
     }
     char msg[30];
-    sprintf(msg, "Parsing failed on character %c", current);
+    sprintf(msg, "Parsenversäumnis wegen des Zeichens '%c'", current);
     err(msg, PARSE_ERROR);
 	return NULL;
 }

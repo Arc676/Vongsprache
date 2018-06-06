@@ -24,7 +24,7 @@ extern int currentlyParsingCol;
 extern int currentlyParsingLine;
 
 void err(char* message, int code) {
-    fprintf(stderr, "%s: line %d, col %d\n", message,
+    fprintf(stderr, "%s: Zeile %d, Kolumne %d\n", message,
             currentlyParsingLine, currentlyParsingCol);
     exit(code);
 }

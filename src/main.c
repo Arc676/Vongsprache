@@ -40,19 +40,20 @@ Token* eval(Token* exp, Scope* scope) {
 			if (leftVal->type == IDENTIFIER) {
 				left = ht_find_token(leftVal->tokenData, VALUE);
 				TokenData* right = ht_find_token(exp->tokenData, RIGHT_VAR);
-				return setVariable(scope, left->charVal, eval(right->tokenVal, scope));
+				return setVariable(scope, left->charVal,
+									eval(right->tokenVal, scope));
 			} else {
 				char msg[100];
 				tokenToString(leftVal, msg);
-				sprintf(msg, "Can't assign to %s", msg);
+				sprintf(msg, "Dem Zeichen %s kann nicht zugeschrieben werden", msg);
 				err(msg, ASSIGN_FAILED);
 			}
 		}
 		default:
 		{
 			char msg[100];
-			tokenToString(exp, msg);
-			sprintf(msg, "Encountered token with unexpected type %s", msg);
+			sprintf(msg, "Zeichen mit unerwartetem Typ %s gefunden",
+					tokenTypeToString(exp-type));
 			err(msg, UNKNOWN_TOKEN_TYPE);
 		}
 	}
@@ -61,12 +62,12 @@ Token* eval(Token* exp, Scope* scope) {
 
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
-		fprintf(stderr, "Usage: vongsprache script_file\n");
+		fprintf(stderr, "Gebrauch: vongsprache Datei\n");
 		return 1;
 	}
 	FILE* file = fopen(argv[1], "r");
 	if (!file) {
-		fprintf(stderr, "Failed to open file!\n");
+		fprintf(stderr, "Datei konnte nicht geöffnet werden\n");
 		return 1;
 	}
 	Token* topLevel = parseTopLevel(file);

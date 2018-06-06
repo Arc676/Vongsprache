@@ -56,27 +56,27 @@ Token* createToken(TokenType type) {
 char* tokenTypeToString(TokenType type) {
 	switch (type) {
 		case PUNCTUATION:
-			return "punctuation";
+			return "Satzzeichen";
 	    case NUMBER:
-			return "numerical";
+			return "Zahl";
 	    case STRING:
-			return "string";
+			return "String";
 	    case KEYWORD:
-			return "keyword";
+			return "Schlüsselwort";
 	    case IDENTIFIER:
-			return "identifier";
+			return "Identifikator";
 		case OPERATOR:
-			return "operator";
+			return "Operator";
 	    case CALL:
-			return "function call";
+			return "Funktionsanruf";
 	    case BINARY:
-			return "binary expression";
+			return "Binarischer Ausdruck";
 	    case IF:
-			return "if-block";
+			return "Bedingte Anweisung";
 	    case ASSIGN:
-			return "assignment";
+			return "Zuschreibung";
 		case PROGRAM:
-			return "statement sequence";
+			return "Anweisungfolge";
 	}
 }
 

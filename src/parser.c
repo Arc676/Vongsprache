@@ -78,7 +78,7 @@ Token* parseProg(FILE* fp) {
 char* parseVariableName(FILE* fp) {
 	Token* var = lexer_next(fp);
 	if (var->type != IDENTIFIER) {
-		err("Expected variable name", PARSE_ERROR);
+		err("Erwartete Variablenamen", PARSE_ERROR);
 		return NULL;
 	}
 	TokenData* data = ht_find_token(var->tokenData, VALUE);
@@ -96,7 +96,7 @@ Token* parseCall(FILE* fp) {
 		}
 		return token;
 	}
-	err("Expected function identifier", EXPECTED_TOKEN);
+	err("Erwartete Funktionsidentifikator", EXPECTED_TOKEN);
 	return NULL;
 }
 
@@ -105,7 +105,7 @@ Token* parseExpression(FILE* fp) {
 		skipValue(fp, KEYWORD, 1, "bims");
 		Token* identifier = lexer_next(fp);
 		if (identifier->type != IDENTIFIER) {
-			err("Expected identifier", EXPECTED_TOKEN);
+			err("Erwartete Identifikator", EXPECTED_TOKEN);
 			return NULL;
 		}
 		skipValue(fp, KEYWORD, 1, "vong");
@@ -185,7 +185,7 @@ void skipValue(FILE* fp, TokenType type, int count, ...) {
 			va_end(arglist);
 			char msg[200];
 			tokenToString(lexer_peek(fp), msg);
-			sprintf(msg, "Expected %s token: \"%s\", found %s",
+			sprintf(msg, "Erwartete %s-Zeichen: \"%s\", %s gefunden",
 				tokenTypeToString(type), value, msg);
 			err(msg, EXPECTED_TOKEN);
 		}
@@ -196,6 +196,6 @@ void skipValue(FILE* fp, TokenType type, int count, ...) {
 void unexpected(Token* token) {
 	char msg[200];
 	tokenToString(token, msg);
-	sprintf(msg, "Unexpected %s", msg);
+	sprintf(msg, "Unerwartetes Zeichen %s", msg);
 	err(msg, UNEXPECTED_TOKEN);
 }
