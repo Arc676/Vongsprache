@@ -33,13 +33,24 @@
 #define HASHTABLE_KEY_TYPE void*
 #define HASHTABLE_VALUE_TYPE void*
 
-// A hash code function, converting a key to a 32b integer.
-typedef uint32_t (*hashtable_hash_code)(HASHTABLE_KEY_TYPE);
+/**
+ * A function that converts a key to an integer
+ * @param key Key value
+ * @return 32 bit integer hash of that key
+ */
+typedef uint32_t (*hashtable_hash_code)(HASHTABLE_KEY_TYPE key);
 
-// A function checking for equality of keys.
-typedef int (*hashtable_key_check)(HASHTABLE_KEY_TYPE, HASHTABLE_KEY_TYPE);
+/**
+ * Key equality checking function
+ * @param k1 First key
+ * @param k2 Second key
+ * @return Whether the keys are equal
+ */
+typedef int (*hashtable_key_check)(HASHTABLE_KEY_TYPE k1, HASHTABLE_KEY_TYPE k2);
 
-// A single node (either bucket or overflow) of the hashtable.
+/**
+ * A single node (either bucket or overflow) of the hashtable.
+ */
 typedef struct hashtable_node_ts {
     // Invariants:
     // State is either 0 (absent) or 1 (present).
@@ -52,7 +63,9 @@ typedef struct hashtable_node_ts {
     struct hashtable_node_ts* follow;
 } hashtable_node_t;
 
-// The hashtable itself.
+/**
+ * The hashtable itself.
+ */
 typedef struct {
     // Table data.
     size_t size;
@@ -71,33 +84,76 @@ typedef struct {
     hashtable_key_check key_check_fun;
 } hashtable_t;
 
-// Creates a hash table.
-// The hash code function may be NULL if the HASHTABLE_KEY_TYPE can be converted
-// to a uint32_t.
-// If the key check is NULL, simple == equality will be checked.
-void ht_create(hashtable_t*, hashtable_hash_code, hashtable_key_check);
+/**
+ * Initializes a hash table
+ * @param ht Hashtable object
+ * @param hashfun Hashing function to be used by hashtable (can be NULL if the
+ *                  key type is castable to uint32_t)
+ * @param chkfun Equality checking function for keys (if NULL, uses !strcmp)
+ */
+void ht_create(hashtable_t* ht, hashtable_hash_code hashfun,
+    hashtable_key_check chkfun);
 
-// Destroys a hash table.
-void ht_destroy(hashtable_t*);
+/**
+ * Destroys a hash table
+ * @param ht Hashtable to destroy
+ */
+void ht_destroy(hashtable_t* ht);
 
-// Insert a key into the table. Overwrites the key if already present.
-// Might trigger a rehash.
-void ht_insert(hashtable_t*, HASHTABLE_KEY_TYPE, HASHTABLE_VALUE_TYPE);
+/**
+ * Insert a key into the table, overwriting the key if already present;
+ * might trigger a rehash
+ * @param ht Hashtable object
+ * @param k Key value
+ * @param v Value to store
+ */
+void ht_insert(hashtable_t* ht, HASHTABLE_KEY_TYPE k, HASHTABLE_VALUE_TYPE v);
 
-void ht_insert_token(hashtable_t*, TokenDataType, HASHTABLE_VALUE_TYPE);
+/**
+ * Converts the given token data type to string form and stores it in
+ * the hashtable
+ * @param ht Hashtable object
+ * @param dt Data type
+ * @param v Value
+ */
+void ht_insert_token(hashtable_t* ht, TokenDataType dt, HASHTABLE_VALUE_TYPE v);
 
-// Finds an entry in the hash table. Returns 0 on failure.
-HASHTABLE_VALUE_TYPE ht_find(hashtable_t*, HASHTABLE_KEY_TYPE);
+/**
+ * Finds an entry in the hashtable by the key
+ * @param ht Hashtable object
+ * @param k Key value
+ * @return Value in the hashtable associated with the data type, 0 on failure
+ */
+HASHTABLE_VALUE_TYPE ht_find(hashtable_t* ht, HASHTABLE_KEY_TYPE k);
 
-HASHTABLE_VALUE_TYPE ht_find_token(hashtable_t*, TokenDataType);
+/**
+ * Finds an entry in the hashtable by the token data type
+ * @param ht Hashtable object
+ * @param dt Data type
+ * @return Value in the hashtable associated with the data type, 0 on failure
+ */
+HASHTABLE_VALUE_TYPE ht_find_token(hashtable_t* ht, TokenDataType dt);
 
-// Checks whether an entry is contained in the hash table.
-int ht_contains(hashtable_t*, HASHTABLE_KEY_TYPE);
+/**
+ * Checks whether an entry is contained in the hash table
+ * @param ht Hashtable object
+ * @param k Key value
+ * @return Whether the key is present in the hashtable
+ */
+int ht_contains(hashtable_t* ht, HASHTABLE_KEY_TYPE k);
 
-// Removes an entry from the hash table.
-void ht_remove(hashtable_t*, HASHTABLE_KEY_TYPE);
+/**
+ * Removes an entry from the hash table
+ * @param ht Hashtable object
+ * @param k Key value
+ */
+void ht_remove(hashtable_t* ht, HASHTABLE_KEY_TYPE k);
 
-// Fetches the size.
-size_t ht_size(hashtable_t*);
+/**
+ * Determines the size of a hashtable
+ * @param ht Hashtable object
+ * @return Size of the hashtable
+ */
+size_t ht_size(hashtable_t* ht);
 
 #endif
