@@ -47,13 +47,48 @@ Token* eval(Token* exp, Scope* scope) {
 				tokenToString(leftVal, msg);
 				sprintf(msg, "Dem Zeichen %s kann nicht zugeschrieben werden", msg);
 				err(msg, ASSIGN_FAILED);
+				break;
 			}
+		}
+		case IF:
+		{
+			Token* cond = ht_find_token(exp->tokenData, CONDITION);
+			Token* res = eval(cond, scope);
+			int evalThen = res != NULL && res->type == NUMBER;
+			if (evalThen) {
+				TokenData* data = ht_find_token(exp->tokenData, VALUE);
+				evalThen = data->floatVal != 0;
+			}
+			if (evalThen) {
+				Token* thenblk = ht_find_token(exp->tokenData, THEN_BLOCK);
+				return eval(thenblk, scope);
+			} else {
+				Token* elseblk = ht_find_token(exp->tokenData, ELSE_BLOCK);
+				if (elseblk) {
+					return eval(elseblk, scope);
+				}
+				return NULL;
+			}
+		}
+		case PROGRAM:
+		{
+			Token* val = NULL;
+
+			TokenData* data = ht_find_token(exp->tokenData, VALUE);
+			int count = (int)data->floatVal;
+
+			Token** statements = ht_find_token(exp->tokenData, FUNCTION_BODY);
+
+			for (int i = 0; i < count; i++) {
+				val = eval(statements[i], scope);
+			}
+			return val;
 		}
 		default:
 		{
 			char msg[100];
 			sprintf(msg, "Zeichen mit unerwartetem Typ %s gefunden",
-					tokenTypeToString(exp-type));
+					tokenTypeToString(exp->type));
 			err(msg, UNKNOWN_TOKEN_TYPE);
 		}
 	}
@@ -70,7 +105,7 @@ int main(int argc, char* argv[]) {
 		fprintf(stderr, "Datei konnte nicht geöffnet werden\n");
 		return 1;
 	}
-	Token* topLevel = parseTopLevel(file);
+	Token* ast = parseTopLevel(file);
 	fclose(file);
 	return 0;
 }

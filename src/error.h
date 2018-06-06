@@ -29,6 +29,7 @@
 #define UNEXPECTED_TOKEN 4
 #define UNKNOWN_TOKEN_TYPE 5
 #define ASSIGN_FAILED 6
+#define MEMORY_ERROR 7
 
 /**
  * Raise an error

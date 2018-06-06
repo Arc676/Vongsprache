@@ -66,12 +66,21 @@ Token* parseProg(FILE* fp) {
 		}
 		if (pos >= size / sizeof(Token*)) {
 			size += INITIAL_FUNCTION_STATEMENT_COUNT * sizeof(Token*);
-			statements = (Token**)realloc(statements, size);
+			Token** new = (Token**)realloc(statements, size);
+			if (new) {
+				statements = new;
+			} else {
+				err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
+				return NULL;
+			}
 		}
 		statements[pos++] = parseExpression(fp);
 	}
 	Token* prog = createToken(PROGRAM);
 	ht_insert_token(prog->tokenData, FUNCTION_BODY, statements);
+	TokenData* data = (TokenData*)malloc(sizeof(TokenData));
+	data->floatVal = pos;
+	ht_insert_token(prog->tokenData, VALUE, data);
 	return prog;
 }
 
