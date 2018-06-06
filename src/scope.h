@@ -24,10 +24,9 @@
 #include <stdlib.h>
 
 #include "hashtable.h"
-#include "ht_ext.h"
 #include "token.h"
 
-typedef struct Scope {
+typedef struct {
 	struct Scope* parentScope;
 	hashtable_t* variables;
 } Scope;
