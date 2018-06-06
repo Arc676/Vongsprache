@@ -95,7 +95,7 @@ Token* readNumber(FILE* fp) {
     memset(literal, 0, 100);
     int pos = 0;
     while (1) {
-    	char c = next(fp);
+    	char c = peek(fp);
         if (c == '.') {
             if (hasDot) {
                 break;
@@ -107,6 +107,7 @@ Token* readNumber(FILE* fp) {
         } else {
 			break;
 		}
+        next(fp);
     }
     float number = strtof(literal, (char**)NULL);
     free(literal);

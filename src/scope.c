@@ -49,11 +49,11 @@ Token* getVariable(Scope* scope, char* identifier) {
 
 Token* setVariable(Scope* scope, char* identifier, Token* value) {
 	Scope* defined = lookupScope(scope, identifier);
-	if (defined) {
-		ht_insert(defined->variables, identifier, value);
-		return value;
+	if (!defined) {
+		defined = scope;
 	}
-	return NULL;
+	ht_insert(defined->variables, identifier, value);
+	return value;
 }
 
 Token* defineVariable(Scope* scope, char* identifier, Token* value) {

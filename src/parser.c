@@ -120,7 +120,7 @@ Token* parseCall(FILE* fp) {
 
 Token* parseExpression(FILE* fp) {
 	if (parser_isValue(fp, KEYWORD, "i")) {
-		lexer_next(fp);
+		skipValue(fp, KEYWORD, 2, "i", "bims");
 		Token* identifier = lexer_next(fp);
 		if (identifier->type != IDENTIFIER) {
 			err("Erwartete Identifikator", EXPECTED_TOKEN);
@@ -131,6 +131,17 @@ Token* parseExpression(FILE* fp) {
 			lexer_next(fp);
 			skipValue(fp, KEYWORD, 1, "mit");
 			return parseProg(fp);
+		} else {
+			Token* token = createToken(ASSIGN);
+			TokenData* leftVal = createTokenData(ASSIGN, 0, NULL, identifier);
+			ht_insert_token(token->tokenData, LEFT_VAR, leftVal);
+
+			Token* right = parseExpression(fp);
+			TokenData* rightVal = createTokenData(ASSIGN, 0, NULL, right);
+			ht_insert_token(token->tokenData, RIGHT_VAR, rightVal);
+
+			skipValue(fp, KEYWORD, 1, "her");
+			return token;
 		}
 	}
 	if (parser_isValue(fp, KEYWORD, "bims")) {
