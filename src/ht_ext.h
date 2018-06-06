@@ -27,17 +27,17 @@
 /**
  * Utility function for hashtable extension to determine in two char* keys
  * are equal using strcmp
- * @param x first key
- * @param y second key
- * @return whether the keys are equal
+ * @param x First key
+ * @param y Second key
+ * @return Whether the keys are equal
  */
 int ht_char_equals(char* x, char* y);
 
 /**
  * Utility hashing function for hashtable extension to convert a char* key
  * into a uint32_t to be used as a key in the hashtable
- * @param k the desired key
- * @return a uint32_t representation of the key
+ * @param k The desired key
+ * @return A uint32_t representation of the key
  */
 uint32_t ht_char_hash(char* k);
 

@@ -51,28 +51,28 @@ Token* currentToken;
 /**
  * Peek at current token without removing it from the stream
  * @param fp FILE* from which to peek
- * @return current token
+ * @return Current token
  */
 Token* lexer_peek(FILE* fp);
 
 /**
  * Obtain and remove the next token in the stream
  * @param fp FILE* from which to peek
- * @return the next token in the stream
+ * @return The next token in the stream
  */
 Token* lexer_next(FILE* fp);
 
 /**
  * Determine whether the token stream has ended
  * @param fp FILE* from which to read
- * @return whether an EOF has been encountered
+ * @return Whether an EOF has been encountered
  */
 int lexer_eof(FILE* fp);
 
 /**
  * Parses the stream for the next token
  * @param fp FILE* from which to read
- * @return parsed token
+ * @return Parsed token
  */
 Token* readNext(FILE* fp);
 
@@ -85,21 +85,21 @@ void skipComment(FILE* fp);
 /**
  * Reads a string literal from the source file
  * @param fp FILE* from which to read
- * @return string literal token
+ * @return String literal token
  */
 Token* readString(FILE* fp);
 
 /**
  * Reads a numerical literal from the source file
  * @param fp FILE* from which to read
- * @return numerical literal token
+ * @return Numerical literal token
  */
 Token* readNumber(FILE* fp);
 
 /**
  * Reads an identifier from the source file
  * @param fp FILE* from which to read
- * @return identifier token
+ * @return Identifier token
  */
 Token* readIdentifier(FILE* fp);
 
@@ -107,8 +107,8 @@ Token* readIdentifier(FILE* fp);
  * Reads from the stream until the end character is reached without
  * being escaped by a backslash
  * @param fp FILE* from which to read
- * @param end character to end the read
- * @return the text read from the stream
+ * @param end Character to end the read
+ * @return The text read from the stream
  */
 char* readEscaped(FILE* fp, char end);
 
@@ -117,66 +117,66 @@ char* readEscaped(FILE* fp, char end);
  * given function pointer and stores the result in the given string
  * @param fp FILE* from which to read
  * @param str char* into which to read from the stream
- * @param size size of the character buffer
- * @param *valid pointer to a function to validate the read characters
+ * @param size Size of the character buffer
+ * @param *valid Pointer to a function to validate the read characters
  */
 void readWhile(FILE* fp, char* str, size_t size, int (*valid)(char));
 
 /**
  * Determine whether a character is a valid initial character for an
  * identifier in the language
- * @param c character to check
- * @return whether the character can be an identifier's initial character
+ * @param c Character to check
+ * @return Whether the character can be an identifier's initial character
  */
 int isValidIDStart(char c);
 
 /**
  * Determine whether a character can be used in an identifier
- * @param c character to check
- * @return whether the character can be used in an identifier
+ * @param c Character to check
+ * @return Whether the character can be used in an identifier
  */
 int isValidIDChar(char c);
 
 /**
  * Determine whether a word is a keyword
- * @param str the word to check
- * @return whether the word is a reserved word
+ * @param str The word to check
+ * @return Whether the word is a reserved word
  */
 int isKeyword(char* str);
 
 /**
  * Determine whether a character is whitespace
- * @param c character to check
- * @return whether the character is a space, tab, or newline
+ * @param c Character to check
+ * @return Whether the character is a space, tab, or newline
  */
 int isWhitespace(char c);
 
 /**
  * Determine whether a character is a digit
- * @param c character to check
- * @return whether the character matches [0-9]
+ * @param c Character to check
+ * @return Whether the character matches [0-9]
  */
 int isDigit(char c);
 
 /**
  * Determines whether a character is an acceptable punctuation mark
- * @param c character to check
- * @return whether the character is an accepted punctuation mark
+ * @param c Character to check
+ * @return Whether the character is an accepted punctuation mark
  */
  int isPunc(char c);
 
 /**
  * Determines whether a character is a recognized operation character
- * @param c character to check
- * @return whether the character is a valid operation character
+ * @param c Character to check
+ * @return Whether the character is a valid operation character
  */
  int isOpChar(char c);
 
 /**
  * Determines whether a character appears in a string
- * @param c character to search for
- * @param str string in which to search
- * @return whether the character appears in the string
+ * @param c Character to search for
+ * @param str String in which to search
+ * @return Whether the character appears in the string
  */
  int charInString(char c, const char* str);
 

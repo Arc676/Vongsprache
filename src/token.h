@@ -67,33 +67,33 @@ typedef union {
 
 /**
  * Utility function for initializing tokens
- * @param type the type of token
- * @return an initialized token of the given type
+ * @param type The type of token
+ * @return An initialized token of the given type
  */
 Token* createToken(TokenType type);
 
 /**
  * Utility function for creating token data
- * @param type the token type
- * @param floatVal float value to store, if any
- * @param charVal string value to store, if any
- * @param tokenVal token value to store, if any
- * @return a token with the specified data
+ * @param type The token type
+ * @param floatVal Float value to store, if any
+ * @param charVal String value to store, if any
+ * @param tokenVal Token value to store, if any
+ * @return A token with the specified data
  */
 TokenData* createTokenData(TokenType type, float floatVal,
     char* charVal, Token* tokenVal);
 
 /**
  * Obtain a human readable string for a token type
- * @param desired token type
- * @return human readable name for given type
+ * @param desired Token type
+ * @return Human readable name for given type
  */
 char* tokenTypeToString(TokenType type);
 
 /**
  * Stores a human readable description of a token in a given string
- * @param token relevant token
- * @param str string into which the description should be stored
+ * @param token Relevant token
+ * @param str String into which the description should be stored
  */
  void tokenToString(Token* token, char* str);
 

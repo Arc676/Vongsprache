@@ -43,28 +43,28 @@ int currentlyParsingCol;
  * Peek at the next character in the stream without
  * removing it
  * @param fp FILE* from which to peek
- * @return the character at the current position in the file
+ * @return The character at the current position in the file
  */
 char peek(FILE* fp);
 
 /**
  * Obtain the next character in the stream and remove it
  * @param fp FILE* from which to read
- * @return the next character in the stream
+ * @return The next character in the stream
  */
 char next(FILE* fp);
 
 /**
  * Determine whether the file is done being read
  * @param fp FILE* to check
- * @return whether the current character is EOF
+ * @return Whether the current character is EOF
  */
 int eof(FILE* fp);
 
 /**
  * Raise an error
- * @param message error message
- * @param code the exit code
+ * @param message Error message
+ * @param code The exit code
  */
 void err(char* message, int code);
 

@@ -32,58 +32,58 @@
 /**
  * Top-level parse function to parse the whole script
  * @param fp FILE* from which to read
- * @return program token containing the script
+ * @return Program token containing the script
  */
 Token* parseTopLevel(FILE* fp);
 
 /**
  * Parse a function from the token stream
  * @param fp FILE* from which to read
- * @return function token containing the defined function
+ * @return Function token containing the defined function
  */
 Token* parseFunction(FILE* fp);
 
 /**
  * Parse an if-block from the token stream
  * @param fp FILE* from which to read
- * @return conditional token defining the block
+ * @return Conditional token defining the block
  */
 Token* parseIf(FILE* fp);
 
 /**
  * Parse a function call from the token stream
  * @param fp FILE* from which to read
- * @return call token indicating the called function and passed arguments
+ * @return Call token indicating the called function and passed arguments
  */
 Token* parseCall(FILE* fp);
 
 /**
  * Parse a sequence of statements
  * @param fp FILE* from which to read
- * @return program token containing statements
+ * @return Program token containing statements
  */
 Token* parseProg(FILE* fp);
 
 /**
  * Parse the token stream for a variable name
  * @param fp FILE* from which to read
- * @return identifier of the variable
+ * @return Identifier of the variable
  */
 char* parseVariableName(FILE* fp);
 
 /**
  * Parse the next expression contained in the token stream
  * @param fp FILE* from which to read
- * @return token representing the next expression in the stream
+ * @return Token representing the next expression in the stream
  */
 Token* parseExpression(FILE* fp);
 
 /**
  * Parse the stream for a potential binary expression
  * @param fp FILE* from which to read
- * @param token given token that might start an expression
- * @param prec precedence of the given token
- * @return the given token or another token representing the expression
+ * @param token Given token that might start an expression
+ * @param prec Precedence of the given token
+ * @return The given token or another token representing the expression
  */
 Token* potentialBinary(FILE* fp, Token* token, int prec);
 
@@ -91,11 +91,11 @@ Token* potentialBinary(FILE* fp, Token* token, int prec);
  * Parse the stream for a list of tokens between specified start and end
  * characters delimited by the specified separator
  * @param fp FILE* from which to read
- * @param start starting character for the list (as string)
- * @param end ending character for the list (as string)
- * @param sep delimiter character for the list (as string)
- * @param parse parse function to parse the delimited tokens
- * @return an array containing the parsed tokens
+ * @param start Starting character for the list (as string)
+ * @param end Ending character for the list (as string)
+ * @param sep Delimiter character for the list (as string)
+ * @param parse Parse function to parse the delimited tokens
+ * @return An array containing the parsed tokens
  */
 Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
 	Token* (*parse)(FILE*));
@@ -104,9 +104,9 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep,
  * Check whether the current token is of a given type and contains a given
  * string in the TokenData charVal of data stored with the VALUE key
  * @param fp FILE* from which to read
- * @param type desired token type
- * @param value desired string value
- * @return whether the current token matches
+ * @param type Desired token type
+ * @param value Desired string value
+ * @return Whether the current token matches
  */
 int parser_isValue(FILE* fp, TokenType type, char* value);
 
@@ -115,15 +115,15 @@ int parser_isValue(FILE* fp, TokenType type, char* value);
  * remove them from the stream. Only values with matching token types can be
  * searched for and removed with a single function call.
  * @param fp FILE* from which to read
- * @param type desired token type
- * @param count number of tokens to search for and skip
- * @param ... variadic list of desired values
+ * @param type Desired token type
+ * @param count Number of tokens to search for and skip
+ * @param ... Variadic list of desired values
  */
 void skipValue(FILE* fp, TokenType type, int count, ...);
 
 /**
  * Throw an error if the current token is an unexpected token
- * @param token the unexpected token
+ * @param token The unexpected token
  */
 void unexpected(Token* token);
 

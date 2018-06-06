@@ -34,42 +34,42 @@ typedef struct Scope {
 
 /**
  * Create a new scope object with the given parent scope
- * @param parent desired parent scope
- * @return the newly created scope object
+ * @param parent Desired parent scope
+ * @return The newly created scope object
  */
 Scope* createScope(Scope* parent);
 
 /**
  * Find the scope in which a variable is declared
- * @param scope scope from which to start searching
- * @param identifier variable identifier
- * @return scope in which variable is declared, NULL if none
+ * @param scope Scope from which to start searching
+ * @param identifier Variable identifier
+ * @return Scope in which variable is declared, NULL if none
  */
 Scope* lookupScope(Scope* scope, char* identifier);
 
 /**
  * Get the token object representing a given variable
- * @param scope scope in which to search
- * @param identifier variable identifier
- * @return variable object
+ * @param scope Scope in which to search
+ * @param identifier Variable identifier
+ * @return Variable object
  */
 Token* getVariable(Scope* scope, char* identifier);
 
 /**
  * Sets the value of a given variable
- * @param scope scope in which variable should be defined
- * @param identifier variable identifier
- * @param value the new value for the variable
- * @return the new value of the variable, NULL if setting failed
+ * @param scope Scope in which variable should be defined
+ * @param identifier Variable identifier
+ * @param value The new value for the variable
+ * @return The new value of the variable, NULL if setting failed
  */
 Token* setVariable(Scope* scope, char* identifier, Token* value);
 
 /**
  * Define a new variable in a scope
- * @param scope scope in which to define the variable
- * @param identifier variable identifier
- * @param value initial value to give to the variable
- * @return value of the new variable, NULL if the variable already existed
+ * @param scope Scope in which to define the variable
+ * @param identifier Variable identifier
+ * @param value Initial value to give to the variable
+ * @return Value of the new variable, NULL if the variable already existed
  */
 Token* defineVariable(Scope* scope, char* identifier, Token* value);
 
