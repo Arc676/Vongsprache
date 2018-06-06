@@ -26,7 +26,7 @@
 #include "hashtable.h"
 #include "token.h"
 
-typedef struct {
+typedef struct Scope {
 	struct Scope* parentScope;
 	hashtable_t* variables;
 } Scope;

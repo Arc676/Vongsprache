@@ -29,9 +29,13 @@ static const size_t INITIAL_CAP_LOG = 4;
 // s = floor((1 << 32) * A)
 static const uint32_t hash_s = 2654435769;
 
-uint32_t ht_identity(uint32_t k) {
-    // Use uint32_t for the parameter to let the compiler catch mistakes.
-    return k;
+uint32_t ht_char_hash(void* key) {
+    char* k = (char*)key;
+    uint32_t h = 0;
+	for (int i = 0; i < strlen(k); i++) {
+		h = 31 * h + k[i];
+	}
+	return h;
 }
 
 int ht_equals(HASHTABLE_KEY_TYPE x, HASHTABLE_KEY_TYPE y) {
@@ -58,7 +62,7 @@ void ht_create(hashtable_t* ht, hashtable_hash_code fun, hashtable_key_check chk
 
     // Setup hash code function.
     if (fun == NULL) {
-        ht->hash_code_fun = ht_identity;
+        ht->hash_code_fun = ht_char_hash;
     } else {
         ht->hash_code_fun = fun;
     }

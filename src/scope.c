@@ -24,7 +24,7 @@ Scope* createScope(Scope* parent) {
 	Scope* scope = (Scope*)malloc(sizeof(Scope*));
 	scope->parentScope = parent;
 	scope->variables = (hashtable_t*)malloc(sizeof(hashtable_t));
-	ht_create(scope->variables, ht_char_hash, ht_char_equals);
+	ht_create(scope->variables, NULL, NULL);
 	return scope;
 }
 
