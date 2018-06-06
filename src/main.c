@@ -18,14 +18,18 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#define ASSIGN_FAILED 1
+#define UNKNOWN_TOKEN_TYPE 2
+
 #include <stdio.h>
 
 #include "parser.h"
+#include "scope.h"
 
-void runtimeErr(char* message) {
+void runtimeErr(char* message, int code) {
 	fprintf(stderr, "%s: line %d, col %d\n", message,
             currentlyParsingLine, currentlyParsingCol);
-    exit(code);
+	exit(code);
 }
 
 Token* eval(Token* exp, Scope* scope) {
@@ -45,28 +49,36 @@ Token* eval(Token* exp, Scope* scope) {
 			if (leftVal->type == IDENTIFIER) {
 				left = ht_find(leftVal->tokenData, VALUE);
 				TokenData* right = ht_find(exp->tokenData, RIGHT_VAR);
-				return setVariable(scope, left->charVal, eval(right->tokenVal));
+				return setVariable(scope, left->charVal, eval(right->tokenVal, scope));
 			} else {
 				char msg[100];
 				tokenToString(leftVal, msg);
 				sprintf(msg, "Can't assign to %s", msg);
-				runtimeErr(msg);
+				runtimeErr(msg, ASSIGN_FAILED);
 			}
 		}
+		default:
+		{
+			char msg[100];
+			tokenToString(exp, msg);
+			sprintf(msg, "Encountered token with unexpected type %s", msg);
+			runtimeErr(msg, UNKNOWN_TOKEN_TYPE);
+		}
 	}
+	return NULL;
 }
 
 int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: vongsprache script_file\n");
-        return 1;
-    }
-    FILE* file = fopen(argv[1], "r");
+	if (argc != 2) {
+		fprintf(stderr, "Usage: vongsprache script_file\n");
+		return 1;
+	}
+	FILE* file = fopen(argv[1], "r");
 	if (!file) {
 		fprintf(stderr, "Failed to open file!\n");
 		return 1;
 	}
 	Token* topLevel = parseTopLevel(file);
-    fclose(file);
-    return 0;
+	fclose(file);
+	return 0;
 }

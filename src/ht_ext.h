@@ -22,6 +22,7 @@
 #define HASHTABLE_EXTENSION_H
 
 #include <string.h>
+#include "hashtable.h"
 
 /**
  * Utility function for hashtable extension to determine in two char* keys

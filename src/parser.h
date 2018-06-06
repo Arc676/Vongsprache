@@ -88,7 +88,7 @@ Token* parseExpression(FILE* fp);
 Token* potentialBinary(FILE* fp, Token* token, int prec);
 
 /**
- * Parse the stream for a list of tokens between a specified start and end
+ * Parse the stream for a list of tokens between specified start and end
  * characters delimited by the specified separator
  * @param fp FILE* from which to read
  * @param start starting character for the list (as string)

@@ -85,23 +85,25 @@ void tokenToString(Token* token, char* str) {
 	TokenData* data = ht_find(token->tokenData, VALUE);
 	switch (token->type) {
         case NUMBER:
-            sprintf(msg, "%s (%d)", msg, data->floatVal);
+            sprintf(str, "%s (%f)", str, data->floatVal);
             break;
         case STRING:
         case KEYWORD:
         case PUNCTUATION:
         case IDENTIFIER:
 		case OPERATOR:
-            sprintf(msg, "%s (%s)", msg, data->charVal);
+            sprintf(str, "%s (%s)", str, data->charVal);
             break;
         case BINARY:
         case CALL:
         case ASSIGN:
         case IF:
 		case PROGRAM:
+        {
             char sub[200];
 			tokenToString(data->tokenVal, sub);
-			sprintf(msg, "%s (%s)", msg, sub);
+			sprintf(str, "%s (%s)", str, sub);
             break;
+        }
     }
 }

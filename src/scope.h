@@ -25,9 +25,10 @@
 
 #include "hashtable.h"
 #include "ht_ext.h"
+#include "token.h"
 
-typedef struct {
-	Scope* parentScope;
+typedef struct Scope {
+	struct Scope* parentScope;
 	hashtable_t* variables;
 } Scope;
 

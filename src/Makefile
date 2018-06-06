@@ -1,31 +1,25 @@
 CC=gcc
 FLAGS=-c
-OBJS=main.o stream.o hashtable.o lexer.o token.o parser.o
+
+ODIR=../obj
+
+OBJS=main.o stream.o hashtable.o ht_ext.o lexer.o token.o parser.o scope.o
+_OBJS=$(patsubst %, $(ODIR)/%, $(OBJS))
+
 OUT=vongsprache
 
-debug: FLAGS += -g -O0
-debug: vongsprache
+ifdef DEBUG
+	FLAGS += -g -O0
+endif
 
-vongsprache: $(OBJS)
-	$(CC) -o $(OUT) $(OBJS)
+vongsprache: makedir $(_OBJS)
+	$(CC) -o $(OUT) $(_OBJS)
 
-main.o:
-	$(CC) $(FLAGS) main.c
+makedir:
+	mkdir -p $(ODIR)
 
-stream.o:
-	$(CC) $(FLAGS) stream.c
-
-hashtable.o:
-	$(CC) $(FLAGS) hashtable.c
-
-lexer.o:
-	$(CC) $(FLAGS) lexer.c
-
-token.o:
-	$(CC) $(FLAGS) token.c
-
-parser.o:
-	$(CC) $(FLAGS) parser.c
+$(ODIR)/%.o: %.c
+	$(CC) $(FLAGS) -o $@ $<
 
 clean:
-	rm -f $(OBJS) $(OUT)
+	rm -f $(ODIR)/*.o $(OUT)

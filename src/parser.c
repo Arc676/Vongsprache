@@ -72,6 +72,7 @@ Token* parseProg(FILE* fp) {
 	}
 	Token* prog = createToken(PROGRAM);
 	ht_insert(prog->tokenData, FUNCTION_BODY, statements);
+	return prog;
 }
 
 char* parseVariableName(FILE* fp) {
@@ -90,7 +91,7 @@ Token* parseCall(FILE* fp) {
 	if (funcIdentifier->type == IDENTIFIER) {
 		ht_insert(token->tokenData, FUNCTION_CALL, funcIdentifier);
 		if (parser_isValue(fp, KEYWORD, "mit")) {
-			Token** args = parseDelimited(fp, "(", ")", parseExpression);
+			Token** args = parseDelimited(fp, "(", ")", ",", parseExpression);
 			ht_insert(token->tokenData, ARGUMENTS, args);
 		}
 		return token;
