@@ -46,7 +46,7 @@ Token* eval(Token* exp, Scope* scope) {
 				char msg[100];
 				char token[100];
 				tokenToString(leftVal, token);
-				sprintf(msg, "Dem Token %s kann nicht zugeschrieben werden", token);
+				sprintf(msg, "Token %s kann nicht zugewiesen werden", token);
 				err(msg, ASSIGN_FAILED);
 				break;
 			}
