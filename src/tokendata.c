@@ -27,9 +27,9 @@ char* tokenDataTypeToString(TokenDataType type) {
         case ARGUMENTS:
             return "Argumente";
         case FUNCTION_BODY:
-            return "Funktionskörper";
+            return "Funktionkörper";
         case FUNCTION_CALL:
-            return "Funktionsanruf";
+            return "Funktionanruf";
         case CONDITION:
             return "Bedingung";
         case THEN_BLOCK:

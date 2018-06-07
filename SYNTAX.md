@@ -2,6 +2,14 @@
 
 In diesem Dokument wird die Syntax der Vongsprache erklärt. In den Beispielen sind Wörter zwischen `[eckigen Klammern]` fakultativ. Beispielsweise können Funktionen auch keine Parameter haben. Wörter zwischen `<spitzen Klammern>` bezeichnen, was eigentlich geschrieben werden sollte. Beispielsweise bedeutet `<Identifikator>`, dass dort ein Identifikator erwartet wird.
 
+## Kommentare
+
+In der Vongsprache gibt es nur Zeilenkommentare. Diese fangen mit `#` an.
+```
+# Das ist ein Kommentar
+# Und das hier auch
+```
+
 ## Deklarationen
 
 ### Identifikatoren

@@ -68,13 +68,13 @@ char* tokenTypeToString(TokenType type) {
 		case OPERATOR:
 			return "Operator";
 	    case CALL:
-			return "Funktionsanruf";
+			return "Funktionanruf";
 	    case BINARY:
 			return "Binarischer Ausdruck";
 	    case IF:
-			return "Bedingte Anweisung";
+			return "Bedingte Anweisungsblock";
 	    case ASSIGN:
-			return "Zuschreibung";
+			return "Zuweisung";
 		case PROGRAM:
 			return "Anweisungfolge";
 	}

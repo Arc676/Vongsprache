@@ -114,7 +114,7 @@ Token* parseCall(FILE* fp) {
 		ht_insert_token(token->tokenData, VALUE, data);
 		return token;
 	}
-	err("Erwartete Funktionsidentifikator", EXPECTED_TOKEN);
+	err("Erwartete Funktionidentifikator", EXPECTED_TOKEN);
 	return NULL;
 }
 
