@@ -50,11 +50,12 @@ Token* parseIf(FILE* fp) {
 	Token* ret = createToken(IF);
 	ht_insert_token(ret->tokenData, CONDITION, cond);
 	ht_insert_token(ret->tokenData, THEN_BLOCK, then);
+	skipValue(fp, KEYWORD, 1, "her");
 	if (parser_isValue(fp, KEYWORD, "am")) {
-		lexer_next(fp);
-		skipValue(fp, KEYWORD, 1, "Sonstigkeit");
+		skipValue(fp, KEYWORD, 2, "am", "Sonstigkeit");
 		Token* els = parseProg(fp);
 		ht_insert_token(ret->tokenData, ELSE_BLOCK, els);
+		skipValue(fp, KEYWORD, 1, "her");
 	}
 	return ret;
 }

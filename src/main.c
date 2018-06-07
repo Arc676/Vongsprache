@@ -57,7 +57,7 @@ Token* eval(Token* exp, Scope* scope) {
 			Token* res = eval(cond, scope);
 			int evalThen = res != NULL && res->type == NUMBER;
 			if (evalThen) {
-				TokenData* data = ht_find_token(exp->tokenData, VALUE);
+				TokenData* data = ht_find_token(res->tokenData, VALUE);
 				evalThen = data->floatVal != 0;
 			}
 			if (evalThen) {
@@ -73,6 +73,7 @@ Token* eval(Token* exp, Scope* scope) {
 		}
 		case PROGRAM:
 		{
+			Scope* childScope = createScope(scope);
 			Token* val = NULL;
 
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
@@ -81,7 +82,7 @@ Token* eval(Token* exp, Scope* scope) {
 			Token** statements = ht_find_token(exp->tokenData, FUNCTION_BODY);
 
 			for (int i = 0; i < count; i++) {
-				val = eval(statements[i], scope);
+				val = eval(statements[i], childScope);
 			}
 			return val;
 		}
@@ -139,8 +140,8 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 	Token* ast = parseTopLevel(file);
-	Scope* global = createScope(NULL);
-	eval(ast, global);
+	// create global scope when running main function
+	eval(ast, NULL);
 	fclose(file);
 	return 0;
 }

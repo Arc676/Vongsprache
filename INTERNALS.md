@@ -54,3 +54,99 @@ Die Schlüssel der Hashtabelle sind einer der folgenden Werte und bezeichnen, wa
 - OP - Operator eines Ausdrucks
 - LEFT_VAR - die linke Variable eines Zuweisungausdrucks
 - RIGHT_VAR - der rechte Wert eines Zuweisungausdrucks
+
+## Inhalt der Tokens
+
+In den folgenden Tabellen sind die Inhalte der verschiedenen Tokens gegeben. Ein einem Schlüssel folgendes Sternchen bezeichnet einen Wert, dessen Erscheinung nicht garantiert ist.
+
+Der Schlüssel ist einer der nach oben gegebenen Hashtabellenschlüssel/Token-Datei-Typ.
+
+Der Wertdatentyp bezeichnet, was für eine Struktur genutzt wird, um den Inhalt zu speichern.
+
+- Zeichenfolge - der `charVal`-Wert eines `TokenData*`-Objekts wird genutzt
+- Zahl - der `floatVal`-Wert eines `TokenData*`-Objekts wird genutzt
+- Token - der `tokenVal`-Wert eines `TokenData*`-Objekts wird genutzt
+- Token Objekt - ein `Token*`-Objekt wird gespeichert
+- Tokenfeld - ein Feld von Tokens (`Token**`) wird gespeichert
+
+### Satzzeichentokens
+
+Tokentyp: `PUNCTUATION`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE` | Zeichenfolge | Gefundenes Satzzeichen |
+
+### Operatortokens
+
+Tokentyp: `OPERATOR`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE` | Zeichenfolge | Gefundener Operator |
+
+### Stringtokens
+
+Tokentyp: `STRING`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE` | Zeichenfolge | Zeichenfolge-Literal |
+
+### Numerische Tokens
+
+Tokentyp: `NUMBER`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE` | Zahl | Numerisches Literal |
+
+### Identifikatortokens/Schlüsselworttokens
+
+Tokentyp: `IDENTIFIER`/`KEYWORD`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE` | Zeichenfolge | Gefundener Identifikator oder gefundenes Schlüsselwort |
+
+### Funktiontokens
+
+Tokentyp: `PROGRAM`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE` | Zahl | Anzahl von enthaltenen Anweisungen |
+| `FUNCTION_BODY` | Tokenfeld | Enthaltene Anweisungen in Form Tokens |
+
+### Bedingte Anweisungsblocktokens
+
+Tokentyp: `IF`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `CONDITION` | Token Objekt | Zu ausdrückende Bedingung der Anweisungsblock |
+| `THEN_BLOCK` | Token Objekt | Dem Ja-Fall entsprechende Funktiontoken |
+| `ELSE_BLOCK`* | Token Objekt | Dem Nein-Fall entsprechende Funktiontoken |
+
+Der `ELSE_BLOCK`-Wert ist für bedingte Anweisungsblöcken ohne Nein-Fall nicht definiert.
+
+### Funktionanruftokens
+
+Tokentyp: `CALL`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `FUNCTION_CALL` | Token Objekt | Den Identifikator der angerufenen Funktion enthaltendes Token |
+| `ARGUMENTS`* | Tokenfeld | Zur Funktion zu gebende Argumente in Form Tokens |
+| `VALUE` | Zahl | Anzahl von gegebenen Argumenten |
+
+Der `ARGUMENTS`-Wert ist für Funktionanrufe ohne Argumente nicht definiert.
+
+### Zuweisungausdruckstoken
+
+Tokentyp: `ASSIGN`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `LEFT_VAR` | Token | Den Identifikator der Variable enthaltendes Token, zu der ein Wert zugewiesen wird |
+| `RIGHT_VAR` | Token | Zu zuweisender Wert in Form eines Tokens |
