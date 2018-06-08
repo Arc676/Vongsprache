@@ -72,6 +72,8 @@ char* tokenTypeToString(TokenType type) {
             return "Schleife";
 	    case ASSIGN:
 			return "Zuweisung";
+        case INIT:
+            return "Initialisierung";
 		case PROGRAM:
 			return "Anweisungfolge";
 	}

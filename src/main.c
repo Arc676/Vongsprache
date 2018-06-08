@@ -64,6 +64,7 @@ Token* eval(Token* exp, Scope* scope) {
 			undeclaredIDErr(data->charVal);
 			break;
 		}
+		case INIT:
 		case ASSIGN:
 		{
 			Token* leftVal = ht_find_token(exp->tokenData, LEFT_VAR);
@@ -74,6 +75,18 @@ Token* eval(Token* exp, Scope* scope) {
 					TokenData* left = ht_find_token(leftVal->tokenData, VALUE);
 					Token* right = ht_find_token(exp->tokenData, RIGHT_VAR);
 					if (leftVal->type == IDENTIFIER) {
+						if (exp->type == ASSIGN) {
+							Token* exists = getVariable(scope, left->charVal);
+							if (!exists) {
+								char msg[100];
+								char token[100];
+								tokenToString(leftVal, token);
+								sprintf("Undeklariertes Token %s kann nicht zugewiesen werden",
+										token);
+								err(msg, ASSIGN_FAILED);
+								return NULL;
+							}
+						}
 						return setVariable(scope, left->charVal, eval(right, scope));
 					} else {
 						return setVariable(scope, left->charVal, right);

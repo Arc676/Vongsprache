@@ -27,6 +27,7 @@
 #include "token.h"
 
 #define KEYWORD_COUNT 12
+#define OP_COUNT 10
 
 /**
  * List of all the reserved words
@@ -41,7 +42,7 @@ const char* punctuation;
 /**
  * Recognized operation characters
  */
-const char* opChars;
+const char* operators[OP_COUNT];
 
 /**
  * Token currently being parsed
@@ -138,11 +139,11 @@ int isValidIDStart(char c);
 int isValidIDChar(char c);
 
 /**
- * Determine whether a word is a keyword
+ * Determine the token type associated with a word
  * @param str The word to check
- * @return Whether the word is a reserved word
+ * @return Corresponding token type
  */
-int isKeyword(char* str);
+TokenType wordType(char* str);
 
 /**
  * Determine whether a character is whitespace

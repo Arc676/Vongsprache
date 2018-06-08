@@ -39,6 +39,7 @@ typedef enum TokenType {
     IF,
     LOOP,
     ASSIGN,
+    INIT,
 	PROGRAM
 } TokenType;
 

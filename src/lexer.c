@@ -35,8 +35,20 @@ const char* keywords[KEYWORD_COUNT] = {
 	"bidde"
 };
 
+const char* operators[OP_COUNT] = {
+    "plus",
+    "minus",
+    "mal",
+    "geteilt-durch",
+    "bimst",
+    "und",
+    "oder",
+    "größer",
+    "kleiner",
+    "nicht"
+};
+
 const char* punctuation = "()[]{},";
-const char* opChars = "%+-*/=&|<>!";
 Token* currentToken = NULL;
 
 Token* readNext(FILE* fp) {
@@ -120,8 +132,7 @@ Token* readNumber(FILE* fp) {
 Token* readIdentifier(FILE* fp) {
     char* str = (char*)malloc(100);
     readWhile(fp, str, 100, isValidIDChar);
-    TokenType type = isKeyword(str) ? KEYWORD : IDENTIFIER;
-    TokenData* data = createTokenData(type, 0, str);
+    TokenData* data = createTokenData(wordType(str), 0, str);
     Token* token = createToken(type);
     ht_insert_token(token->tokenData, VALUE, data);
     return token;
@@ -197,13 +208,18 @@ int lexer_eof(FILE* fp) {
     return lexer_peek(fp) == NULL;
 }
 
-int isKeyword(char* str) {
+TokenType wordType(char* str) {
     for (int i = 0; i < KEYWORD_COUNT; i++) {
         if (!strcmp(str, keywords[i])) {
-            return 1;
+            return KEYWORD;
         }
     }
-    return 0;
+    for (int i = 0; i < OP_COUNT; i++) {
+        if (!strcmp(str, operators[i])) {
+            return OPERATOR;
+        }
+    }
+    return IDENTIFIER;
 }
 
 int isValidIDStart(char c) {
