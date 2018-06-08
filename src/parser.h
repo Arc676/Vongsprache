@@ -95,11 +95,10 @@ Token* parseExpression(FILE* fp);
 /**
  * Parse the stream for a potential binary expression
  * @param fp FILE* from which to read
- * @param token Given token that might start an expression
  * @param prec Precedence of the given token
  * @return The given token or another token representing the expression
  */
-Token* potentialBinary(FILE* fp, Token* token, int prec);
+Token* potentialBinary(FILE* fp, int prec);
 
 /**
  * Parse the stream for a list of tokens between specified start and end
@@ -108,7 +107,7 @@ Token* potentialBinary(FILE* fp, Token* token, int prec);
  * @param start Starting character for the list (as string)
  * @param end Ending character for the list (as string)
  * @param sep Delimiter character for the list (as string)
- * @param count Pointer to int in which to store parsed token count 
+ * @param count Pointer to int in which to store parsed token count
  * @param parse Parse function to parse the delimited tokens
  * @return An array containing the parsed tokens
  */

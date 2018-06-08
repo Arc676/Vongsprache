@@ -153,6 +153,10 @@ Token* parseCall(FILE* fp) {
 }
 
 Token* parseExpression(FILE* fp) {
+	return potentialBinary(fp, 0);
+}
+
+Token* potentialBinary(FILE* fp, int prec) {
 	if (parser_isValue(fp, KEYWORD, "i")) {
 		skipValue(fp, KEYWORD, 2, "i", "bims");
 		Token* identifier = lexer_next(fp);
@@ -161,7 +165,7 @@ Token* parseExpression(FILE* fp) {
 			return NULL;
 		}
 		skipValue(fp, KEYWORD, 1, "vong");
-		Token* token = createToken(ASSIGN);
+		Token* token = createToken(INIT);
 		ht_insert_token(token->tokenData, LEFT_VAR, identifier);
 		if (parser_isValue(fp, KEYWORD, "Funktionigkeit")) {
 			lexer_next(fp);
@@ -220,6 +224,25 @@ Token* parseExpression(FILE* fp) {
 	}
 	switch (token->type) {
 		case IDENTIFIER:
+		{
+			Token* op = lexer_peek(fp);
+			if (op->type == OPERATOR) {
+				TokenData* data = ht_find_token(op->tokenData, OP);
+				int opType = (int)data->floatVal;
+				int opPrec = getPrecedence(opType);
+				if (opPrec > prec) {
+					lexer_next(fp);
+					Token* rval = potentialBinary(fp, opPrec);
+
+					Token* exp = createToken(opType == 0 ? ASSIGN : BINARY);
+					ht_insert_token(exp->tokenData, LEFT_VAR, token);
+					ht_insert_token(exp->tokenData, OP, op);
+					ht_insert_token(exp->tokenData, RIGHT_VAR, rval);
+					return exp;
+				}
+			}
+		}
+		// if no binary expression found, fall through to just return token
 		case STRING:
 		case NUMBER:
 			return token;

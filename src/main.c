@@ -81,7 +81,7 @@ Token* eval(Token* exp, Scope* scope) {
 								char msg[100];
 								char token[100];
 								tokenToString(leftVal, token);
-								sprintf("Undeklariertes Token %s kann nicht zugewiesen werden",
+								sprintf(msg, "Undeklariertes Token %s kann nicht zugewiesen werden",
 										token);
 								err(msg, ASSIGN_FAILED);
 								return NULL;
