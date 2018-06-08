@@ -34,7 +34,7 @@ Scope* lookupScope(Scope* scope, char* identifier) {
 		if (ht_contains(found->variables, identifier)) {
 			return found;
 		}
-		found = scope->parentScope;
+		found = found->parentScope;
 	}
 	return NULL;
 }

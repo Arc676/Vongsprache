@@ -1,6 +1,6 @@
 # Innere Arbeitsweisen der Vongsprache
 
-In diesem Dokument wird die Darstellung der Tokens und des abstrakten Syntaxbaum der Vongsprache erklärt. Die Regeln der Sprache können in `SYNTAX.md` gefunden werden.
+In diesem Dokument wird die Darstellung der Tokens und des abstrakten Syntaxbaums der Vongsprache erklärt. Die Regeln der Sprache können in `SYNTAX.md` gefunden werden.
 
 ## Struktur eines Tokens
 
@@ -67,6 +67,8 @@ Der Wertdatentyp bezeichnet, was für eine Struktur genutzt wird, um den Inhalt 
 - Token - ein `Token*`-Objekt wird gespeichert
 - Tokenfeld - ein Feld von Tokens (`Token**`) wird gespeichert
 
+Tokens, die bei dem Anruf und der Darstellung von Funktionen genutzt werden, sind ganz nach unten beschrieben.
+
 ### Satzzeichentokens
 
 Tokentyp: `PUNCTUATION`
@@ -107,15 +109,6 @@ Tokentyp: `IDENTIFIER`/`KEYWORD`
 | --- | --- | --- |
 | `VALUE` | Zeichenfolge | Gefundener Identifikator oder gefundenes Schlüsselwort |
 
-### Funktiontokens
-
-Tokentyp: `PROGRAM`
-
-| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
-| --- | --- | --- |
-| `VALUE` | Zahl | Anzahl von enthaltenen Anweisungen |
-| `FUNCTION_BODY` | Tokenfeld | Enthaltene Anweisungen in Form Tokens |
-
 ### Bedingte Anweisungsblocktokens
 
 Tokentyp: `IF`
@@ -128,6 +121,24 @@ Tokentyp: `IF`
 
 Der `ELSE_BLOCK`-Wert ist für bedingte Anweisungsblöcken ohne Nein-Fall nicht definiert.
 
+### Variablen- und Funktionenzuweisungtokens
+
+Tokentyp: `ASSIGN`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `LEFT_VAR` | Token | Den Identifikator der Variable enthaltendes Token, zu der ein Wert zugewiesen wird |
+| `RIGHT_VAR` | Token | Zu zuweisender Wert in Form eines Tokens |
+
+Da Funktionen auch als Variablen gespeichert werden, kann der `RIGHT_VAR`-Wert sowohl ein einfacher Wert als auch ein Funktiontoken sein.
+
+## Funktionen
+
+Funktionen werden in der Vongsprache als Variablen gespeichert. Um Funktionen zu speichern und anzurufen werden drei unterschiedliche Tokens benutzt:
+- Das Funktionenzuweisungtoken enthält den Identifikator der neuen Funktion und ein Funktionswrappertoken, das als Variable mit dem gegebenen Identifikator im aktuellen Umfang gespeichert wird
+- Das Funktionswrappertoken enthält Informationen über die benötigten Argumente und ein Funktiontoken
+- Das Funktiontoken ist die letzte Darstellung einer Funktion und enthält nur die enthaltenen Anweisungen
+
 ### Funktionanruftokens
 
 Tokentyp: `CALL`
@@ -138,13 +149,31 @@ Tokentyp: `CALL`
 | `ARGUMENTS`* | Tokenfeld | Zur Funktion zu gebende Argumente in Form Tokens |
 | `VALUE` | Zahl | Anzahl von gegebenen Argumenten |
 
-Der `ARGUMENTS`-Wert ist für Funktionanrufe ohne Argumente nicht definiert.
+Für Funktionanrufe ohne Argumente:
+- Der `ARGUMENTS`-Wert ist nicht definiert
+- Der `VALUE`-Wert ist gleich null
 
-### Zuweisungausdruckstoken
+### Funktionswrappertoken
 
-Tokentyp: `ASSIGN`
+Tokentyp: `PROGRAM`
 
 | Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
 | --- | --- | --- |
-| `LEFT_VAR` | Token | Den Identifikator der Variable enthaltendes Token, zu der ein Wert zugewiesen wird |
-| `RIGHT_VAR` | Token | Zu zuweisender Wert in Form eines Tokens |
+| `VALUE` | Zahl | Anzahl von benötigten Argumenten |
+| `ARGUMENTS`* | Zeichenfolgenfeld | Identifikatore der zur Funktion entsprechenden Argumente |
+| `FUNCTION_BODY` | Token | Funktiontoken |
+
+Für Funktionanrufe ohne Argumente:
+- Der `ARGUMENTS`-Wert ist nicht definiert
+- Der `VALUE`-Wert ist gleich null
+
+Die zur Funktion gegebenen Argumente werden mit den im `ARGUMENTS`-Wert gefundenen Identifikatoren in einem neuen Umfang gespeichert.
+
+### Funktiontokens
+
+Tokentyp: `PROGRAM`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE` | Zahl | Anzahl von enthaltenen Anweisungen |
+| `FUNCTION_BODY` | Tokenfeld | Enthaltene Anweisungen in Form Tokens |
