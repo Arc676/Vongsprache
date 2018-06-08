@@ -65,11 +65,11 @@ Token* parseCall(FILE* fp);
 Token* parseProg(FILE* fp);
 
 /**
- * Parse the token stream for a variable name
+ * Parse the token stream for an identifier
  * @param fp FILE* from which to read
- * @return Identifier of the variable
+ * @return The next token, if it's an identifier
  */
-char* parseVariableName(FILE* fp);
+Token* parseIdentifier(FILE* fp);
 
 /**
  * Parse the next expression contained in the token stream

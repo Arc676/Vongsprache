@@ -23,6 +23,12 @@
 #include "parser.h"
 #include "scope.h"
 
+void undeclaredIDErr(char* ID) {
+	char msg[100];
+	sprintf(msg, "Undefinierter Identifikator: %s", ID);
+	err(msg, UNDECLARED_IDENTIFIER);
+}
+
 Token* eval(Token* exp, Scope* scope) {
 	switch (exp->type) {
 		case NUMBER:
@@ -31,23 +37,37 @@ Token* eval(Token* exp, Scope* scope) {
 		case IDENTIFIER:
 		{
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
-			return getVariable(scope, data->charVal);
+			Token* val = getVariable(scope, data->charVal);
+			if (val) {
+				return val;
+			}
+			undeclaredIDErr(data->charVal);
+			break;
 		}
 		case ASSIGN:
 		{
 			Token* leftVal = ht_find_token(exp->tokenData, LEFT_VAR);
-			if (leftVal->type == IDENTIFIER) {
-				TokenData* left = ht_find_token(leftVal->tokenData, VALUE);
-				Token* right = ht_find_token(exp->tokenData, RIGHT_VAR);
-				return setVariable(scope, left->charVal,
-									eval(right, scope));
-			} else {
-				char msg[100];
-				char token[100];
-				tokenToString(leftVal, token);
-				sprintf(msg, "Token %s kann nicht zugewiesen werden", token);
-				err(msg, ASSIGN_FAILED);
-				break;
+			switch (leftVal->type) {
+				case IDENTIFIER:
+				case CALL:
+				{
+					TokenData* left = ht_find_token(leftVal->tokenData, VALUE);
+					Token* right = ht_find_token(exp->tokenData, RIGHT_VAR);
+					if (leftVal->type == IDENTIFIER) {
+						return setVariable(scope, left->charVal, eval(right, scope));
+					} else {
+						return setVariable(scope, left->charVal, right);
+					}
+				}
+				default:
+				{
+					char msg[100];
+					char token[100];
+					tokenToString(leftVal, token);
+					sprintf(msg, "Token %s kann nicht zugewiesen werden", token);
+					err(msg, ASSIGN_FAILED);
+					break;
+				}
 			}
 		}
 		case IF:
@@ -89,10 +109,13 @@ Token* eval(Token* exp, Scope* scope) {
 		{
 			Token* funcId = ht_find_token(exp->tokenData, FUNCTION_CALL);
 			TokenData* funcIDData = ht_find_token(funcId->tokenData, VALUE);
-			if (!strcmp(funcIDData->charVal, "drucke")) {
-				Token** args = ht_find_token(exp->tokenData, ARGUMENTS);
-				TokenData* data = ht_find_token(exp->tokenData, VALUE);
-				int argc = (int)data->floatVal;
+			char* fID = funcIDData->charVal;
+
+			Token** args = ht_find_token(exp->tokenData, ARGUMENTS);
+			TokenData* data = ht_find_token(exp->tokenData, VALUE);
+			int argc = (int)data->floatVal;
+
+			if (!strcmp(fID, "drucke")) {
 				for (int i = 0; i < argc; i++) {
 					Token* val = eval(args[i], scope);
 					TokenData* valData = ht_find_token(val->tokenData, VALUE);
@@ -114,6 +137,26 @@ Token* eval(Token* exp, Scope* scope) {
 				}
 				printf("\n");
 			} else {
+				Token* func = getVariable(scope, fID);
+				if (func) {
+					TokenData* args = ht_find_token(func->tokenData, VALUE);
+					int expectedArgs = (int)args->floatVal;
+					if (argc != expectedArgs) {
+						char msg[100];
+						sprintf(msg, "%d Argumente für Funktion %s erwartet aber %d gefunden", expectedArgs, fID, argc);
+						err(msg, BAD_ARG_COUNT);
+						break;
+					}
+					char** params = ht_find_token(func->tokenData, ARGUMENTS);
+					Scope* fScope = createScope(scope);
+					for (int i = 0; i < argc; i++) {
+						setVariable(fScope, params[i], eval(args[i], scope));
+					}
+					Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
+					return eval(fBody, fScope);
+				}
+				undeclaredIDErr(fID);
+				break;
 			}
 			break;
 		}

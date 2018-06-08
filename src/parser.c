@@ -89,14 +89,13 @@ Token* parseProg(FILE* fp) {
 	return prog;
 }
 
-char* parseVariableName(FILE* fp) {
+Token* parseIdentifier(FILE* fp) {
 	Token* var = lexer_next(fp);
 	if (var->type != IDENTIFIER) {
 		err("Erwartete Variablenamen", PARSE_ERROR);
 		return NULL;
 	}
-	TokenData* data = ht_find_token(var->tokenData, VALUE);
-	return data->charVal;
+	return var;
 }
 
 Token* parseCall(FILE* fp) {
@@ -128,20 +127,42 @@ Token* parseExpression(FILE* fp) {
 			return NULL;
 		}
 		skipValue(fp, KEYWORD, 1, "vong");
+		ht_insert_token(token->tokenData, LEFT_VAR, identifier);
+		Token* token = createToken(ASSIGN);
 		if (parser_isValue(fp, KEYWORD, "Funktionigkeit")) {
 			lexer_next(fp);
-			skipValue(fp, KEYWORD, 1, "mit");
-			return parseProg(fp);
-		} else {
-			Token* token = createToken(ASSIGN);
-			ht_insert_token(token->tokenData, LEFT_VAR, identifier);
+			identifier->type = CALL;
+			Token* function = createToken(PROGRAM);
+			TokenData* fArgs = createTokenData(NUMBER, 0, NULL);
+			if (parser_isValue(fp, KEYWORD, "mit")) {
+				lexer_next(fp);
+				int argc;
+				Token** args = parseDelimited(fp, "(", ")", ",", &argc, parseIdentifier);
+				fArgs->floatVal = (float)argc;
+				char** argNames = (char**)malloc(argc * sizeof(char*))
+				for (int i = 0; i < argc; i++) {
+					argNames[i] = malloc(100);
+					TokenData* data = ht_find_token(args[i]->tokenData, VALUE);
+					char* argName = data->charVal;
+					memcpy(argNames[i], argName, strlen(argName));
+					free(args[i]);
+				}
+				free(args);
+				ht_insert_token(function->tokenData, ARGUMENTS, argNames);
+			}
+			ht_insert_token(function->tokenData, VALUE, fArgs);
 
+			Token* fBody = parseProg(fp);
+			ht_insert_token(function->tokenData, FUNCTION_BODY, fBody);
+
+			ht_insert_token(token->tokenData, RIGHT_VAR, function);
+		} else {
 			Token* right = parseExpression(fp);
 			ht_insert_token(token->tokenData, RIGHT_VAR, right);
 
 			skipValue(fp, KEYWORD, 1, "her");
-			return token;
 		}
+		return token;
 	}
 	if (parser_isValue(fp, KEYWORD, "bims")) {
 		lexer_next(fp);

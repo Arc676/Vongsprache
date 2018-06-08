@@ -30,6 +30,7 @@
 #define UNKNOWN_TOKEN_TYPE 5
 #define ASSIGN_FAILED 6
 #define MEMORY_ERROR 7
+#define UNDECLARED_IDENTIFIER 8
 
 /**
  * Raise an error
