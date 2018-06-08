@@ -31,6 +31,7 @@
 #define ASSIGN_FAILED 6
 #define MEMORY_ERROR 7
 #define UNDECLARED_IDENTIFIER 8
+#define BAD_ARG_COUNT 9
 
 /**
  * Raise an error

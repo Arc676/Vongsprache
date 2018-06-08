@@ -139,11 +139,12 @@ Token* eval(Token* exp, Scope* scope) {
 			} else {
 				Token* func = getVariable(scope, fID);
 				if (func) {
-					TokenData* args = ht_find_token(func->tokenData, VALUE);
-					int expectedArgs = (int)args->floatVal;
+					TokenData* fArgs = ht_find_token(func->tokenData, VALUE);
+					int expectedArgs = (int)fArgs->floatVal;
 					if (argc != expectedArgs) {
 						char msg[100];
-						sprintf(msg, "%d Argumente für Funktion %s erwartet aber %d gefunden", expectedArgs, fID, argc);
+						sprintf(msg, "%d Argumente für Funktion %s erwartet aber %d gefunden",
+								expectedArgs, fID, argc);
 						err(msg, BAD_ARG_COUNT);
 						break;
 					}

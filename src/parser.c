@@ -66,8 +66,11 @@ Token* parseProg(FILE* fp) {
 	memset(statements, 0, size);
 
 	int pos = 0;
+	int blockClosed = 0;
 	while (!eof(fp)) {
 		if (parser_isValue(fp, KEYWORD, "her")) {
+			lexer_next(fp);
+			blockClosed = 1;
 			break;
 		}
 		if (pos >= size / sizeof(Token*)) {
@@ -81,6 +84,10 @@ Token* parseProg(FILE* fp) {
 			}
 		}
 		statements[pos++] = parseExpression(fp);
+	}
+	if (!blockClosed) {
+		err("Geöffneter Anweisungsblock nicht geschlossen", EXPECTED_TOKEN);
+		return NULL;
 	}
 	Token* prog = createToken(PROGRAM);
 	ht_insert_token(prog->tokenData, FUNCTION_BODY, statements);
@@ -127,8 +134,8 @@ Token* parseExpression(FILE* fp) {
 			return NULL;
 		}
 		skipValue(fp, KEYWORD, 1, "vong");
-		ht_insert_token(token->tokenData, LEFT_VAR, identifier);
 		Token* token = createToken(ASSIGN);
+		ht_insert_token(token->tokenData, LEFT_VAR, identifier);
 		if (parser_isValue(fp, KEYWORD, "Funktionigkeit")) {
 			lexer_next(fp);
 			identifier->type = CALL;
@@ -139,7 +146,7 @@ Token* parseExpression(FILE* fp) {
 				int argc;
 				Token** args = parseDelimited(fp, "(", ")", ",", &argc, parseIdentifier);
 				fArgs->floatVal = (float)argc;
-				char** argNames = (char**)malloc(argc * sizeof(char*))
+				char** argNames = (char**)malloc(argc * sizeof(char*));
 				for (int i = 0; i < argc; i++) {
 					argNames[i] = malloc(100);
 					TokenData* data = ht_find_token(args[i]->tokenData, VALUE);
@@ -253,6 +260,6 @@ void unexpected(Token* token) {
 	char msg[200];
 	char tk[100];
 	tokenToString(token, tk);
-	sprintf(msg, "Unerwartetes Token: %s", tk);
+	sprintf(msg, "Unerwartetes %s", tk);
 	err(msg, UNEXPECTED_TOKEN);
 }
