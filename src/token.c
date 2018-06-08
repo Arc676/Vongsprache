@@ -21,7 +21,7 @@
 #include "token.h"
 
 TokenData* createTokenData(TokenType type, float floatVal,
-    char* charVal, Token* tokenVal) {
+    char* charVal) {
     TokenData* data = (TokenData*)malloc(sizeof(TokenData));
     switch (type) {
         case NUMBER:
@@ -31,15 +31,10 @@ TokenData* createTokenData(TokenType type, float floatVal,
         case KEYWORD:
         case PUNCTUATION:
         case IDENTIFIER:
-		case OPERATOR:
+	case OPERATOR:
             data->charVal = charVal;
             break;
-        case BINARY:
-        case CALL:
-        case ASSIGN:
-        case IF:
-		case PROGRAM:
-            data->tokenVal = tokenVal;
+	default:
             break;
     }
     return data;
@@ -95,16 +90,7 @@ void tokenToString(Token* token, char* str) {
 		case OPERATOR:
             sprintf(str, "%s (\"%s\")", s, data->charVal);
             break;
-        case BINARY:
-        case CALL:
-        case ASSIGN:
-        case IF:
-		case PROGRAM:
-        {
-            char sub[200];
-			tokenToString(data->tokenVal, sub);
-			sprintf(str, "%s (%s)", s, sub);
-            break;
+	default:
+		break;
         }
-    }
 }

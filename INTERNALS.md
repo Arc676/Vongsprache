@@ -18,11 +18,10 @@ Im Datenfeld werden Informationen über das Token und seinen Zweck gespeichert, 
 typedef union {
     float floatVal;
     char* charVal;
-    Token* tokenVal;
 } TokenData;
 ```
 
-Token-Dateien können jederzeit nur eine Zahl, eine Zeichenfolge oder ein anderes Token enthalten. Ein Token kann aber mehrere Token-Datei-Strukturen enthalten, sollte sowas nötig sein.
+Token-Dateien können jederzeit nur eine Zahl oder eine Zeichenfolge enthalten. Das Datenfeld eines Tokens kann aber sowohl mehrere Token-Datei-Strukturen als auch andere Tokens enthalten, sollte sowas nötig sein.
 
 ## Tokentypen
 
@@ -65,8 +64,7 @@ Der Wertdatentyp bezeichnet, was für eine Struktur genutzt wird, um den Inhalt 
 
 - Zeichenfolge - der `charVal`-Wert eines `TokenData*`-Objekts wird genutzt
 - Zahl - der `floatVal`-Wert eines `TokenData*`-Objekts wird genutzt
-- Token - der `tokenVal`-Wert eines `TokenData*`-Objekts wird genutzt
-- Token Objekt - ein `Token*`-Objekt wird gespeichert
+- Token - ein `Token*`-Objekt wird gespeichert
 - Tokenfeld - ein Feld von Tokens (`Token**`) wird gespeichert
 
 ### Satzzeichentokens
@@ -124,9 +122,9 @@ Tokentyp: `IF`
 
 | Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
 | --- | --- | --- |
-| `CONDITION` | Token Objekt | Zu ausdrückende Bedingung der Anweisungsblock |
-| `THEN_BLOCK` | Token Objekt | Dem Ja-Fall entsprechende Funktiontoken |
-| `ELSE_BLOCK`* | Token Objekt | Dem Nein-Fall entsprechende Funktiontoken |
+| `CONDITION` | Token | Zu ausdrückende Bedingung der Anweisungsblock |
+| `THEN_BLOCK` | Token | Dem Ja-Fall entsprechende Funktiontoken |
+| `ELSE_BLOCK`* | Token | Dem Nein-Fall entsprechende Funktiontoken |
 
 Der `ELSE_BLOCK`-Wert ist für bedingte Anweisungsblöcken ohne Nein-Fall nicht definiert.
 
@@ -136,7 +134,7 @@ Tokentyp: `CALL`
 
 | Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
 | --- | --- | --- |
-| `FUNCTION_CALL` | Token Objekt | Den Identifikator der angerufenen Funktion enthaltendes Token |
+| `FUNCTION_CALL` | Token | Den Identifikator der angerufenen Funktion enthaltendes Token |
 | `ARGUMENTS`* | Tokenfeld | Zur Funktion zu gebende Argumente in Form Tokens |
 | `VALUE` | Zahl | Anzahl von gegebenen Argumenten |
 

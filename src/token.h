@@ -49,7 +49,6 @@ typedef struct {
 typedef union {
     float floatVal;
     char* charVal;
-    Token* tokenVal;
 } TokenData;
 
 /**
@@ -64,11 +63,10 @@ Token* createToken(TokenType type);
  * @param type The token type
  * @param floatVal Float value to store, if any
  * @param charVal String value to store, if any
- * @param tokenVal Token value to store, if any
  * @return A token with the specified data
  */
 TokenData* createTokenData(TokenType type, float floatVal,
-    char* charVal, Token* tokenVal);
+    char* charVal);
 
 /**
  * Obtain a human readable string for a token type

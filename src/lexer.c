@@ -62,7 +62,7 @@ Token* readNext(FILE* fp) {
         char* str = (char*)malloc(2);
         sprintf(str, "%c", current);
         next(fp);
-        TokenData* data = createTokenData(PUNCTUATION, 0, str, NULL);
+        TokenData* data = createTokenData(PUNCTUATION, 0, str);
         Token* token = createToken(PUNCTUATION);
         ht_insert_token(token->tokenData, VALUE, data);
         return token;
@@ -70,7 +70,7 @@ Token* readNext(FILE* fp) {
     if (isOpChar(current)) {
         char* operator = (char*)malloc(5);
         readWhile(fp, operator, 5, isOpChar);
-        TokenData* data = createTokenData(OPERATOR, 0, operator, NULL);
+        TokenData* data = createTokenData(OPERATOR, 0, operator);
         Token* token = createToken(OPERATOR);
         ht_insert_token(token->tokenData, VALUE, data);
         return token;
@@ -83,7 +83,7 @@ Token* readNext(FILE* fp) {
 
 Token* readString(FILE* fp) {
     char* literal = readEscaped(fp, '"');
-    TokenData* data = createTokenData(STRING, 0, literal, NULL);
+    TokenData* data = createTokenData(STRING, 0, literal);
     Token* token = createToken(STRING);
     ht_insert_token(token->tokenData, VALUE, data);
     return token;
@@ -111,7 +111,7 @@ Token* readNumber(FILE* fp) {
     }
     float number = strtof(literal, (char**)NULL);
     free(literal);
-    TokenData* data = createTokenData(NUMBER, number, NULL, NULL);
+    TokenData* data = createTokenData(NUMBER, number, NULL);
     Token* token = createToken(NUMBER);
     ht_insert_token(token->tokenData, VALUE, data);
     return token;
@@ -121,7 +121,7 @@ Token* readIdentifier(FILE* fp) {
     char* str = (char*)malloc(100);
     readWhile(fp, str, 100, isValidIDChar);
     TokenType type = isKeyword(str) ? KEYWORD : IDENTIFIER;
-    TokenData* data = createTokenData(type, 0, str, NULL);
+    TokenData* data = createTokenData(type, 0, str);
     Token* token = createToken(type);
     ht_insert_token(token->tokenData, VALUE, data);
     return token;

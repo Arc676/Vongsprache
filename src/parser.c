@@ -37,7 +37,7 @@ Token* parseTopLevel(FILE* fp) {
 			progs[pos++] = token;
 		}
 	}
-	TokenData* data = createTokenData(NUMBER, pos, NULL, NULL);
+	TokenData* data = createTokenData(NUMBER, pos, NULL);
 	ht_insert_token(program->tokenData, VALUE, data);
 	ht_insert_token(program->tokenData, FUNCTION_BODY, progs);
 	return program;
@@ -84,7 +84,7 @@ Token* parseProg(FILE* fp) {
 	}
 	Token* prog = createToken(PROGRAM);
 	ht_insert_token(prog->tokenData, FUNCTION_BODY, statements);
-	TokenData* data = createTokenData(NUMBER, pos, NULL, NULL);
+	TokenData* data = createTokenData(NUMBER, pos, NULL);
 	ht_insert_token(prog->tokenData, VALUE, data);
 	return prog;
 }
@@ -104,7 +104,7 @@ Token* parseCall(FILE* fp) {
 	Token* funcIdentifier = lexer_next(fp);
 	if (funcIdentifier->type == IDENTIFIER) {
 		ht_insert_token(token->tokenData, FUNCTION_CALL, funcIdentifier);
-		TokenData* data = createTokenData(NUMBER, 0, NULL, NULL);
+		TokenData* data = createTokenData(NUMBER, 0, NULL);
 		if (parser_isValue(fp, KEYWORD, "mit")) {
 			lexer_next(fp);
 			int argc;
