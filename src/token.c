@@ -31,10 +31,10 @@ TokenData* createTokenData(TokenType type, float floatVal,
         case KEYWORD:
         case PUNCTUATION:
         case IDENTIFIER:
-	case OPERATOR:
+    	case OPERATOR:
             data->charVal = charVal;
             break;
-	default:
+    	default:
             break;
     }
     return data;
@@ -68,6 +68,8 @@ char* tokenTypeToString(TokenType type) {
 			return "Binarischer Ausdruck";
 	    case IF:
 			return "Bedingte Anweisungsblock";
+        case LOOP:
+            return "Schleife";
 	    case ASSIGN:
 			return "Zuweisung";
 		case PROGRAM:
@@ -90,7 +92,7 @@ void tokenToString(Token* token, char* str) {
 		case OPERATOR:
             sprintf(str, "%s (\"%s\")", s, data->charVal);
             break;
-	default:
-		break;
-        }
+    	default:
+    		break;
+    }
 }

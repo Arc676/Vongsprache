@@ -94,6 +94,35 @@ Token* parseProg(FILE* fp) {
 	return prog;
 }
 
+Token* parseFor(FILE* fp) {
+	Token* counter = parseExpression(fp);
+
+	skipValue(fp, KEYWORD, 1, "vong");
+	Token* start = parseExpression(fp);
+
+	skipValue(fp, KEYWORD, 1, "bis");
+	Token* end = parseExpression(fp);
+
+	Token* prog = parseProg(fp);
+
+	Token* loop = createToken(LOOP);
+	ht_insert_token(loop->tokenData, FUNCTION_BODY, prog);
+	return loop;
+}
+
+Token* parseWhile(FILE* fp) {
+	Token* cond = parseExpression(fp);
+	skipValue(fp, KEYWORD, 2, "vong", "Wahrigkeit");
+
+	Token* prog = parseProg(fp);
+	skipValue(fp, KEYWORD, 1, "bims");
+
+	Token* loop = createToken(LOOP);
+	ht_insert_token(loop->tokenData, CONDITION, cond);
+	ht_insert_token(loop->tokenData, FUNCTION_BODY, prog);
+	return loop;
+}
+
 Token* parseIdentifier(FILE* fp) {
 	Token* var = lexer_next(fp);
 	if (var->type != IDENTIFIER) {
@@ -176,6 +205,14 @@ Token* parseExpression(FILE* fp) {
 	if (parser_isValue(fp, KEYWORD, "bidde")) {
 		lexer_next(fp);
 		return parseCall(fp);
+	}
+	if (parser_isValue(fp, KEYWORD, "mit")) {
+		lexer_next(fp);
+		return parseFor(fp);
+	}
+	if (parser_isValue(fp, KEYWORD, "solange")) {
+		lexer_next(fp);
+		return parseWhile(fp);
 	}
 	Token* token = lexer_next(fp);
 	if (token == NULL) {

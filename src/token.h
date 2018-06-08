@@ -37,6 +37,7 @@ typedef enum TokenType {
     CALL,
     BINARY,
     IF,
+    LOOP,
     ASSIGN,
 	PROGRAM
 } TokenType;

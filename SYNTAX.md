@@ -80,7 +80,7 @@ Deshalb brauchen bedingte Anweisungen und Schleifen boolesche Variablen.
 ### Bedingte Anweisungen
 
 ```
-bims <Variable> vong Wahrigkeit
+bims <Ausdruck> vong Wahrigkeit
   <Anweisungen>
 her am Sonstigkeit
   <Anweisungen>
@@ -102,7 +102,7 @@ her
 #### Kopfgesteuerte Schleifen
 
 ```
-solange <Variable> vong Wahrigkeit
+solange <Ausdruck> vong Wahrigkeit
   <Anweisungen>
 her bims
 ```

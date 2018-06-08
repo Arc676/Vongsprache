@@ -74,8 +74,8 @@ Token* eval(Token* exp, Scope* scope) {
 		{
 			Token* cond = ht_find_token(exp->tokenData, CONDITION);
 			Token* res = eval(cond, scope);
-			int evalThen = res != NULL && res->type == NUMBER;
-			if (evalThen) {
+			int evalThen = res != NULL;
+			if (evalThen && res->type == NUMBER) {
 				TokenData* data = ht_find_token(res->tokenData, VALUE);
 				evalThen = data->floatVal != 0;
 			}
@@ -159,6 +159,15 @@ Token* eval(Token* exp, Scope* scope) {
 				}
 				undeclaredIDErr(fID);
 				break;
+			}
+			break;
+		}
+		case LOOP:
+		{
+			Token* cond = ht_find_token(exp->tokenData, CONDITION);
+			Token* prog = ht_find_token(exp->tokenData, FUNCTION_BODY);
+			while (eval(cond, scope)) {
+				eval(prog, scope);
 			}
 			break;
 		}

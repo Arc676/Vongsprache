@@ -58,11 +58,25 @@ Token* parseIf(FILE* fp);
 Token* parseCall(FILE* fp);
 
 /**
- * Parse a sequence of statements
+ * Parse a "her"-terminated statement block
  * @param fp FILE* from which to read
  * @return Program token containing statements
  */
 Token* parseProg(FILE* fp);
+
+/**
+ * Parse the token stream for a for-loop
+ * @param fp FILE* from which to read
+ * @return For-loop token
+ */
+Token* parseFor(FILE* fp);
+
+/**
+ * Parse the token stream for a while-loop
+ * @param fp FILE* from which to read
+ * @return While-loop token
+ */
+Token* parseWhile(FILE* fp);
 
 /**
  * Parse the token stream for an identifier
