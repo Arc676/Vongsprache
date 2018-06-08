@@ -27,7 +27,7 @@
 #include "token.h"
 
 #define KEYWORD_COUNT 12
-#define OP_COUNT 10
+#define OP_COUNT 12
 
 /**
  * List of all the reserved words
@@ -45,9 +45,21 @@ const char* punctuation;
 const char* operators[OP_COUNT];
 
 /**
+ * Precedence values for operators
+ */
+const hashtable_t* opPrec;
+
+/**
  * Token currently being parsed
  */
 Token* currentToken;
+
+/**
+ * Obtain operator precedence
+ * @param op Index of operator
+ * @return Precedence of operator
+ */
+int getPrecedence(int op);
 
 /**
  * Peek at current token without removing it from the stream
@@ -141,9 +153,10 @@ int isValidIDChar(char c);
 /**
  * Determine the token type associated with a word
  * @param str The word to check
+ * @param index A pointer to an integer to store the operator index, -1 if N/A
  * @return Corresponding token type
  */
-TokenType wordType(char* str);
+TokenType wordType(char* str, int* index);
 
 /**
  * Determine whether a character is whitespace
@@ -165,13 +178,6 @@ int isDigit(char c);
  * @return Whether the character is an accepted punctuation mark
  */
  int isPunc(char c);
-
-/**
- * Determines whether a character is a recognized operation character
- * @param c Character to check
- * @return Whether the character is a valid operation character
- */
- int isOpChar(char c);
 
 /**
  * Determines whether a character appears in a string

@@ -36,7 +36,8 @@ In der Darstellung der abstrakten Syntaxbaum wird jedem Token einen Typ zugewies
 - CALL - ein Funktionanruf
 - BINARY - ein binarischer Ausdruck
 - IF - beginnt eine Folge einer bedingten Anweisungsblock
-- ASSIGN - wiest einen Wert einer Variable zu
+- ASSIGN - weist einen Wert einer Variable zu
+- INIT - initialisiert eine Variable
 - PROGRAM - eine Folge von Anweisungen
 
 ## Inhalt der Hashtabelle
@@ -84,6 +85,7 @@ Tokentyp: `OPERATOR`
 | Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
 | --- | --- | --- |
 | `VALUE` | Zeichenfolge | Gefundener Operator |
+| `OP` | Zahl | Index gefundenes Operator |
 
 ### Stringtokens
 
@@ -121,9 +123,10 @@ Tokentyp: `IF`
 
 Der `ELSE_BLOCK`-Wert ist für bedingte Anweisungsblöcken ohne Nein-Fall nicht definiert.
 
-### Variablen- und Funktionenzuweisungtokens
+### Variablen- und Funktionenzuweisungstokens
 
-Tokentyp: `ASSIGN`
+Tokentyp: `ASSIGN`/`INIT` (Variablenzuweisungstokens)
+Tokentyp: `INIT` (Funktionenzuweisungstokens)
 
 | Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
 | --- | --- | --- |
@@ -132,10 +135,20 @@ Tokentyp: `ASSIGN`
 
 Da Funktionen auch als Variablen gespeichert werden, kann der `RIGHT_VAR`-Wert sowohl ein einfacher Wert als auch ein Funktiontoken sein.
 
+### Binärausdruckstoken
+
+Tokentyp: `BINARY`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `LEFT_VAR` | Token | Den linken Ausdruck enthaltendes Token |
+| `RIGHT_VAR` | Token | Den rechten Ausdruck enthaltendes Token |
+| `OP` | Token | Operator des Ausdrucks in Form eines Tokens |
+
 ## Funktionen
 
 Funktionen werden in der Vongsprache als Variablen gespeichert. Um Funktionen zu speichern und anzurufen werden drei unterschiedliche Tokens benutzt:
-- Das Funktionenzuweisungtoken enthält den Identifikator der neuen Funktion und ein Funktionswrappertoken, das als Variable mit dem gegebenen Identifikator im aktuellen Umfang gespeichert wird
+- Das Funktionenzuweisungstoken enthält den Identifikator der neuen Funktion und ein Funktionswrappertoken, das als Variable mit dem gegebenen Identifikator im aktuellen Umfang gespeichert wird
 - Das Funktionswrappertoken enthält Informationen über die benötigten Argumente und ein Funktiontoken
 - Das Funktiontoken ist die letzte Darstellung einer Funktion und enthält nur die enthaltenen Anweisungen
 

@@ -36,17 +36,41 @@ const char* keywords[KEYWORD_COUNT] = {
 };
 
 const char* operators[OP_COUNT] = {
-    "plus",
-    "minus",
-    "mal",
-    "geteilt-durch",
     "bimst",
-    "und",
     "oder",
+    "und",
     "größer",
     "kleiner",
-    "nicht"
+    "gleich",
+    "plus",
+    "minus",
+    "nicht",
+    "mal",
+    "geteilt-durch",
+    "rest"
 };
+
+int getPrecedence(int op) {
+    switch (op) {
+        case 0:
+        case 1:
+        case 2:
+            return op + 1;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            return 10;
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+            return 20;
+        default:
+            return 0;
+    }
+}
 
 const char* punctuation = "()[]{},";
 Token* currentToken = NULL;
@@ -76,14 +100,6 @@ Token* readNext(FILE* fp) {
         next(fp);
         TokenData* data = createTokenData(PUNCTUATION, 0, str);
         Token* token = createToken(PUNCTUATION);
-        ht_insert_token(token->tokenData, VALUE, data);
-        return token;
-    }
-    if (isOpChar(current)) {
-        char* operator = (char*)malloc(5);
-        readWhile(fp, operator, 5, isOpChar);
-        TokenData* data = createTokenData(OPERATOR, 0, operator);
-        Token* token = createToken(OPERATOR);
         ht_insert_token(token->tokenData, VALUE, data);
         return token;
     }
@@ -132,9 +148,15 @@ Token* readNumber(FILE* fp) {
 Token* readIdentifier(FILE* fp) {
     char* str = (char*)malloc(100);
     readWhile(fp, str, 100, isValidIDChar);
-    TokenData* data = createTokenData(wordType(str), 0, str);
+    int index;
+    TokenType type = wordType(str, &index);
+    TokenData* data = createTokenData(type, 0, str);
     Token* token = createToken(type);
     ht_insert_token(token->tokenData, VALUE, data);
+    if (type == OPERATOR) {
+        TokenData* op = createTokenData(NUMBER, index, NULL);
+        ht_insert_token(token->tokenData, OP, op);
+    }
     return token;
 }
 
@@ -208,7 +230,8 @@ int lexer_eof(FILE* fp) {
     return lexer_peek(fp) == NULL;
 }
 
-TokenType wordType(char* str) {
+TokenType wordType(char* str, int* index) {
+    *index = -1;
     for (int i = 0; i < KEYWORD_COUNT; i++) {
         if (!strcmp(str, keywords[i])) {
             return KEYWORD;
@@ -216,6 +239,7 @@ TokenType wordType(char* str) {
     }
     for (int i = 0; i < OP_COUNT; i++) {
         if (!strcmp(str, operators[i])) {
+            *index = i;
             return OPERATOR;
         }
     }
@@ -240,10 +264,6 @@ int isDigit(char c) {
 
 int isPunc(char c) {
     return charInString(c, punctuation);
-}
-
-int isOpChar(char c) {
-    return charInString(c, opChars);
 }
 
 int charInString(char c, const char* str) {
