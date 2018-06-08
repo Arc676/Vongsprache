@@ -177,3 +177,13 @@ Tokentyp: `PROGRAM`
 | --- | --- | --- |
 | `VALUE` | Zahl | Anzahl von enthaltenen Anweisungen |
 | `FUNCTION_BODY` | Tokenfeld | Enthaltene Anweisungen in Form Tokens |
+
+## Umfang
+
+In der Vongsprache werden Variablen (und Funktionen) in einer Hashtabelle mit ihren Identifikatoren gespeichert. Diese sind in Unterumfängen zugänglich.
+
+Der globale Umfang hat keinen Überumfang. Der Wert des Überumfangs des globalen Umfangs ist gleich `NULL`.
+
+Bei der Berechnung eines `PROGRAM`-Tokens wird ein neuer Unterumfang geschafft. Das gewährleistet, dass in einem Block deklarierte Variablen nach dem Ende dieses Blocks gelöscht werden.
+
+Beim Anruf einer Funktion werden **zwei** neue Unterumfänge geschafft. Im ersten werden die zur Funktion gegebenen Argumente gespeichert und der zweite wird beim Berechnung der Anweisungsblock der Funktion geschafft.
