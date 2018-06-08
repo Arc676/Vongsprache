@@ -18,15 +18,35 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include <stdio.h>
-
-#include "parser.h"
-#include "scope.h"
+#include "main.h"
 
 void undeclaredIDErr(char* ID) {
 	char msg[100];
 	sprintf(msg, "Undefinierter Identifikator: %s", ID);
 	err(msg, UNDECLARED_IDENTIFIER);
+}
+
+void vongsprache_print(int argc, Token** args, Scope* scope) {
+	for (int i = 0; i < argc; i++) {
+		Token* val = eval(args[i], scope);
+		TokenData* valData = ht_find_token(val->tokenData, VALUE);
+		switch (val->type) {
+			case STRING:
+				printf("%s", valData->charVal);
+				break;
+			case NUMBER:
+				printf("%f", valData->floatVal);
+				break;
+			default:
+			{
+				char msg[100];
+				tokenToString(val, msg);
+				printf("%s", msg);
+				break;
+			}
+		}
+	}
+	printf("\n");
 }
 
 Token* eval(Token* exp, Scope* scope) {
@@ -115,27 +135,17 @@ Token* eval(Token* exp, Scope* scope) {
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
 			int argc = (int)data->floatVal;
 
-			if (!strcmp(fID, "drucke")) {
-				for (int i = 0; i < argc; i++) {
-					Token* val = eval(args[i], scope);
-					TokenData* valData = ht_find_token(val->tokenData, VALUE);
-					switch (val->type) {
-						case STRING:
-							printf("%s", valData->charVal);
-							break;
-						case NUMBER:
-							printf("%f", valData->floatVal);
-							break;
-						default:
-						{
-							char msg[100];
-							tokenToString(val, msg);
-							printf("%s", msg);
-							break;
-						}
-					}
+			if (!strcmp(fID, "drucke") || !strcmp(fID, "gib")) {
+				vongsprache_print(argc, args, scope);
+				if (!strcmp(fID, "gib")) {
+					char* input = malloc(255);
+					fgets(input, 255, stdin);
+					input[strlen(input) - 1] = 0;
+					TokenData* data = createTokenData(STRING, 0, input);
+					Token* token = createToken(STRING);
+					ht_insert_token(token->tokenData, VALUE, data);
+					return token;
 				}
-				printf("\n");
 			} else {
 				Token* func = getVariable(scope, fID);
 				if (func) {

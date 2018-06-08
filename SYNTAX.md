@@ -10,6 +10,26 @@ In der Vongsprache gibt es nur Zeilenkommentare. Diese fangen mit `#` an.
 # Und das hier auch
 ```
 
+## Format
+
+Bei der Benutzung der Vongsprache ist die Groß- und Kleinschreibung zu beachten. Einrückung der Anweisungen in Blöcken ist für Lesbarkeit empfohlen aber nicht notwendig.
+
+## Ein-/Ausgabe
+
+Die Vongsprache bietet eine Eingabe- und eine Ausgabefunktion an.
+
+```
+# Hallo, Welt! drucken
+bidde drucke mit ("Hallo, Welt!")
+
+# Nach Eingabe fragen, ohne zu speichern
+bidde gib mit ("Diese Eingabe wird nicht gespeichert.")
+
+# Nach dem Namen des Benutzers fragen und dann ihn begrüßen
+i bims Name vong bidde gib mit ("Wie heißt du?") her
+bidde drucke mit ("Hallo, ", Name)
+```
+
 ## Deklarationen
 
 ### Identifikatoren
