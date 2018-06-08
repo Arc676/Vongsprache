@@ -41,9 +41,9 @@ int currentlyParsingCol;
  * Peek at the next character in the stream without
  * removing it
  * @param fp FILE* from which to peek
- * @return The character at the current position in the file
+ * @return The character at the current position in the file as an integer
  */
-char peek(FILE* fp);
+int peek(FILE* fp);
 
 /**
  * Obtain the next character in the stream and remove it

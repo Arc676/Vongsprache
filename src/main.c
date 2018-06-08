@@ -35,13 +35,12 @@ Token* eval(Token* exp, Scope* scope) {
 		}
 		case ASSIGN:
 		{
-			TokenData* left = ht_find_token(exp->tokenData, LEFT_VAR);
-			Token* leftVal = left->tokenVal;
+			Token* leftVal = ht_find_token(exp->tokenData, LEFT_VAR);
 			if (leftVal->type == IDENTIFIER) {
-				left = ht_find_token(leftVal->tokenData, VALUE);
-				TokenData* right = ht_find_token(exp->tokenData, RIGHT_VAR);
+				TokenData* left = ht_find_token(leftVal->tokenData, VALUE);
+				Token* right = ht_find_token(exp->tokenData, RIGHT_VAR);
 				return setVariable(scope, left->charVal,
-									eval(right->tokenVal, scope));
+									eval(right, scope));
 			} else {
 				char msg[100];
 				char token[100];
@@ -90,7 +89,7 @@ Token* eval(Token* exp, Scope* scope) {
 		{
 			Token* funcId = ht_find_token(exp->tokenData, FUNCTION_CALL);
 			TokenData* funcIDData = ht_find_token(funcId->tokenData, VALUE);
-			if (!strcmp(funcIDData->charVal, "drucken")) {
+			if (!strcmp(funcIDData->charVal, "drucke")) {
 				Token** args = ht_find_token(exp->tokenData, ARGUMENTS);
 				TokenData* data = ht_find_token(exp->tokenData, VALUE);
 				int argc = (int)data->floatVal;

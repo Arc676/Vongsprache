@@ -134,12 +134,10 @@ Token* parseExpression(FILE* fp) {
 			return parseProg(fp);
 		} else {
 			Token* token = createToken(ASSIGN);
-			TokenData* leftVal = createTokenData(ASSIGN, 0, NULL, identifier);
-			ht_insert_token(token->tokenData, LEFT_VAR, leftVal);
+			ht_insert_token(token->tokenData, LEFT_VAR, identifier);
 
 			Token* right = parseExpression(fp);
-			TokenData* rightVal = createTokenData(ASSIGN, 0, NULL, right);
-			ht_insert_token(token->tokenData, RIGHT_VAR, rightVal);
+			ht_insert_token(token->tokenData, RIGHT_VAR, right);
 
 			skipValue(fp, KEYWORD, 1, "her");
 			return token;

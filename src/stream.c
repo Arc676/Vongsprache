@@ -23,8 +23,8 @@
 int currentlyParsingLine = 1;
 int currentlyParsingCol = 0;
 
-char peek(FILE* fp) {
-    char c = fgetc(fp);
+int peek(FILE* fp) {
+    int c = fgetc(fp);
     return c == EOF ? EOF : ungetc(c, fp);
 }
 
