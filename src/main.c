@@ -355,8 +355,30 @@ Token* eval(Token* exp, Scope* scope) {
 		{
 			Token* cond = ht_find_token(exp->tokenData, CONDITION);
 			Token* prog = ht_find_token(exp->tokenData, FUNCTION_BODY);
-			while (eval(cond, scope)) {
-				eval(prog, scope);
+
+			// create child scope for loop
+			Scope* lScope = createScope(scope);
+
+			// determine if loop has a loop counter
+			Token* counter = ht_find_token(exp->tokenData, VALUE);
+			TokenData* cID;
+			if (counter) {
+				cID = ht_find_token(counter->tokenData, VALUE);
+				Token* start = ht_find_token(exp->tokenData, ARGUMENTS);
+
+				// evaluate start value for counter and define counter in
+				// loop scope
+				Token* startVal = eval(start, scope);
+				defineVariable(lScope, cID->charVal, startVal);
+			}
+
+			while (evalBool(eval(cond, lScope))) {
+				eval(prog, lScope);
+				if (counter) {
+					Token* c = getVariable(lScope, cID->charVal);
+					TokenData* cVal = ht_find_token(c->tokenData, VALUE);
+					cVal->floatVal += 1;
+				}
 			}
 			break;
 		}

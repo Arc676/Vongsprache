@@ -95,7 +95,7 @@ Token* parseProg(FILE* fp) {
 }
 
 Token* parseFor(FILE* fp) {
-	Token* counter = parseExpression(fp);
+	Token* counter = parseIdentifier(fp);
 
 	skipValue(fp, KEYWORD, 1, "vong");
 	Token* start = parseExpression(fp);
@@ -105,7 +105,19 @@ Token* parseFor(FILE* fp) {
 
 	Token* prog = parseProg(fp);
 
+	Token* op = createToken(OPERATOR);
+	TokenData* opType = createTokenData(NUMBER, KLEINER, NULL);
+	ht_insert_token(op->tokenData, OP, opType);
+
+	Token* cond = createToken(BINARY);
+	ht_insert_token(cond->tokenData, LEFT_VAR, counter);
+	ht_insert_token(cond->tokenData, OP, op);
+	ht_insert_token(cond->tokenData, RIGHT_VAR, end);
+
 	Token* loop = createToken(LOOP);
+	ht_insert_token(loop->tokenData, VALUE, counter);
+	ht_insert_token(loop->tokenData, ARGUMENTS, start);
+	ht_insert_token(loop->tokenData, CONDITION, cond);
 	ht_insert_token(loop->tokenData, FUNCTION_BODY, prog);
 	return loop;
 }
@@ -126,7 +138,7 @@ Token* parseWhile(FILE* fp) {
 Token* parseIdentifier(FILE* fp) {
 	Token* var = lexer_next(fp);
 	if (var->type != IDENTIFIER) {
-		err("Erwartete Variablenamen", PARSE_ERROR);
+		err("Erwartete Identifikator", EXPECTED_TOKEN);
 		return NULL;
 	}
 	return var;

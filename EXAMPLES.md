@@ -17,3 +17,13 @@ bidde drucke mit (
 	)
 )
 ```
+
+## Sterne
+
+```
+i bims Anzahl vong bidde gib mit ("Wie viele Sterne möchten Sie?") her
+Anzahl bimst bidde zuZahl mit (Anzahl)
+mit j vong 0 bis Anzahl
+	bidde drucke mit ("*")
+her
+```

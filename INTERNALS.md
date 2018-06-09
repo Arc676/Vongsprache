@@ -36,6 +36,7 @@ In der Darstellung der abstrakten Syntaxbaum wird jedem Token einen Typ zugewies
 - CALL - ein Funktionanruf
 - BINARY - ein binarischer Ausdruck
 - IF - beginnt eine Folge einer bedingten Anweisungsblock
+- LOOP - eine Schleife
 - ASSIGN - weist einen Wert einer Variable zu
 - INIT - initialisiert eine Variable
 - RETURN - bestimmt den Rückgabewert einer Funktion
@@ -145,6 +146,21 @@ Tokentyp: `BINARY`
 | `LEFT_VAR` | Token | Den linken Ausdruck enthaltendes Token |
 | `RIGHT_VAR` | Token | Den rechten Ausdruck enthaltendes Token |
 | `OP` | Token | Operator des Ausdrucks in Form eines Tokens |
+
+### Schleifentokens
+
+Tokentyp: `LOOP`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE`* | Token | Identifikator des Zählers der Schleife |
+| `ARGUMENTS`* | Token | Den ersten Wert des Schleifezählers darstellendes Ausdruckstoken |
+| `CONDITION` | Token | Bedingung der Schleife |
+| `FUNCTION_BODY` | Token | Die Anweisungen der Schleife enthaltendes Funktiontoken |
+
+Alle Schleifen, das heißt sowohl Zählschleifen als auch kopfgesteuerte Schleifen, werden als kopfgesteuerte Schleifen gespeichert und berechnet.. Die Bedingung einer Zählschleife ist ein Vergleich zwischen dem Zähler und seinem letzten Wert.
+
+Die `VALUE`- und `ARGUMENTS`-Werte sind nur für Zählschleifen anwesend.
 
 ## Funktionen
 
