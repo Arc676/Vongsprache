@@ -28,3 +28,11 @@ void err(char* message, int code) {
             currentlyParsingLine, currentlyParsingCol);
     exit(code);
 }
+
+void unexpected(Token* token) {
+	char msg[200];
+	char tk[100];
+	tokenToString(token, tk);
+	sprintf(msg, "Unerwartetes %s", tk);
+	err(msg, UNEXPECTED_TOKEN);
+}

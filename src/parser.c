@@ -218,6 +218,13 @@ Token* parseAtom(FILE* fp) {
 		lexer_next(fp);
 		return parseWhile(fp);
 	}
+	if (parser_isValue(fp, KEYWORD, "hab")) {
+		lexer_next(fp);
+		Token* retVal = parseExpression(fp);
+		Token* retToken = createToken(RETURN);
+		ht_insert_token(retToken->tokenData, VALUE, retVal);
+		return retToken;
+	}
 	Token* token = lexer_next(fp);
 	if (token == NULL) {
 		return NULL;
@@ -244,6 +251,7 @@ Token* potentialBinary(FILE* fp, Token* left, int prec) {
 			Token* rval = potentialBinary(fp, parseAtom(fp), opPrec);
 			if (!rval) {
 				err("Erwartete Ausdruck", EXPECTED_TOKEN);
+				return NULL;
 			}
 
 			Token* binary = createToken(opType == 0 ? ASSIGN : BINARY);
@@ -323,12 +331,4 @@ void skipValue(FILE* fp, TokenType type, int count, ...) {
 		}
 	}
 	va_end(arglist);
-}
-
-void unexpected(Token* token) {
-	char msg[200];
-	char tk[100];
-	tokenToString(token, tk);
-	sprintf(msg, "Unerwartetes %s", tk);
-	err(msg, UNEXPECTED_TOKEN);
 }

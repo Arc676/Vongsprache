@@ -244,6 +244,20 @@ Token* eval(Token* exp, Scope* scope) {
 
 			for (int i = 0; i < count; i++) {
 				val = eval(statements[i], childScope);
+				// check if a return statement has been given
+				Token* ret = getVariable(childScope, "hab");
+				if (ret) {
+					// determine the scope of the function
+					Scope* retFrame = lookupScope(childScope, "Funktionigkeit");
+					// if the function was entered in the last frame,
+					// the current eval call is running the function
+					// otherwise, this eval call is still nested in the
+					// function that needs to be stopped
+					if (retFrame != scope) {
+						setVariable(scope, "hab", ret);
+					}
+					break;
+				}
 			}
 			return val;
 		}
@@ -282,15 +296,24 @@ Token* eval(Token* exp, Scope* scope) {
 						break;
 					}
 					char** params = ht_find_token(func->tokenData, ARGUMENTS);
+
+					// create child scope for function evaluation
 					Scope* fScope = createScope(scope);
+
+					// indicate that we are currently in a function call,
+					// shadowing any previous function frames
+					Token* frame = createToken(RETURN);
+					defineVariable(fScope, "Funktionigkeit", frame);
+
+					// assign given arguments to parameter names, shadowing
+					// any variables in parent scopes with the same name
 					for (int i = 0; i < argc; i++) {
-						setVariable(fScope, params[i], eval(args[i], scope));
+						defineVariable(fScope, params[i], eval(args[i], scope));
 					}
 					Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
 					return eval(fBody, fScope);
 				}
 				undeclaredIDErr(fID);
-				break;
 			}
 			break;
 		}
@@ -303,13 +326,19 @@ Token* eval(Token* exp, Scope* scope) {
 			}
 			break;
 		}
-		default:
+		case RETURN:
 		{
-			char msg[100];
-			sprintf(msg, "Token mit unerwartetem Typ %s gefunden",
-					tokenTypeToString(exp->type));
-			err(msg, UNKNOWN_TOKEN_TYPE);
+			if (!getVariable(scope, "Funktionigkeit")) {
+				unexpected(exp);
+			}
+			Token* val = ht_find_token(exp->tokenData, VALUE);
+			Token* ret = eval(val, scope);
+			setVariable(scope, "hab", createToken(RETURN));
+			return ret;
 		}
+		default:
+			unexpected(exp);
+			break;
 	}
 	return NULL;
 }

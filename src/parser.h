@@ -86,7 +86,7 @@ Token* parseWhile(FILE* fp);
 Token* parseIdentifier(FILE* fp);
 
 /**
- * Parse the next expression contained in the token stream
+ * Utility function for parsing the token stream
  * @param fp FILE* from which to read
  * @return Token representing the next expression in the stream
  */
@@ -143,11 +143,5 @@ int parser_isValue(FILE* fp, TokenType type, char* value);
  * @param ... Variadic list of desired values
  */
 void skipValue(FILE* fp, TokenType type, int count, ...);
-
-/**
- * Throw an error if the current token is an unexpected token
- * @param token The unexpected token
- */
-void unexpected(Token* token);
 
 #endif

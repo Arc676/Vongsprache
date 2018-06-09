@@ -38,6 +38,7 @@ In der Darstellung der abstrakten Syntaxbaum wird jedem Token einen Typ zugewies
 - IF - beginnt eine Folge einer bedingten Anweisungsblock
 - ASSIGN - weist einen Wert einer Variable zu
 - INIT - initialisiert eine Variable
+- RETURN - bestimmt den Rückgabewert einer Funktion
 - PROGRAM - eine Folge von Anweisungen
 
 ## Inhalt der Hashtabelle
@@ -152,6 +153,8 @@ Funktionen werden in der Vongsprache als Variablen gespeichert. Um Funktionen zu
 - Das Funktionswrappertoken enthält Informationen über die benötigten Argumente und ein Funktiontoken
 - Das Funktiontoken ist die letzte Darstellung einer Funktion und enthält nur die enthaltenen Anweisungen
 
+Bei der Berechnung einer Funktion gibt es auch ein viertes Token, das den Rückgabewert der Funktion enthält. Für Funktionen ohne Rückgabewert ist dies nicht anwesend.
+
 ### Funktionanruftokens
 
 Tokentyp: `CALL`
@@ -190,6 +193,14 @@ Tokentyp: `PROGRAM`
 | --- | --- | --- |
 | `VALUE` | Zahl | Anzahl von enthaltenen Anweisungen |
 | `FUNCTION_BODY` | Tokenfeld | Enthaltene Anweisungen in Form Tokens |
+
+### Rückgabewertstokens
+
+Tokentyp: `RETURN`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE` | Token | Den Rückgabewert bildender Ausdruck |
 
 ## Umfang
 

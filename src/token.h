@@ -40,6 +40,7 @@ typedef enum TokenType {
     LOOP,
     ASSIGN,
     INIT,
+    RETURN,
 	PROGRAM
 } TokenType;
 

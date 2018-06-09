@@ -24,10 +24,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "token.h"
+
 #define PARSE_ERROR 2
 #define EXPECTED_TOKEN 3
 #define UNEXPECTED_TOKEN 4
-#define UNKNOWN_TOKEN_TYPE 5
+#define NULL_TOKEN 5
 #define ASSIGN_FAILED 6
 #define MEMORY_ERROR 7
 #define UNDECLARED_IDENTIFIER 8
@@ -40,5 +42,11 @@
  * @param code The exit code
  */
 void err(char* message, int code);
+
+/**
+ * Throw an error because the current token is an unexpected token
+ * @param token The unexpected token
+ */
+void unexpected(Token* token);
 
 #endif

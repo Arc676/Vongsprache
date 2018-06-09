@@ -24,9 +24,8 @@
 #include <ctype.h>
 
 #include "stream.h"
-#include "token.h"
 
-#define KEYWORD_COUNT 12
+#define KEYWORD_COUNT 13
 
 #define OP_COUNT 12
 #define BIMST 0

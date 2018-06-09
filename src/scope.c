@@ -57,9 +57,6 @@ Token* setVariable(Scope* scope, char* identifier, Token* value) {
 }
 
 Token* defineVariable(Scope* scope, char* identifier, Token* value) {
-	if (!getVariable(scope, identifier)) {
-		ht_insert(scope->variables, identifier, value);
-		return value;
-	}
-	return NULL;
+	ht_insert(scope->variables, identifier, value);
+	return value;
 }

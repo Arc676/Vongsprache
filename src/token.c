@@ -74,6 +74,8 @@ char* tokenTypeToString(TokenType type) {
 			return "Zuweisung";
         case INIT:
             return "Initialisierung";
+        case RETURN:
+            return "Rückkehranweisung";
 		case PROGRAM:
 			return "Anweisungfolge";
 	}
@@ -95,6 +97,7 @@ void tokenToString(Token* token, char* str) {
             sprintf(str, "%s (\"%s\")", s, data->charVal);
             break;
     	default:
+            sprintf(str, "%s", s);
     		break;
     }
 }
