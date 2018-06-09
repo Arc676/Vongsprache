@@ -2,7 +2,11 @@
 
 In diesem Dokument wird die Syntax der Vongsprache erklärt. In den Beispielen sind Wörter zwischen `[eckigen Klammern]` fakultativ. Beispielsweise können Funktionen auch keine Parameter haben. Wörter zwischen `<spitzen Klammern>` bezeichnen, was eigentlich geschrieben werden sollte. Beispielsweise bedeutet `<Identifikator>`, dass dort ein Identifikator erwartet wird.
 
-## Kommentare
+Bei der Benutzung der Vongsprache ist die Groß- und Kleinschreibung zu beachten. Einrückung der Anweisungen in Blöcken ist für Lesbarkeit empfohlen aber nicht notwendig.
+
+## Eingebildete Funktionen
+
+### Kommentare
 
 In der Vongsprache gibt es nur Zeilenkommentare. Diese fangen mit `#` an.
 ```
@@ -10,11 +14,7 @@ In der Vongsprache gibt es nur Zeilenkommentare. Diese fangen mit `#` an.
 # Und das hier auch
 ```
 
-## Format
-
-Bei der Benutzung der Vongsprache ist die Groß- und Kleinschreibung zu beachten. Einrückung der Anweisungen in Blöcken ist für Lesbarkeit empfohlen aber nicht notwendig.
-
-## Ein-/Ausgabe
+### Ein-/Ausgabe
 
 Die Vongsprache bietet eine Eingabe- und eine Ausgabefunktion an.
 
@@ -30,6 +30,21 @@ i bims Name vong bidde gib mit ("Wie heißt du?") her
 bidde drucke mit ("Hallo, ", Name)
 ```
 
+### Typumwandlung
+
+Der Datentyp einer Variable kann mit den folgenden eingebildeten Funktionen umgewandelt werden. Der umgewandelte Wert wird als Rückgabewert gegeben, muss also auch zugewiesen werden, um gespeichert zu werden.
+
+```
+i bims Zeichenfolge vong "12" her
+i bims Zahl vong 14 her
+
+# Zeichenfolge in Zahl umwandeln
+bidde zuZahl mit (Zeichenfolge)
+
+# Zahl in Zeichenfolge umwandeln
+i bims UmgewandelteZeichenfolge vong bidde zuZeichenfolge mit (Zahl) her
+```
+
 ## Deklarationen
 
 ### Identifikatoren
@@ -37,7 +52,9 @@ bidde drucke mit ("Hallo, ", Name)
 Schlüsselwörter, die hier unten aufgezählt werden, dürfen nicht als Identifikatoren benutzt werden.
 Das erste Zeichen eines Identifikatoren muss ein Unterstrich oder ein Buchstabe sein.
 
-Schlüsselwörter:
+In der Vongsprache sind Operatoren auch Schlüsselwörter. Diese sind im Abschnitt "Operatoren" aufgezählt.
+
+Nicht-Operator Schlüsselwörter:
 ```
 i
 bims
@@ -50,6 +67,7 @@ am
 Wahrigkeit
 Sonstigkeit
 solange
+hab
 bidde
 ```
 
@@ -69,7 +87,7 @@ Hier sind einige Beispiele.
 ```
 i bims Alter vong 26 her
 i bims RationaleZahl vong 2.5 her
-i bims Begrüßung vong "Hallo, Welt!" her
+i bims Begruessung vong "Hallo, Welt!" her
 ```
 
 ### Funktionen
@@ -78,7 +96,17 @@ Auch Funktionen werden mit demselben Verb deklariert.
 
 ```
 i bims <Identifikator> vong Funktionigkeit [mit (Parameter1, Parameter2, ...)]
-  <Anweisungen>
+    <Anweisungen>
+her
+```
+
+#### Rückkehranweisungen
+
+Das Schlüsselwort `hab` bezeichnet den Rückgabewert der Funktion.
+
+```
+i bims Doppel vong Funktionigkeit mit (x)
+    hab x mal 2
 her
 ```
 
@@ -92,6 +120,22 @@ bidde <Funktionidentifikator> [mit (Parameter1, Parameter2, ...)]
 
 ## Operatoren
 
+| Operator | Priorität | Funktion |
+| --- | --- | --- |
+| `bimst` | 1 | Zuweisung |
+| `oder` | 2 | Logischer Oder-Operator |
+| `und` | 3 | Logischer Und-Operator |
+| `groesser` | 7 | Vergleichsoperator (`x > y`) |
+| `kleiner` | 7 | Vergleichsoperator (`x < y`) |
+| `gleich` | 7 | Gleichheitsoperator |
+| `plus` | 10 | Additionoperator |
+| `minus` | 10 | Subtraktionoperator |
+| `nicht` | 20 | Logische Negation |
+| `mal` | 20 | Multiplikationoperator |
+| `geteilt-durch` | 20 | Divisionoperator |
+| `rest` | 20 | Moduloperator |
+
+
 ## Kontrollstrukturen
 
 Die Vongsprache bietet folgende Kontrollstrukturen an. In der Vongsprache gibt es keine booleschen Ausdrücke.
@@ -101,9 +145,9 @@ Deshalb brauchen bedingte Anweisungen und Schleifen boolesche Variablen.
 
 ```
 bims <Ausdruck> vong Wahrigkeit
-  <Anweisungen>
+    <Anweisungen>
 her am Sonstigkeit
-  <Anweisungen>
+    <Anweisungen>
 her
 ```
 
@@ -115,7 +159,7 @@ Die Vongsprache hat Zählschleifen und kopfgesteuerte Schleifen. Die folgenden B
 
 ```
 mit <Zähler> vong <Start> bis <Ende>
-  <Anweisungen>
+    <Anweisungen>
 her
 ```
 
@@ -123,6 +167,6 @@ her
 
 ```
 solange <Ausdruck> vong Wahrigkeit
-  <Anweisungen>
+    <Anweisungen>
 her bims
 ```

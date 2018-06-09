@@ -82,12 +82,8 @@ Token* applyOp(Token* op, Token* left, Token* right) {
 				result = *(float*)v1 / *(float*)v2;
 				break;
 			case REST:
-			{
-				int k1 = (int)(*(float*)v1);
-				int k2 = (int)(*(float*)v2);
-				result = (float)(k1 % k2);
+				result = fmod(*(float*)v1, *(float*)v2);
 				break;
-			}
 			case GROESSER:
 				result = *(float*)v1 > *(float*)v2;
 				break;
@@ -282,6 +278,44 @@ Token* eval(Token* exp, Scope* scope) {
 					ht_insert_token(token->tokenData, VALUE, data);
 					return token;
 				}
+			} else if (!strcmp(fID, "zuZahl") || !strcmp(fID, "zuZeichenfolge")) {
+				int toString = !strcmp(fID, "zuZeichenfolge");
+
+				// prepare error message
+				char msg[100];
+				if (argc != 1) {
+					sprintf(msg, "1 Argument für Funktion %s erwartet aber %d gefunden",
+							fID, argc);
+					err(msg, BAD_ARG_COUNT);
+					break;
+				}
+				Token* given = eval(args[0], scope);
+
+				sprintf(msg, "Erwartete %sArgument, %s gefunden",
+						(toString ? "numerisches " : "Zeichenfolge-"),
+						tokenTypeToString(args[0]->type));
+
+				TokenData* current = ht_find_token(given->tokenData, VALUE);
+				TokenData* newData;
+				Token* ret = createToken(toString ? STRING : NUMBER);
+				if (toString) {
+					if (given->type != NUMBER) {
+						err(msg, BAD_ARG_TYPE);
+						break;
+					}
+					char* strVal = (char*)malloc(20);
+					sprintf(strVal, "%f", current->floatVal);
+					newData = createTokenData(STRING, 0, strVal);
+				} else {
+					if (given->type != STRING) {
+						err(msg, BAD_ARG_TYPE);
+						break;
+					}
+					float fVal = (float)strtol(current->charVal, (char**)NULL, 0);
+					newData = createTokenData(NUMBER, fVal, NULL);
+				}
+				ht_insert_token(ret->tokenData, VALUE, newData);
+				return ret;
 			} else {
 				Token* func = getVariable(scope, fID);
 				if (func) {
