@@ -55,7 +55,7 @@ char* tokenTypeToString(TokenType type) {
 	    case NUMBER:
 			return "Zahl";
 	    case STRING:
-			return "String";
+			return "Zeichenfolge";
 	    case KEYWORD:
 			return "Schlüsselwort";
 	    case IDENTIFIER:

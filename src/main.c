@@ -26,6 +26,109 @@ void undeclaredIDErr(char* ID) {
 	err(msg, UNDECLARED_IDENTIFIER);
 }
 
+Token* applyOp(Token* op, Token* left, Token* right) {
+	TokenData* lData = ht_find_token(left->tokenData, VALUE);
+	TokenData* rData = ht_find_token(right->tokenData, VALUE);
+
+	// are the operands numbers?
+	int n1 = left->type == NUMBER;
+	int n2 = right->type == NUMBER;
+
+	void* v1 = n1 ? (void*)&(lData->floatVal) : (void*)lData->charVal;
+	void* v2 = n2 ? (void*)&(rData->floatVal) : (void*)rData->charVal;
+
+	TokenData* data = ht_find_token(op->tokenData, OP);
+	int opType = (int)data->floatVal;
+
+	// prepare error message
+	char msg[100];
+	sprintf(msg, "Falsche Datentypen %s und %s zum Operator '%s' gegeben",
+			tokenTypeToString(left->type), tokenTypeToString(right->type),
+			operators[opType]);
+
+	// determine the requirements of the operator
+	// default to requiring numbers
+	int canOperate = n1 && n2;
+	switch (opType) {
+		// division requires nonzero
+		case GETEILT:
+		case REST:
+			if (canOperate && *(float*)v2 == 0) {
+				// overwrite error message
+				sprintf(msg, "Kann nicht durch null teilen");
+				canOperate = 0;
+			}
+			break;
+		// these operators require operands of the same type
+		case GLEICH:
+			canOperate = n1 == n2;
+		default:
+			break;
+	}
+
+	if (canOperate) {
+		float result;
+		switch (opType) {
+			case PLUS:
+				result = *(float*)v1 + *(float*)v2;
+				break;
+			case MINUS:
+				result = *(float*)v1 - *(float*)v2;
+				break;
+			case MAL:
+				result = *(float*)v1 * *(float*)v2;
+				break;
+			case GETEILT:
+				result = *(float*)v1 / *(float*)v2;
+				break;
+			case REST:
+			{
+				int k1 = (int)(*(float*)v1);
+				int k2 = (int)(*(float*)v2);
+				result = (float)(k1 % k2);
+				break;
+			}
+			case GROESSER:
+				result = *(float*)v1 > *(float*)v2;
+				break;
+			case KLEINER:
+				result = *(float*)v1 < *(float*)v2;
+				break;
+			case GLEICH:
+				if (n1) {
+					result = *(float*)v1 == *(float*)v2;
+				} else {
+					result = !strcmp((char*)v1, (char*)v2);
+				}
+				break;
+			case ODER:
+				result = evalBool(left) || evalBool(right);
+				break;
+			case UND:
+				result = evalBool(left) && evalBool(right);
+				break;
+			default:
+				break;
+		}
+		Token* res = createToken(NUMBER);
+		TokenData* data = createTokenData(NUMBER, result, NULL);
+		ht_insert_token(res->tokenData, VALUE, data);
+		return res;
+	}
+	// display error if cannot operate
+	err(msg, OPERATOR_ERROR);
+	return NULL;
+}
+
+int evalBool(Token* val) {
+	int ret = val != NULL;
+	if (ret && val->type == NUMBER) {
+		TokenData* data = ht_find_token(val->tokenData, VALUE);
+		ret = data->floatVal != 0;
+	}
+	return ret;
+}
+
 void vongsprache_print(int argc, Token** args, Scope* scope) {
 	for (int i = 0; i < argc; i++) {
 		Token* val = eval(args[i], scope);
@@ -103,16 +206,22 @@ Token* eval(Token* exp, Scope* scope) {
 				}
 			}
 		}
+		case BINARY:
+		{
+			Token* op = ht_find_token(exp->tokenData, OP);
+			Token* left = ht_find_token(exp->tokenData, LEFT_VAR);
+			Token* right = ht_find_token(exp->tokenData, RIGHT_VAR);
+			return applyOp(
+				op,
+				eval(left, scope),
+				eval(right, scope)
+			);
+		}
 		case IF:
 		{
 			Token* cond = ht_find_token(exp->tokenData, CONDITION);
 			Token* res = eval(cond, scope);
-			int evalThen = res != NULL;
-			if (evalThen && res->type == NUMBER) {
-				TokenData* data = ht_find_token(res->tokenData, VALUE);
-				evalThen = data->floatVal != 0;
-			}
-			if (evalThen) {
+			if (evalBool(res)) {
 				Token* thenblk = ht_find_token(exp->tokenData, THEN_BLOCK);
 				return eval(thenblk, scope);
 			} else {

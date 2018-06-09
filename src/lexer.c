@@ -39,34 +39,34 @@ const char* operators[OP_COUNT] = {
     "bimst",
     "oder",
     "und",
-    "größer",
+    "groesser",
     "kleiner",
     "gleich",
     "plus",
     "minus",
     "nicht",
     "mal",
-    "geteilt-durch",
+    "geteiltdurch",
     "rest"
 };
 
 int getPrecedence(int op) {
     switch (op) {
-        case 0:
-        case 1:
-        case 2:
+        case BIMST:
+        case ODER:
+        case UND:
             return op + 1;
-        case 3:
-        case 4:
-        case 5:
+        case GROESSER:
+        case KLEINER:
+        case GLEICH:
             return 7;
-        case 6:
-        case 7:
+        case PLUS:
+        case MINUS:
             return 10;
-        case 8:
-        case 9:
-        case 10:
-        case 11:
+        case NICHT:
+        case MAL:
+        case GETEILT:
+        case REST:
             return 20;
         default:
             return 0;

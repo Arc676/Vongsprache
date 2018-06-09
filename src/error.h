@@ -32,6 +32,7 @@
 #define MEMORY_ERROR 7
 #define UNDECLARED_IDENTIFIER 8
 #define BAD_ARG_COUNT 9
+#define OPERATOR_ERROR 10
 
 /**
  * Raise an error

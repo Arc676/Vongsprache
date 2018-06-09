@@ -27,7 +27,20 @@
 #include "token.h"
 
 #define KEYWORD_COUNT 12
+
 #define OP_COUNT 12
+#define BIMST 0
+#define ODER 1
+#define UND 2
+#define GROESSER 3
+#define KLEINER 4
+#define GLEICH 5
+#define PLUS 6
+#define MINUS 7
+#define NICHT 8
+#define MAL 9
+#define GETEILT 10
+#define REST 11
 
 /**
  * List of all the reserved words

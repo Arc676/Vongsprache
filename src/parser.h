@@ -95,10 +95,19 @@ Token* parseExpression(FILE* fp);
 /**
  * Parse the stream for a potential binary expression
  * @param fp FILE* from which to read
- * @param prec Precedence of the given token
+ * @param left Left value of the expression
+ * @param prec Precedence of the given left value
  * @return The given token or another token representing the expression
  */
-Token* potentialBinary(FILE* fp, int prec);
+Token* potentialBinary(FILE* fp, Token* left, int prec);
+
+/**
+ * Parse the stream for tokens and call appropriate functions to
+ * handle the expression
+ * @param fp FILE* from which to read
+ * @return Parsed expression
+ */
+Token* parseAtom(FILE* fp);
 
 /**
  * Parse the stream for a list of tokens between specified start and end

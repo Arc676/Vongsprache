@@ -39,6 +39,22 @@ void undeclaredIDErr(char* ID);
 void vongsprache_print(int argc, Token** args, Scope* scope);
 
 /**
+ * Applies a binary operator
+ * @param op Operator
+ * @param left Left value
+ * @param right Right value
+ * @return Result of operation
+ */
+Token* applyOp(Token* op, Token* left, Token* right);
+
+/**
+ * Determines if a token should evaluate to a truthy value
+ * @param val Token to check
+ * @return Boolean value of the evaluated token
+ */
+int evalBool(Token* val);
+
+/**
  * Evaluates a token
  * @param exp Token to evaluate
  * @param scope Scope in which to evaluate the token

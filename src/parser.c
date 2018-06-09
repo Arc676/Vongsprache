@@ -153,10 +153,10 @@ Token* parseCall(FILE* fp) {
 }
 
 Token* parseExpression(FILE* fp) {
-	return potentialBinary(fp, 0);
+	return potentialBinary(fp, parseAtom(fp), 0);
 }
 
-Token* potentialBinary(FILE* fp, int prec) {
+Token* parseAtom(FILE* fp) {
 	if (parser_isValue(fp, KEYWORD, "i")) {
 		skipValue(fp, KEYWORD, 2, "i", "bims");
 		Token* identifier = lexer_next(fp);
@@ -224,25 +224,6 @@ Token* potentialBinary(FILE* fp, int prec) {
 	}
 	switch (token->type) {
 		case IDENTIFIER:
-		{
-			Token* op = lexer_peek(fp);
-			if (op->type == OPERATOR) {
-				TokenData* data = ht_find_token(op->tokenData, OP);
-				int opType = (int)data->floatVal;
-				int opPrec = getPrecedence(opType);
-				if (opPrec > prec) {
-					lexer_next(fp);
-					Token* rval = potentialBinary(fp, opPrec);
-
-					Token* exp = createToken(opType == 0 ? ASSIGN : BINARY);
-					ht_insert_token(exp->tokenData, LEFT_VAR, token);
-					ht_insert_token(exp->tokenData, OP, op);
-					ht_insert_token(exp->tokenData, RIGHT_VAR, rval);
-					return exp;
-				}
-			}
-		}
-		// if no binary expression found, fall through to just return token
 		case STRING:
 		case NUMBER:
 			return token;
@@ -250,6 +231,31 @@ Token* potentialBinary(FILE* fp, int prec) {
 			unexpected(token);
 			return NULL;
 	}
+}
+
+Token* potentialBinary(FILE* fp, Token* left, int prec) {
+	Token* op = lexer_peek(fp);
+	if (op && op->type == OPERATOR) {
+		TokenData* data = ht_find_token(op->tokenData, OP);
+		int opType = (int)data->floatVal;
+		int opPrec = getPrecedence(opType);
+		if (opPrec > prec) {
+			lexer_next(fp);
+			Token* rval = potentialBinary(fp, parseAtom(fp), opPrec);
+			if (!rval) {
+				err("Erwartete Ausdruck", EXPECTED_TOKEN);
+			}
+
+			Token* binary = createToken(opType == 0 ? ASSIGN : BINARY);
+			ht_insert_token(binary->tokenData, LEFT_VAR, left);
+			ht_insert_token(binary->tokenData, OP, op);
+			ht_insert_token(binary->tokenData, RIGHT_VAR, rval);
+
+			return potentialBinary(fp, binary, prec);
+		}
+	}
+	// if no binary expression found, just return token
+	return left;
 }
 
 Token** parseDelimited(FILE* fp, char* start, char* end, char* sep, int* count,
@@ -305,7 +311,12 @@ void skipValue(FILE* fp, TokenType type, int count, ...) {
 			va_end(arglist);
 			char token[100];
 			char msg[200];
-			tokenToString(lexer_peek(fp), token);
+			Token* found = lexer_peek(fp);
+			if (found) {
+				tokenToString(found, token);
+			} else {
+				sprintf(token, "nichts");
+			}
 			sprintf(msg, "Erwartete %s-Token: \"%s\", %s gefunden",
 				tokenTypeToString(type), value, token);
 			err(msg, EXPECTED_TOKEN);
