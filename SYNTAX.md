@@ -87,7 +87,7 @@ Hier sind einige Beispiele.
 ```
 i bims Alter vong 26 her
 i bims RationaleZahl vong 2.5 her
-i bims Begruessung vong "Hallo, Welt!" her
+i bims Begrüßung vong "Hallo, Welt!" her
 ```
 
 ### Funktionen
@@ -125,16 +125,15 @@ bidde <Funktionidentifikator> [mit (Parameter1, Parameter2, ...)]
 | `bimst` | 1 | Zuweisung |
 | `oder` | 2 | Logischer Oder-Operator |
 | `und` | 3 | Logischer Und-Operator |
-| `groesser` | 7 | Vergleichsoperator (`x > y`) |
+| `größer` | 7 | Vergleichsoperator (`x > y`) |
 | `kleiner` | 7 | Vergleichsoperator (`x < y`) |
 | `gleich` | 7 | Gleichheitsoperator |
 | `plus` | 10 | Additionoperator |
 | `minus` | 10 | Subtraktionoperator |
 | `nicht` | 20 | Logische Negation |
 | `mal` | 20 | Multiplikationoperator |
-| `geteilt-durch` | 20 | Divisionoperator |
+| `gteild` | 20 | Divisionoperator |
 | `rest` | 20 | Moduloperator |
-
 
 ## Kontrollstrukturen
 

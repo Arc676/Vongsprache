@@ -40,14 +40,14 @@ const char* operators[OP_COUNT] = {
     "bimst",
     "oder",
     "und",
-    "groesser",
+    "größer",
     "kleiner",
     "gleich",
     "plus",
     "minus",
     "nicht",
     "mal",
-    "geteiltdurch",
+    "gteild",
     "rest"
 };
 
@@ -253,7 +253,7 @@ int isValidIDStart(char c) {
 }
 
 int isValidIDChar(char c) {
-    return isValidIDStart(c) || isDigit(c);
+    return isValidIDStart(c) || isDigit(c) || charInString(c, "äöüß");
 }
 
 int isWhitespace(char c) {
