@@ -87,7 +87,7 @@ Tokentyp: `OPERATOR`
 | Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
 | --- | --- | --- |
 | `VALUE` | Zeichenfolge | Gefundener Operator |
-| `OP` | Zahl | Index gefundenes Operator |
+| `OP` | Zahl | Index gefundenes Operators |
 
 ### Stringtokens
 
@@ -158,7 +158,7 @@ Tokentyp: `LOOP`
 | `CONDITION` | Token | Bedingung der Schleife |
 | `FUNCTION_BODY` | Token | Die Anweisungen der Schleife enthaltendes Funktiontoken |
 
-Alle Schleifen, das heißt sowohl Zählschleifen als auch kopfgesteuerte Schleifen, werden als kopfgesteuerte Schleifen gespeichert und berechnet.. Die Bedingung einer Zählschleife ist ein Vergleich zwischen dem Zähler und seinem letzten Wert.
+Alle Schleifen, das heißt sowohl Zählschleifen als auch kopfgesteuerte Schleifen, werden als kopfgesteuerte Schleifen gespeichert und berechnet. Die Bedingung einer Zählschleife ist ein Vergleich zwischen dem Zähler und dem End-Wert. Die Schleife läuft, solange der Zähler kleiner oder gleich dem End-Wert ist.
 
 Die `VALUE`- und `ARGUMENTS`-Werte sind nur für Zählschleifen anwesend.
 
@@ -227,3 +227,25 @@ Der globale Umfang hat keinen Überumfang. Der Wert des Überumfangs des globale
 Bei der Berechnung eines `PROGRAM`-Tokens wird ein neuer Unterumfang geschafft. Das gewährleistet, dass in einem Block deklarierte Variablen nach dem Ende dieses Blocks gelöscht werden.
 
 Beim Anruf einer Funktion werden **zwei** neue Unterumfänge geschafft. Im ersten werden die zur Funktion gegebenen Argumente gespeichert und der zweite wird beim Berechnung der Anweisungsblock der Funktion geschafft.
+
+### Besondere Variablen
+
+In bestimmten Umfängen werden besondere Variablen mit Schlüsselwörtern als Identifikatoren gespeichert. Die Benutzung von Schlüsselwörtern als Identifikatoren verhindert, dass von dem Benutzer definierte Variablen damit verwechselt werden könnten.
+
+Besondere Variablen entstehen alle aus leeren Identifikatortokens.
+
+#### Funktionen
+
+Bevor der Anweisungsblock einer Funktion berechnet wird, wird eine besondere Variable mit dem Identifikator „Funktionigkeit“ im zuerst geschafften Unterumfang gespeichert.
+
+#### Rückgabewert
+
+Bei der Bestimmung des Rückgabewertes einer Funktion durch die Benutzung des Schlüsselwortes `hab` wird eine besondere Variable mit demselben Schlüsselwort als Identifikator gespeichert.
+
+Nachdem ein Rückgabewertstoken berechnet wird, werden alle weitere Befehle der Funktion übersprungen. Das heißt, alle folgenden Befehle werden nicht berechnet, bis der letzte Umfang mit einer mit dem Identifikator „Funktionigkeit“ gespeicherten Variable gefunden ist.
+
+#### Globaler Umfang
+
+Nur im globalen Umfang darf eine Variable mit dem Identifikator „i“ gespeichert werden. Bei der Berechnung eines `PROGRAM`-Tokens wird kein neuer Umfang erschafft, wenn sich das Token im globalen Umfang befindet.
+
+Diese Variable wird vor der Berechnung der Wurzel des abstrakten Syntaxbaums bei der Erschaffung des globalen Umfangs gespeichert.

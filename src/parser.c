@@ -106,7 +106,7 @@ Token* parseFor(FILE* fp) {
 	Token* prog = parseProg(fp);
 
 	Token* op = createToken(OPERATOR);
-	TokenData* opType = createTokenData(NUMBER, KLEINER, NULL);
+	TokenData* opType = createTokenData(NUMBER, KLEINER_ODER_GLEICH, NULL);
 	ht_insert_token(op->tokenData, OP, opType);
 
 	Token* cond = createToken(BINARY);

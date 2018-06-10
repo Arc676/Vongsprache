@@ -27,22 +27,24 @@
 
 #define KEYWORD_COUNT 13
 
-#define OP_COUNT 12
+#define OP_COUNT 14
 #define BIMST 0
 #define ODER 1
 #define UND 2
-#define GROESSER 3
-#define KLEINER 4
-#define GLEICH 5
-#define PLUS 6
-#define MINUS 7
-#define NICHT 8
-#define MAL 9
-#define GETEILT 10
-#define REST 11
+#define GROESSER_ALS 3
+#define GROESSER_ODER_GLEICH 4
+#define KLEINER_ALS 5
+#define KLEINER_ODER_GLEICH 6
+#define GLEICH 7
+#define PLUS 8
+#define MINUS 9
+#define NICHT 10
+#define MAL 11
+#define GETEILT 12
+#define REST 13
 
 /**
- * List of all the reserved words
+ * Non-operator reserved words
  */
 const char* keywords[KEYWORD_COUNT];
 
@@ -52,7 +54,7 @@ const char* keywords[KEYWORD_COUNT];
 const char* punctuation;
 
 /**
- * Recognized operation characters
+ * Recognized operators
  */
 const char* operators[OP_COUNT];
 

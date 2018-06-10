@@ -120,13 +120,17 @@ bidde <Funktionidentifikator> [mit (Parameter1, Parameter2, ...)]
 
 ## Operatoren
 
+Alle folgenden Wörter sind auch Schlüsselwörter und können deshalb nicht als Identifikatoren genutzt werden.
+
 | Operator | Priorität | Funktion |
 | --- | --- | --- |
 | `bimst` | 1 | Zuweisung |
 | `oder` | 2 | Logischer Oder-Operator |
 | `und` | 3 | Logischer Und-Operator |
 | `größer` | 7 | Vergleichsoperator (`x > y`) |
+| `größergleich` | 7 | Vergleichsoperator (`x >= y`) |
 | `kleiner` | 7 | Vergleichsoperator (`x < y`) |
+| `kleinergleich` | 7 | Vergleichsoperator (`x <= y`) |
 | `gleich` | 7 | Gleichheitsoperator |
 | `plus` | 10 | Additionoperator |
 | `minus` | 10 | Subtraktionoperator |
@@ -161,6 +165,8 @@ mit <Zähler> vong <Start> bis <Ende>
     <Anweisungen>
 her
 ```
+
+Die Werte des Zählers sind inklusive der Start- und End-Werte.
 
 #### Kopfgesteuerte Schleifen
 

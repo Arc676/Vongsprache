@@ -78,10 +78,16 @@ Token* applyOp(Token* op, Token* left, Token* right) {
 			case REST:
 				result = fmod(*(float*)v1, *(float*)v2);
 				break;
-			case GROESSER:
+			case GROESSER_ODER_GLEICH:
+				result = *(float*)v1 >= *(float*)v2;
+				break;
+			case GROESSER_ALS:
 				result = *(float*)v1 > *(float*)v2;
 				break;
-			case KLEINER:
+			case KLEINER_ODER_GLEICH:
+				result = *(float*)v1 <= *(float*)v2;
+				break;
+			case KLEINER_ALS:
 				result = *(float*)v1 < *(float*)v2;
 				break;
 			case GLEICH:
@@ -384,7 +390,7 @@ Token* eval(Token* exp, Scope* scope) {
 			}
 			Token* val = ht_find_token(exp->tokenData, VALUE);
 			Token* ret = eval(val, scope);
-			setVariable(scope, "hab", createToken(RETURN));
+			setVariable(scope, "hab", createToken(IDENTIFIER));
 			return ret;
 		}
 		default:
