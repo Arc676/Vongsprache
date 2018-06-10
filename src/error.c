@@ -36,3 +36,9 @@ void unexpected(Token* token) {
 	sprintf(msg, "Unerwartetes %s", tk);
 	err(msg, UNEXPECTED_TOKEN);
 }
+
+void undeclaredIDErr(char* ID) {
+	char msg[100];
+	sprintf(msg, "Undefinierter Identifikator: %s", ID);
+	err(msg, UNDECLARED_IDENTIFIER);
+}

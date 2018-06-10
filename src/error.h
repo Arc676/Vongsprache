@@ -49,4 +49,10 @@ void err(char* message, int code);
  */
 void unexpected(Token* token);
 
+/**
+ * Raise an error caused by the use of an undeclared identifier
+ * @param ID Relevant identifier
+ */
+void undeclaredIDErr(char* ID);
+
 #endif

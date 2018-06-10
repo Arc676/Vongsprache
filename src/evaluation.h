@@ -25,12 +25,6 @@
 #include "scope.h"
 
 /**
- * Raise an error caused by the use of an undeclared identifier
- * @param ID Relevant identifier
- */
-void undeclaredIDErr(char* ID);
-
-/**
  * Print function for Vongsprache; prints the contents of the passed arguments
  * to the console with a trailing newline
  * @param argc Number of arguments passed to print function
