@@ -14,7 +14,7 @@ ifdef DEBUG
 endif
 
 vongsprache: makedir $(_OBJS)
-	$(CC) -o $(OUT) $(_OBJS)
+	$(CC) -o $(OUT) $(_OBJS) -lm
 
 makedir:
 	mkdir -p $(ODIR)
