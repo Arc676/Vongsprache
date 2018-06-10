@@ -18,29 +18,29 @@
 //IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "interactive.h"
+#ifndef INTERACTIVE_H
+#define INTERACTIVE_H
 
-int main(int argc, char* argv[]) {
-	FILE* file;
-	if (argc == 2) {
-		if (!strcmp(argv[1], "-i")) {
-			printf("Interaktivmodus beginnt\n");
-			interactiveMode();
-			return 0;
-		} else {
-			file = fopen(argv[1], "r");
-			if (!file) {
-				fprintf(stderr, "Datei konnte nicht geöffnet werden\n");
-				return 1;
-			}
-			Token* ast = parseTopLevel(file);
-			// create global scope when running main function
-			eval(ast, NULL);
-			fclose(file);
-			return 0;
-		}
-	} else {
-		fprintf(stderr, "Gebrauch: vongsprache Datei\n");
-		return 1;
-	}
-}
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "evaluation.h"
+
+/**
+ * Enter interactive mode
+ */
+void interactiveMode();
+
+/**
+ * Print help
+ */
+void printHelp();
+
+/**
+ * Creates a new FIFO file, checking existing files to avoid name collisions
+ * @return File descriptor of newly created FIFO
+ */
+// int mkSafeFifo();
+
+#endif
