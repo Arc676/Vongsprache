@@ -28,6 +28,22 @@ Scope* createScope(Scope* parent) {
 	return scope;
 }
 
+Scope* createFuncScope(Scope* parent) {
+	Scope* fScope = createScope(parent);
+	// indicate that we are currently in a function call,
+	// shadowing any previous function frames
+	Token* frame = createToken(IDENTIFIER);
+	defineVariable(fScope, "Funktionigkeit", frame);
+	return fScope;
+}
+
+Scope* createGlobalScope() {
+	Scope* global = createScope(NULL);
+	Token* token = createToken(IDENTIFIER);
+	defineVariable(global, "i", token);
+	return global;
+}
+
 Scope* lookupScope(Scope* scope, char* identifier) {
 	Scope* found = scope;
 	while (found) {

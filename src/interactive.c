@@ -20,6 +20,8 @@
 
 #include "interactive.h"
 
+extern int isInteractive;
+
 void printHelp() {
 	printf("Interaktivmodus läuft. Verfügbare Befehle:\n\
 beenden - Interaktivmodus beenden\n\
@@ -28,21 +30,9 @@ parsen - ein Programm bis EOF parsen\n\
 ");
 }
 
-// int mkSafeFifo() {
-// 	char* fifoName = (char*)malloc(50);
-// 	int i = 0;
-// 	sprintf(fifoName, "vongsprache-0");
-// 	struct stat st;
-// 	while (stat(fifoName, &st) == 0) {
-// 		i++;
-// 		sprintf(fifoName, "vongsprache-%d", i);
-// 	}
-// 	mkfifo(fifoName, 0666);
-// 	return open(fifoName, O_RDWR | O_NONBLOCK);
-// }
-
 void interactiveMode() {
-	Scope* global = createScope(NULL);
+	isInteractive = 1;
+	Scope* global = createGlobalScope();
 	char input[100];
 	while (1) {
 		printf("> ");
@@ -90,4 +80,5 @@ void interactiveMode() {
 			printf("Unbekannter Befehl: %s\n", input);
 		}
 	}
+	isInteractive = 0;
 }

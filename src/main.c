@@ -20,6 +20,8 @@
 
 #include "interactive.h"
 
+int isInteractive = 0;
+
 int main(int argc, char* argv[]) {
 	FILE* file;
 	if (argc == 2) {
@@ -34,8 +36,7 @@ int main(int argc, char* argv[]) {
 				return 1;
 			}
 			Token* ast = parseTopLevel(file);
-			// create global scope when running main function
-			eval(ast, NULL);
+			eval(ast, createGlobalScope());
 			fclose(file);
 			return 0;
 		}

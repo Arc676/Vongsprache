@@ -224,7 +224,13 @@ Token* eval(Token* exp, Scope* scope) {
 		}
 		case PROGRAM:
 		{
-			Scope* childScope = createScope(scope);
+			// if in global scope, don't create a child scope
+			Scope* childScope;
+			if (getVariable(scope, "i")) {
+				childScope = scope;
+			} else {
+				childScope = createScope(scope);
+			}
 			Token* val = NULL;
 
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
@@ -326,12 +332,7 @@ Token* eval(Token* exp, Scope* scope) {
 					char** params = ht_find_token(func->tokenData, ARGUMENTS);
 
 					// create child scope for function evaluation
-					Scope* fScope = createScope(scope);
-
-					// indicate that we are currently in a function call,
-					// shadowing any previous function frames
-					Token* frame = createToken(RETURN);
-					defineVariable(fScope, "Funktionigkeit", frame);
+					Scope* fScope = createFuncScope(scope);
 
 					// assign given arguments to parameter names, shadowing
 					// any variables in parent scopes with the same name

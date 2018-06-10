@@ -39,6 +39,19 @@ typedef struct Scope {
 Scope* createScope(Scope* parent);
 
 /**
+ * Utility function to create a new function scope
+ * @param parent Parent scope
+ * @return Newly created and appropriately initialized scope object
+ */
+Scope* createFuncScope(Scope* parent);
+
+/**
+ * Utility function to create a new global scope
+ * @return Newly created and appropriately initialized scope object
+ */
+Scope* createGlobalScope();
+
+/**
  * Find the scope in which a variable is declared
  * @param scope Scope from which to start searching
  * @param identifier Variable identifier

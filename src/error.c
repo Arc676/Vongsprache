@@ -23,10 +23,14 @@
 extern int currentlyParsingCol;
 extern int currentlyParsingLine;
 
+extern int isInteractive;
+
 void err(char* message, int code) {
     fprintf(stderr, "%s: Zeile %d, Spalte %d\n", message,
             currentlyParsingLine, currentlyParsingCol);
-    exit(code);
+    if (!isInteractive) {
+        exit(code);
+    }
 }
 
 void unexpected(Token* token) {

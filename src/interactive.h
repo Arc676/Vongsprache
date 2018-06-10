@@ -37,10 +37,4 @@ void interactiveMode();
  */
 void printHelp();
 
-/**
- * Creates a new FIFO file, checking existing files to avoid name collisions
- * @return File descriptor of newly created FIFO
- */
-// int mkSafeFifo();
-
 #endif
