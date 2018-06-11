@@ -27,7 +27,7 @@ Token* parseTopLevel(FILE* fp) {
 	memset(progs, 0, size);
 
 	int pos = 0;
-	while (!eof(fp)) {
+	while (!lexer_eof(fp)) {
 		if (pos >= size * sizeof(Token*)) {
 			size += INITIAL_STATEMENT_COUNT * sizeof(Token*);
 			progs = (Token**)realloc(progs, size);
@@ -65,7 +65,7 @@ Token* parseProg(FILE* fp) {
 
 	int pos = 0;
 	int blockClosed = 0;
-	while (!eof(fp)) {
+	while (!lexer_eof(fp)) {
 		if (parser_isValue(fp, KEYWORD, "her")) {
 			lexer_next(fp);
 			blockClosed = 1;
@@ -286,7 +286,7 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep, int* count,
 
 	int pos = 0;
 	skipValue(fp, PUNCTUATION, 1, start);
-	while (!eof(fp)) {
+	while (!lexer_eof(fp)) {
 		if (parser_isValue(fp, PUNCTUATION, end)) {
 			break;
 		}

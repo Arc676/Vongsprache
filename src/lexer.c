@@ -207,12 +207,7 @@ void readWhile(FILE* fp, char* str, size_t size, int (*valid)(char)) {
 }
 
 void skipComment(FILE* fp) {
-    char c = peek(fp);
-    while (c != '\n') {
-        next(fp);
-        c = peek(fp);
-    }
-    next(fp);
+    while (next(fp) != '\n');
 }
 
 Token* lexer_peek(FILE* fp) {
