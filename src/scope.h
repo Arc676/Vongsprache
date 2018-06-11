@@ -39,6 +39,12 @@ typedef struct Scope {
 Scope* createScope(Scope* parent);
 
 /**
+ * Free all memory occupied by a given scope
+ * @param scope Scope to destroy
+ */
+void destroyScope(Scope* scope);
+
+/**
  * Utility function to create a new function scope
  * @param parent Parent scope
  * @return Newly created and appropriately initialized scope object
@@ -84,5 +90,20 @@ Token* setVariable(Scope* scope, char* identifier, Token* value);
  * @return Value of the new variable, NULL if the variable already existed
  */
 Token* defineVariable(Scope* scope, char* identifier, Token* value);
+
+/**
+ * Determine if the given scope is the global scope
+ * @param scope Scope to check
+ * @return Whether the given scope is the global scope
+ */
+int isGlobalScope(Scope* scope);
+
+/**
+ * Determine if the given scope marks the beginning of a frame in which
+ * a function was called
+ * @param scope Scope to check
+ * @return Whether the given scope is a function scope
+ */
+int isFuncScope(Scope* scope);
 
 #endif

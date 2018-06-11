@@ -36,7 +36,9 @@ int main(int argc, char* argv[]) {
 				return 1;
 			}
 			Token* ast = parseTopLevel(file);
-			eval(ast, createGlobalScope());
+			Scope* global = createGlobalScope();
+			eval(ast, global);
+			destroyScope(global);
 			fclose(file);
 			return 0;
 		}

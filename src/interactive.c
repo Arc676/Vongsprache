@@ -80,5 +80,6 @@ void interactiveMode() {
 			printf("Unbekannter Befehl: %s\n", input);
 		}
 	}
+	destroyScope(global);
 	isInteractive = 0;
 }

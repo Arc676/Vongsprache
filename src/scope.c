@@ -28,6 +28,12 @@ Scope* createScope(Scope* parent) {
 	return scope;
 }
 
+void destroyScope(Scope* scope) {
+	ht_destroy(scope->variables);
+	free(scope->variables);
+	free(scope);
+}
+
 Scope* createFuncScope(Scope* parent) {
 	Scope* fScope = createScope(parent);
 	// indicate that we are currently in a function call,
@@ -75,4 +81,12 @@ Token* setVariable(Scope* scope, char* identifier, Token* value) {
 Token* defineVariable(Scope* scope, char* identifier, Token* value) {
 	ht_insert(scope->variables, identifier, value);
 	return value;
+}
+
+int isGlobalScope(Scope* scope) {
+	return lookupScope(scope, "i") == scope;
+}
+
+int isFuncScope(Scope* scope) {
+	return lookupScope(scope, "Funktionigkeit") == scope->parentScope;
 }
