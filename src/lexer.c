@@ -50,6 +50,7 @@ const char* operators[OP_COUNT] = {
     "nicht",
     "mal",
     "gteild",
+    "hoch",
     "rest"
 };
 
@@ -72,6 +73,7 @@ int getPrecedence(int op) {
         case MAL:
         case GETEILT:
         case REST:
+        case HOCH:
             return 20;
         default:
             return 0;

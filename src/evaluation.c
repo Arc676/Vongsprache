@@ -78,6 +78,9 @@ Token* applyOp(Token* op, Token* left, Token* right) {
 			case REST:
 				result = fmod(*(float*)v1, *(float*)v2);
 				break;
+			case HOCH:
+				result = powf(*(float*)v1, *(float*)v2);
+				break;
 			case GROESSER_ODER_GLEICH:
 				result = *(float*)v1 >= *(float*)v2;
 				break;
@@ -231,10 +234,8 @@ Token* eval(Token* exp, Scope* scope) {
 		case PROGRAM:
 		{
 			// if in global scope, don't create a child scope
-			Scope* childScope;
-			if (getVariable(scope, "i")) {
-				childScope = scope;
-			} else {
+			Scope* childScope = scope;
+			if (!isGlobalScope(scope)) {
 				childScope = createScope(scope);
 			}
 			Token* val = NULL;
@@ -246,20 +247,14 @@ Token* eval(Token* exp, Scope* scope) {
 
 			for (int i = 0; i < count; i++) {
 				val = eval(statements[i], childScope);
-				// check if a return statement has been given
-				Token* ret = getVariable(childScope, "hab");
-				if (ret) {
-					// determine the scope of the function
-					Scope* retFrame = lookupScope(childScope, "Funktionigkeit");
-					// if the function was entered in the last frame,
-					// the current eval call is running the function
-					// otherwise, this eval call is still nested in the
-					// function that needs to be stopped
-					if (retFrame != scope) {
-						setVariable(scope, "hab", ret);
-					}
+				// stop evaluating block if a return statement has been given
+				if (getVariable(childScope, "hab")) {
 					break;
 				}
+			}
+			// destroy child scope unless it's the global scope
+			if (childScope != scope) {
+				destroyScope(childScope);
 			}
 			return val;
 		}
@@ -346,7 +341,9 @@ Token* eval(Token* exp, Scope* scope) {
 						defineVariable(fScope, params[i], eval(args[i], scope));
 					}
 					Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
-					return eval(fBody, fScope);
+					Token* ret = eval(fBody, fScope);
+					destroyScope(fScope);
+					return ret;
 				}
 				undeclaredIDErr(fID);
 			}
@@ -362,35 +359,49 @@ Token* eval(Token* exp, Scope* scope) {
 
 			// determine if loop has a loop counter
 			Token* counter = ht_find_token(exp->tokenData, VALUE);
-			TokenData* cID;
+			TokenData* counterVal;
 			if (counter) {
-				cID = ht_find_token(counter->tokenData, VALUE);
+				TokenData* cID = ht_find_token(counter->tokenData, VALUE);
 				Token* start = ht_find_token(exp->tokenData, ARGUMENTS);
 
-				// evaluate start value for counter and define counter in
-				// loop scope
+				// evaluate start value for counter
 				Token* startVal = eval(start, scope);
-				defineVariable(lScope, cID->charVal, startVal);
+				TokenData* cVal = ht_find_token(startVal->tokenData, VALUE);
+
+				// copy start value to new token in case it's a literal
+				Token* startCopy = createToken(NUMBER);
+				counterVal = createTokenData(NUMBER, cVal->floatVal, NULL);
+				ht_insert_token(startCopy->tokenData, VALUE, counterVal);
+
+				// define loop counter in child scope
+				defineVariable(lScope, cID->charVal, startCopy);
 			}
 
 			while (evalBool(eval(cond, lScope))) {
 				eval(prog, lScope);
 				if (counter) {
-					Token* c = getVariable(lScope, cID->charVal);
-					TokenData* cVal = ht_find_token(c->tokenData, VALUE);
-					cVal->floatVal += 1;
+					counterVal->floatVal += 1;
 				}
 			}
+
+			destroyScope(lScope);
 			break;
 		}
 		case RETURN:
 		{
+			// can only return if inside a function
 			if (!getVariable(scope, "Funktionigkeit")) {
 				unexpected(exp);
 			}
 			Token* val = ht_find_token(exp->tokenData, VALUE);
 			Token* ret = eval(val, scope);
-			setVariable(scope, "hab", createToken(IDENTIFIER));
+
+			// find the stack frame in which the function started
+			Scope* fScope = scope;
+			while (!isFuncScope(fScope)) {
+				fScope = fScope->parentScope;
+			}
+			setVariable(fScope, "hab", createToken(IDENTIFIER));
 			return ret;
 		}
 		default:

@@ -27,7 +27,7 @@
 
 #define KEYWORD_COUNT 13
 
-#define OP_COUNT 14
+#define OP_COUNT 15
 #define BIMST 0
 #define ODER 1
 #define UND 2
@@ -41,7 +41,8 @@
 #define NICHT 10
 #define MAL 11
 #define GETEILT 12
-#define REST 13
+#define HOCH 13
+#define REST 14
 
 /**
  * Non-operator reserved words

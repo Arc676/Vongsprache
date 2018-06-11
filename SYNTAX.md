@@ -137,6 +137,7 @@ Alle folgenden Wörter sind auch Schlüsselwörter und können deshalb nicht als
 | `nicht` | 20 | Logische Negation |
 | `mal` | 20 | Multiplikationoperator |
 | `gteild` | 20 | Divisionoperator |
+| `hoch` | 20 | Potenzoperator |
 | `rest` | 20 | Moduloperator |
 
 ## Kontrollstrukturen

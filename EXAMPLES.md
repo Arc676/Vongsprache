@@ -43,3 +43,17 @@ solange Zahl größer 1 vong Wahrigkeit
 	bidde drucke mit (Zahl)
 her bims
 ```
+
+## Funktion, die bestimmt, ob eine Zahl eine Primzahl ist
+
+```
+i bims bimsPrimzahl vong Funktionigkeit mit (n)
+	i bims Ende vong n hoch 0.5 her
+	mit k vong 2 bis Ende
+		bims n rest k gleich 0 vong Wahrigkeit
+			hab 0
+		her
+	her
+	hab 1
+her
+```
