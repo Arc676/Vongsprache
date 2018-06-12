@@ -114,6 +114,8 @@ Tokentyp: `IDENTIFIER`/`KEYWORD`
 | --- | --- | --- |
 | `VALUE` | Zeichenfolge | Gefundener Identifikator oder gefundenes Schlüsselwort |
 
+Bei der Zuweisung einer Funktion wird der Schlüsselwert des Identifikators der Funktion durch `CALL` ersetzt.
+
 ### Einfügungstokens
 
 Tokentyp: `INCLUDE`

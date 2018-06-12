@@ -1,6 +1,8 @@
 # Mathematikfunktionen
 
 i bims pi vong 3.141592653589793 her
+i bims e vong 2.718281828459045 her
+i bims ln10 vong 2.302585092994046 her
 
 i bims bimsPrimzahl vong Funktionigkeit mit (n)
 	i bims Ende vong n hoch 0.5 her
@@ -19,6 +21,33 @@ i bims fakultät vong Funktionigkeit mit (n)
 	hab 1
 her
 
+i bims logarithmus vong Funktionigkeit mit (n)
+	# Argument in Form a * 10^k ausdrücken
+	# n durch a ersetzen
+	i bims potenz vong 0 her
+	solange n größer 10 vong Wahrigkeit
+		n bimst n gteild 10
+		potenz bimst potenz plus 1
+	her bims
+	# ln(n) = ln(a) + k * ln(10) = -ln(1/a) + k * ln(10)
+	i bims log vong potenz mal ln10 her
+
+	# x = 1 - 1/a für die Taylorreihe
+	i bims x vong 1 minus 1 gteild n her
+	# x^n
+	i bims xN vong x her
+	i bims n vong 1 her
+	i bims term vong x her
+	i bims grenze vong 10 hoch -6 her
+	solange bidde absolutwert mit (term) größer grenze vong Wahrigkeit
+		log bimst log plus term
+		xN bimst xN mal x
+		n bimst n plus 1
+		term bimst xN gteild n
+	her bims
+	hab log
+her
+
 i bims absolutwert vong Funktionigkeit mit (n)
 	bims n kleiner 0 vong Wahrigkeit
 		hab n mal -1
@@ -28,7 +57,7 @@ her
 
 i bims sinus vong Funktionigkeit mit (winkel)
 	i bims term vong winkel her
-	i bims grenze vong 10 hoch -8 her
+	i bims grenze vong 10 hoch -6 her
 	i bims total vong 0 her
 	i bims n vong 0 her
 	solange bidde absolutwert mit (term) größer grenze vong Wahrigkeit

@@ -312,7 +312,7 @@ Token* eval(Token* exp, Scope* scope) {
 						err(msg, BAD_ARG_TYPE);
 						break;
 					}
-					float fVal = (float)strtol(current->charVal, (char**)NULL, 0);
+					float fVal = strtof(current->charVal, (char**)NULL);
 					newData = createTokenData(NUMBER, fVal, NULL);
 				}
 				ht_insert_token(ret->tokenData, VALUE, newData);
