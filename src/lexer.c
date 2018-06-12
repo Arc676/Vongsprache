@@ -97,7 +97,7 @@ Token* readNext(FILE* fp) {
     if (current == '"') {
         return readString(fp);
     }
-    if (isDigit(current)) {
+    if (current == '-' || isDigit(current)) {
         return readNumber(fp);
     }
     if (isValidIDStart(current)) {
@@ -127,7 +127,7 @@ Token* readString(FILE* fp) {
 }
 
 Token* readNumber(FILE* fp) {
-    int hasDot = 0;
+    int hasDot = 0, hasMinus = 0;
     char* literal = (char*)malloc(100);
     memset(literal, 0, 100);
     int pos = 0;
@@ -138,12 +138,15 @@ Token* readNumber(FILE* fp) {
                 break;
             }
             hasDot = 1;
-            literal[pos++] = c;
-        } else if (isDigit(c)) {
-            literal[pos++] = c;
-        } else {
+        } else if (c == '-') {
+            if (hasMinus) {
+                break;
+            }
+            hasMinus = 1;
+        } else if (!isDigit(c)) {
 			break;
 		}
+        literal[pos++] = c;
         next(fp);
     }
     float number = strtof(literal, (char**)NULL);
