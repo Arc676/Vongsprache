@@ -45,6 +45,22 @@ bidde zuZahl mit (Zeichenfolge)
 i bims UmgewandelteZeichenfolge vong bidde zuZeichenfolge mit (Zahl) her
 ```
 
+### Dateieinfügung
+
+Das Schlüsselwort `benutze` erlaubt die Einfügung einer anderen Datei. Das macht den Inhalt davon zugänglich beispielsweise in der eingefügten Datei deklarierte Funktionen.
+
+```
+# Datei1.vong
+i bims foo vong Funktionigkeit
+	bidde drucke mit ("i bims in einer anderen Datei")
+her
+
+# Datei2.vong
+benutze Datei1
+
+bidde foo
+```
+
 ## Deklarationen
 
 ### Identifikatoren
@@ -69,6 +85,7 @@ Sonstigkeit
 solange
 hab
 bidde
+benutze
 ```
 
 ### Variablen

@@ -1,5 +1,6 @@
 CC=gcc
-FLAGS=-c -std=c11
+STD=c11
+FLAGS=-c -std=$(STD)
 
 ODIR=../obj
 

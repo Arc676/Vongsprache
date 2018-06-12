@@ -40,6 +40,7 @@ In der Darstellung der abstrakten Syntaxbaum wird jedem Token einen Typ zugewies
 - ASSIGN - weist einen Wert einer Variable zu
 - INIT - initialisiert eine Variable
 - RETURN - bestimmt den Rückgabewert einer Funktion
+- INCLUDE - fügt eine andere Datei ein
 - PROGRAM - eine Folge von Anweisungen
 
 ## Inhalt der Hashtabelle
@@ -112,6 +113,16 @@ Tokentyp: `IDENTIFIER`/`KEYWORD`
 | Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
 | --- | --- | --- |
 | `VALUE` | Zeichenfolge | Gefundener Identifikator oder gefundenes Schlüsselwort |
+
+### Einfügungstokens
+
+Tokentyp: `INCLUDE`
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `VALUE` | Zeichenfolge | Name der einzufügenden Datei, ohne `.vong` |
+
+Bei der Einfügung einer Datei wird den Inhalt davon als Wurzel eines neuen Syntaxbaums berechnet, aber im aktuellen Umfang.
 
 ### Bedingte Anweisungsblocktokens
 
