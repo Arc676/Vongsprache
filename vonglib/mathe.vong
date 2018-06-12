@@ -1,0 +1,16 @@
+i bims bimsPrimzahl vong Funktionigkeit mit (n)
+	i bims Ende vong n hoch 0.5 her
+	mit j vong 2 bis Ende
+		bims n rest j gleich 0 vong Wahrigkeit
+			hab 0
+		her
+	her
+	hab 1
+her
+
+i bims fakultät vong Funktionigkeit mit (n)
+	bims n größer 1 vong Wahrigkeit
+		hab n mal bidde fakultät mit (n minus 1)
+	her
+	hab 1
+her
