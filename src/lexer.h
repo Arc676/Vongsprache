@@ -25,7 +25,7 @@
 
 #include "stream.h"
 
-#define KEYWORD_COUNT 13
+#define KEYWORD_COUNT 14
 
 #define OP_COUNT 15
 #define BIMST 0

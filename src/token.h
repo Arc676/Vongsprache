@@ -41,6 +41,7 @@ typedef enum TokenType {
     ASSIGN,
     INIT,
     RETURN,
+    INCLUDE,
 	PROGRAM
 } TokenType;
 

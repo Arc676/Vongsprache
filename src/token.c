@@ -76,6 +76,8 @@ char* tokenTypeToString(TokenType type) {
             return "Initialisierung";
         case RETURN:
             return "Rückkehranweisung";
+	case INCLUDE:
+		return "Einfügung";
 		case PROGRAM:
 			return "Anweisungfolge";
 	}

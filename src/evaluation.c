@@ -404,6 +404,24 @@ Token* eval(Token* exp, Scope* scope) {
 			setVariable(fScope, "hab", createToken(IDENTIFIER));
 			return ret;
 		}
+		case INCLUDE:
+		{
+			TokenData* data = ht_find_token(exp->tokenData, VALUE);
+			char filename[100];
+			sprintf(filename, "%s.vong", data->charVal);
+			FILE* included = fopen(filename, "r");
+			if (!included) {
+				char msg[100];
+				sprintf(msg, "Zu einfügende Datei %s konnte nicht geöffnet werden",
+					filename);
+				err(msg, INCLUDE_FAILED);
+				return NULL;
+			}
+			Token* ast = parseTopLevel(included);
+			Token* ret = eval(ast, scope);
+			fclose(included);
+			return ret;
+		}
 		default:
 			unexpected(exp);
 			break;

@@ -236,6 +236,15 @@ Token* parseAtom(FILE* fp) {
 		Token* retToken = createToken(RETURN);
 		ht_insert_token(retToken->tokenData, VALUE, retVal);
 		return retToken;
+	} else if (parser_isValue(fp, KEYWORD, "benutze")) {
+		lexer_next(fp);
+		Token* filename = parseIdentifier(fp);
+		TokenData* idVal = ht_find_token(filename->tokenData, VALUE);
+
+		Token* incToken = createToken(INCLUDE);
+		TokenData* incVal = createTokenData(STRING, 0, idVal->charVal);
+		ht_insert_token(incToken->tokenData, VALUE, incVal);
+		return incToken;
 	}
 	Token* token = lexer_next(fp);
 	if (token == NULL) {

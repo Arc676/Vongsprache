@@ -35,6 +35,7 @@
 #define UNDECLARED_IDENTIFIER 8
 #define BAD_ARG_COUNT 9
 #define OPERATOR_ERROR 10
+#define INCLUDE_FAILED 11
 
 /**
  * Raise an error
