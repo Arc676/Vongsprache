@@ -1,0 +1,60 @@
+# Mathematikfunktionen
+
+i bims pi vong 3.141592653589793 her
+
+i bims bimsPrimzahl vong Funktionigkeit mit (n)
+	i bims Ende vong n hoch 0.5 her
+	mit j vong 2 bis Ende
+		bims n rest j gleich 0 vong Wahrigkeit
+			hab 0
+		her
+	her
+	hab 1
+her
+
+i bims fakultät vong Funktionigkeit mit (n)
+	bims n größer 1 vong Wahrigkeit
+		hab n mal bidde fakultät mit (n minus 1)
+	her
+	hab 1
+her
+
+i bims absolutwert vong Funktionigkeit mit (n)
+	bims n kleiner 0 vong Wahrigkeit
+		hab n mal -1
+	her
+	hab n
+her
+
+i bims sinus vong Funktionigkeit mit (winkel)
+	i bims term vong winkel her
+	i bims grenze vong 10 hoch -8 her
+	i bims total vong 0 her
+	i bims n vong 0 her
+	solange bidde absolutwert mit (term) größer grenze vong Wahrigkeit
+		total bimst total plus term
+		term bimst term mal -1 mal (winkel hoch 2) gteild (n mal 2 plus 2) gteild (n mal 2 plus 3)
+		n bimst n plus 1
+	her bims
+	hab total
+her
+
+i bims kosinus vong Funktionigkeit mit (winkel)
+	hab bidde sinus mit (pi gteild 2 minus winkel)
+her
+
+i bims tangens vong Funktionigkeit mit (winkel)
+	hab bidde sinus mit (winkel) gteild bidde kosinus mit (winkel)
+her
+
+i bims kotangens vong Funktionigkeit mit (winkel)
+	hab 1 gteild bidde tangens mit (winkel)
+her
+
+i bims sekans vong Funktionigkeit mit (winkel)
+	hab 1 gteild bidde kosinus mit (winkel)
+her
+
+i bims kosekans vong Funktionigkeit mit (winkel)
+	hab 1 gteild bidde sinus mit (winkel)
+her

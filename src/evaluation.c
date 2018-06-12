@@ -408,10 +408,14 @@ Token* eval(Token* exp, Scope* scope) {
 		{
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
 			char filename[100];
-			sprintf(filename, "%s.vong", data->charVal);
+			char* libpath = getenv("VONGLIB");
+			if (!libpath || strlen(libpath) == 0) {
+				libpath = ".";
+			}
+			sprintf(filename, "%s/%s.vong", libpath, data->charVal);
 			FILE* included = fopen(filename, "r");
 			if (!included) {
-				char msg[100];
+				char msg[300];
 				sprintf(msg, "Zu einfügende Datei %s konnte nicht geöffnet werden",
 					filename);
 				err(msg, INCLUDE_FAILED);
