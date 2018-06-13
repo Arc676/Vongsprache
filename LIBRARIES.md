@@ -29,3 +29,9 @@ Die trigonometrischen Funktionen nehmen alle einen in Radianten ausgedrückten W
 - `pi` (3.141592653589793)
 - `e` (2.718281828459045)
 - `ln10` (ln(10) = 2.302585092994046)
+
+## Logikfunktionen (luke)
+
+### Verfügbare Funktionen
+
+- `negation` - ergibt das logische Gegenteil des als Argument gegebenes Wert, da es kein Negationsoperator in der Sprache gibt
