@@ -36,13 +36,14 @@
 #define KLEINER_ALS 5
 #define KLEINER_ODER_GLEICH 6
 #define GLEICH 7
-#define PLUS 8
-#define MINUS 9
-#define NICHT 10
-#define MAL 11
-#define GETEILT 12
-#define HOCH 13
-#define REST 14
+#define UNGLEICH 8
+#define PLUS 9
+#define MINUS 10
+#define NICHT 11
+#define MAL 12
+#define GETEILT 13
+#define HOCH 14
+#define REST 15
 
 /**
  * Non-operator reserved words

@@ -46,9 +46,9 @@ const char* operators[OP_COUNT] = {
     "kleiner",
     "kleinergleich",
     "gleich",
+    "ungleich",
     "plus",
     "minus",
-    "nicht",
     "mal",
     "gteild",
     "hoch",
@@ -66,11 +66,11 @@ int getPrecedence(int op) {
         case KLEINER_ALS:
         case KLEINER_ODER_GLEICH:
         case GLEICH:
+	case UNGLEICH:
             return 7;
         case PLUS:
         case MINUS:
             return 10;
-        case NICHT:
         case MAL:
         case GETEILT:
         case REST:

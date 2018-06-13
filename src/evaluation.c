@@ -100,6 +100,13 @@ Token* applyOp(Token* op, Token* left, Token* right) {
 					result = !strcmp((char*)v1, (char*)v2);
 				}
 				break;
+			case UNGLEICH:
+				if (n1) {
+					result = *(float*)v1 != *(float*)v2;
+				} else {
+					result = strcmp((char*)v1, (char*)v2) != 0;
+				}
+				break;
 			case ODER:
 				result = evalBool(left) || evalBool(right);
 				break;
