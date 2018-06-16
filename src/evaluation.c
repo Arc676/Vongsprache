@@ -160,11 +160,17 @@ Token* eval(Token* exp, Scope* scope) {
 				{
 					TokenData* left = ht_find_token(leftVal->tokenData, VALUE);
 					Token* right = ht_find_token(exp->tokenData, RIGHT_VAR);
+
+					// copy identifier
+					size_t size = strlen(left->charVal);
+					char* id = (char*)malloc(size);
+					memcpy(id, left->charVal, size);
+
 					// identifier lvalues indicate variable assignment
 					if (leftVal->type == IDENTIFIER) {
 						// assignment requires that the variable already exists
 						if (exp->type == ASSIGN) {
-							Token* exists = getVariable(scope, left->charVal);
+							Token* exists = getVariable(scope, id);
 							if (!exists) {
 								char msg[100];
 								char token[100];
@@ -174,14 +180,14 @@ Token* eval(Token* exp, Scope* scope) {
 								err(msg, ASSIGN_FAILED);
 								return NULL;
 							}
-							return setVariable(scope, left->charVal, eval(right, scope));
+							return setVariable(scope, id, eval(right, scope));
 						} else {
 							// initialization calls shadow any parent scope variables
-							return defineVariable(scope, left->charVal, eval(right, scope));
+							return defineVariable(scope, id, eval(right, scope));
 						}
 					} else {
 						// if assigning a function instead, don't evaluate right side
-						return defineVariable(scope, left->charVal, right);
+						return defineVariable(scope, id, right);
 					}
 				}
 				default:
@@ -210,7 +216,9 @@ Token* eval(Token* exp, Scope* scope) {
 		{
 			Token* cond = ht_find_token(exp->tokenData, CONDITION);
 			Token* res = eval(cond, scope);
-			if (evalBool(res)) {
+			int evalThen = evalBool(res);
+			destroyNonLiteralToken(res);
+			if (evalThen) {
 				Token* thenblk = ht_find_token(exp->tokenData, THEN_BLOCK);
 				return eval(thenblk, scope);
 			} else {
@@ -322,11 +330,23 @@ Token* eval(Token* exp, Scope* scope) {
 				counterVal = createTokenData(NUMBER, cVal->floatVal, NULL);
 				ht_insert_token(startCopy->tokenData, VALUE, counterVal);
 
+				// if it's NOT a literal, destroy original copy of start value
+				destroyNonLiteralToken(startVal);
+
 				// define loop counter in child scope
-				defineVariable(lScope, cID->charVal, startCopy);
+				size_t size = strlen(cID->charVal);
+				char* cIDCopy = (char*)malloc(size);
+				memcpy(cIDCopy, cID->charVal, size);
+				defineVariable(lScope, cIDCopy, startCopy);
 			}
 
-			while (evalBool(eval(cond, lScope))) {
+			while (1) {
+				Token* res = eval(cond, lScope);
+				int evalBlock = evalBool(res);
+				destroyNonLiteralToken(res);
+				if (!evalBlock) {
+					break;
+				}
 				eval(prog, lScope);
 				if (counter) {
 					counterVal->floatVal += 1;
@@ -350,7 +370,9 @@ Token* eval(Token* exp, Scope* scope) {
 			while (!isFuncScope(fScope)) {
 				fScope = fScope->parentScope;
 			}
-			setVariable(fScope, "hab", createToken(IDENTIFIER));
+			char* id = (char*)malloc(4);
+			sprintf(id, "hab");
+			setVariable(fScope, id, createToken(IDENTIFIER));
 			return ret;
 		}
 		case INCLUDE:
@@ -371,8 +393,8 @@ Token* eval(Token* exp, Scope* scope) {
 				return NULL;
 			}
 			Token* ast = parseTopLevel(included);
-			Token* ret = eval(ast, scope);
 			fclose(included);
+			Token* ret = eval(ast, scope);
 			return ret;
 		}
 		default:

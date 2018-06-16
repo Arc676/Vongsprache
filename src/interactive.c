@@ -58,6 +58,7 @@ void interactiveMode() {
 				FILE* rd = fdopen(fd[0], "r");
 				Token* ast = parseTopLevel(rd);
 				eval(ast, global);
+				destroyToken(ast);
 				close(fd[0]);
 			} else {
 				// child process

@@ -25,10 +25,21 @@ Scope* createScope(Scope* parent) {
 	scope->parentScope = parent;
 	scope->variables = (hashtable_t*)malloc(sizeof(hashtable_t));
 	ht_create(scope->variables, NULL, NULL);
+	scope->identifierCount = 0;
+	scope->storedIdentifiers = (char**)malloc(INITIAL_IDENTIFIER_COUNT * sizeof(char*));
 	return scope;
 }
 
 void destroyScope(Scope* scope) {
+	for (int i = 0; i < scope->identifierCount; i++) {
+		char* identifier = scope->storedIdentifiers[i];
+		if (identifier) {
+			Token* token = ht_find(scope->variables, identifier);
+			destroyToken(token);
+			free(identifier);
+		}
+	}
+	free(scope->storedIdentifiers);
 	ht_destroy(scope->variables);
 	free(scope->variables);
 	free(scope);
@@ -39,21 +50,25 @@ Scope* createFuncScope(Scope* parent) {
 	// indicate that we are currently in a function call,
 	// shadowing any previous function frames
 	Token* frame = createToken(IDENTIFIER);
-	defineVariable(fScope, "Funktionigkeit", frame);
+	char* id = (char*)malloc(15);
+	sprintf(id, "Funktionigkeit");
+	defineVariable(fScope, id, frame);
 	return fScope;
 }
 
 Scope* createGlobalScope() {
 	Scope* global = createScope(NULL);
 	Token* token = createToken(IDENTIFIER);
-	defineVariable(global, "i", token);
+	char* id = (char*)malloc(2);
+	sprintf(id, "i");
+	defineVariable(global, id, token);
 	return global;
 }
 
 Scope* lookupScope(Scope* scope, char* identifier) {
 	Scope* found = scope;
 	while (found) {
-		if (ht_contains(found->variables, identifier)) {
+		if (ht_find(found->variables, identifier)) {
 			return found;
 		}
 		found = found->parentScope;
@@ -74,11 +89,33 @@ Token* setVariable(Scope* scope, char* identifier, Token* value) {
 	if (!defined) {
 		defined = scope;
 	}
+	if (defined->identifierCount > defined->storageSize / sizeof(char*)) {
+		defined->storageSize += INITIAL_IDENTIFIER_COUNT * sizeof(char*);
+		char** new = (char**)realloc(defined->storedIdentifiers, defined->storageSize);
+		if (new) {
+			defined->storedIdentifiers = new;
+		} else {
+			err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
+			return NULL;
+		}
+	}
+	defined->storedIdentifiers[defined->identifierCount++] = identifier;
 	ht_insert(defined->variables, identifier, value);
 	return value;
 }
 
 Token* defineVariable(Scope* scope, char* identifier, Token* value) {
+	if (scope->identifierCount > scope->storageSize / sizeof(char*)) {
+		scope->storageSize += INITIAL_IDENTIFIER_COUNT * sizeof(char*);
+		char** new = (char**)realloc(scope->storedIdentifiers, scope->storageSize);
+		if (new) {
+			scope->storedIdentifiers = new;
+		} else {
+			err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
+			return NULL;
+		}
+	}
+	scope->storedIdentifiers[scope->identifierCount++] = identifier;
 	ht_insert(scope->variables, identifier, value);
 	return value;
 }

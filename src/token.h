@@ -63,6 +63,18 @@ typedef union {
 Token* createToken(TokenType type);
 
 /**
+ * Frees the memory associated with a given token
+ * @param token Token to delete
+ */
+void destroyToken(Token* token);
+
+/**
+ * Frees the memory associated with a given token if it's not a literal token
+ * @param token Token to delete
+ */
+void destroyNonLiteralToken(Token* token);
+
+/**
  * Utility function for creating token data
  * @param type The token type
  * @param floatVal Float value to store, if any

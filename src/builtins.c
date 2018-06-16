@@ -60,7 +60,7 @@ Token* vongsprache_print(int argc, Token** args) {
 
 Token* vongsprache_input(int argc, Token** args) {
 	vongsprache_print(argc, args);
-	char* input = malloc(255);
+	char* input = (char*)malloc(255);
 	fgets(input, 255, stdin);
 	input[strlen(input) - 1] = 0;
 	TokenData* data = createTokenData(STRING, 0, input);

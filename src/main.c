@@ -36,10 +36,11 @@ int main(int argc, char* argv[]) {
 				return 1;
 			}
 			Token* ast = parseTopLevel(file);
+			fclose(file);
 			Scope* global = createGlobalScope();
 			eval(ast, global);
 			destroyScope(global);
-			fclose(file);
+			destroyToken(ast);
 			return 0;
 		}
 	} else {

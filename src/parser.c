@@ -24,13 +24,18 @@ Token* parseTopLevel(FILE* fp) {
 	Token* program = createToken(PROGRAM);
 	size_t size = INITIAL_STATEMENT_COUNT * sizeof(Token*);
 	Token** progs = (Token**)malloc(size);
-	memset(progs, 0, size);
 
 	int pos = 0;
 	while (!lexer_eof(fp)) {
-		if (pos >= size * sizeof(Token*)) {
+		if (pos >= size / sizeof(Token*)) {
 			size += INITIAL_STATEMENT_COUNT * sizeof(Token*);
-			progs = (Token**)realloc(progs, size);
+			Token** new = (Token**)realloc(progs, size);
+			if (new) {
+				progs = new;
+			} else {
+				err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
+				return NULL;
+			}
 		}
 		Token* token = parseExpression(fp);
 		if (token) {
@@ -67,7 +72,7 @@ Token* parseProg(FILE* fp) {
 	int blockClosed = 0;
 	while (!lexer_eof(fp)) {
 		if (parser_isValue(fp, KEYWORD, "her")) {
-			lexer_next(fp);
+			lexer_discard(fp);
 			blockClosed = 1;
 			break;
 		}
@@ -151,7 +156,7 @@ Token* parseCall(FILE* fp) {
 		ht_insert_token(token->tokenData, FUNCTION_CALL, funcIdentifier);
 		TokenData* data = createTokenData(NUMBER, 0, NULL);
 		if (parser_isValue(fp, KEYWORD, "mit")) {
-			lexer_next(fp);
+			lexer_discard(fp);
 			int argc;
 			Token** args = parseDelimited(fp, "(", ")", ",", &argc, parseExpression);
 			data->floatVal = (float)argc;
@@ -180,22 +185,22 @@ Token* parseAtom(FILE* fp) {
 		Token* token = createToken(INIT);
 		ht_insert_token(token->tokenData, LEFT_VAR, identifier);
 		if (parser_isValue(fp, KEYWORD, "Funktionigkeit")) {
-			lexer_next(fp);
+			lexer_discard(fp);
 			identifier->type = CALL;
 			Token* function = createToken(PROGRAM);
 			TokenData* fArgs = createTokenData(NUMBER, 0, NULL);
 			if (parser_isValue(fp, KEYWORD, "mit")) {
-				lexer_next(fp);
+				lexer_discard(fp);
 				int argc;
 				Token** args = parseDelimited(fp, "(", ")", ",", &argc, parseIdentifier);
 				fArgs->floatVal = (float)argc;
 				char** argNames = (char**)malloc(argc * sizeof(char*));
 				for (int i = 0; i < argc; i++) {
-					argNames[i] = malloc(100);
+					argNames[i] = (char*)malloc(100);
 					TokenData* data = ht_find_token(args[i]->tokenData, VALUE);
 					char* argName = data->charVal;
 					memcpy(argNames[i], argName, strlen(argName));
-					free(args[i]);
+					destroyToken(args[i]);
 				}
 				free(args);
 				ht_insert_token(function->tokenData, ARGUMENTS, argNames);
@@ -215,40 +220,46 @@ Token* parseAtom(FILE* fp) {
 		return token;
 	}
 	if (parser_isValue(fp, KEYWORD, "bims")) {
-		lexer_next(fp);
+		lexer_discard(fp);
 		return parseIf(fp);
 	}
 	if (parser_isValue(fp, KEYWORD, "bidde")) {
-		lexer_next(fp);
+		lexer_discard(fp);
 		return parseCall(fp);
 	}
 	if (parser_isValue(fp, KEYWORD, "mit")) {
-		lexer_next(fp);
+		lexer_discard(fp);
 		return parseFor(fp);
 	}
 	if (parser_isValue(fp, KEYWORD, "solange")) {
-		lexer_next(fp);
+		lexer_discard(fp);
 		return parseWhile(fp);
 	}
 	if (parser_isValue(fp, KEYWORD, "hab")) {
-		lexer_next(fp);
+		lexer_discard(fp);
 		Token* retVal = parseExpression(fp);
 		Token* retToken = createToken(RETURN);
 		ht_insert_token(retToken->tokenData, VALUE, retVal);
 		return retToken;
 	}
 	if (parser_isValue(fp, KEYWORD, "benutze")) {
-		lexer_next(fp);
+		lexer_discard(fp);
 		Token* filename = parseIdentifier(fp);
 		TokenData* idVal = ht_find_token(filename->tokenData, VALUE);
 
 		Token* incToken = createToken(INCLUDE);
-		TokenData* incVal = createTokenData(STRING, 0, idVal->charVal);
+		size_t size = strlen(idVal->charVal);
+		char* copy = (char*)malloc(size);
+		memcpy(copy, idVal->charVal, size);
+		TokenData* incVal = createTokenData(STRING, 0, copy);
 		ht_insert_token(incToken->tokenData, VALUE, incVal);
+
+		destroyToken(filename);
+
 		return incToken;
 	}
 	if (parser_isValue(fp, PUNCTUATION, "(")) {
-		lexer_next(fp);
+		lexer_discard(fp);
 		Token* token = parseExpression(fp);
 		skipValue(fp, PUNCTUATION, 1, ")");
 		return token;
@@ -275,7 +286,7 @@ Token* potentialBinary(FILE* fp, Token* left, int prec) {
 		int opType = (int)data->floatVal;
 		int opPrec = getPrecedence(opType);
 		if (opPrec > prec) {
-			lexer_next(fp);
+			lexer_discard(fp);
 			Token* rval = potentialBinary(fp, parseAtom(fp), opPrec);
 			if (!rval) {
 				err("Erwartete Ausdruck", EXPECTED_TOKEN);
@@ -342,7 +353,7 @@ void skipValue(FILE* fp, TokenType type, int count, ...) {
 	for (int i = 0; i < count; i++) {
 		char* value = va_arg(arglist, char*);
 		if (parser_isValue(fp, type, value)) {
-			lexer_next(fp);
+			lexer_discard(fp);
 		} else {
 			va_end(arglist);
 			char token[100];

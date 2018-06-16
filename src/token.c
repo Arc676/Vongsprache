@@ -103,3 +103,102 @@ void tokenToString(Token* token, char* str) {
     		break;
     }
 }
+
+void destroyToken(Token* token) {
+    if (!token || !token->tokenData) {
+        return;
+    }
+    for (int i = 0; i <= VALUE; i++) {
+        TokenDataType datatype = (TokenDataType)i;
+        void* stored = ht_find_token(token->tokenData, datatype);
+        if (stored) {
+            switch (datatype) {
+                case VALUE:
+                    switch (token->type) {
+                        case LOOP:
+                        case RETURN:
+                            destroyToken((Token*)stored);
+                            break;
+                        case PUNCTUATION:
+                        case OPERATOR:
+                        case STRING:
+                        case IDENTIFIER:
+                        case KEYWORD:
+                        case INCLUDE:
+                        {
+                            TokenData* data = (TokenData*)stored;
+                            free(data->charVal);
+                            free(data);
+                            break;
+                        }
+                        default:
+                            free(stored);
+                            break;
+                    }
+                    break;
+                case OP:
+                    switch (token->type) {
+                        case BINARY:
+                            destroyToken((Token*)stored);
+                            break;
+                        default:
+                            free(stored);
+                            break;
+                    }
+                    break;
+                case ARGUMENTS:
+                {
+                    TokenData* argCount = ht_find_token(token->tokenData, VALUE);
+                    int argc = (int)argCount->floatVal;
+                    switch (token->type) {
+                        case CALL:
+                        {
+                            Token** args = (Token**)stored;
+                            for (int i = 0; i < argc; i++) {
+                                destroyToken(args[i]);
+                            }
+                            free(args);
+                            break;
+                        }
+                        case PROGRAM:
+                        {
+                            char** args = (char**)stored;
+                            for (int i = 0; i < argc; i++) {
+                                free(args[i]);
+                            }
+                            free(args);
+                            break;
+                        }
+                        default:
+                            destroyToken((Token*)stored);
+                            break;
+                    }
+                    break;
+                }
+                case FUNCTION_BODY:
+                {
+                    TokenData* argCount = ht_find_token(token->tokenData, VALUE);
+                    int argc = (int)argCount->floatVal;
+                    Token** statements = (Token**)stored;
+                    for (int i = 0; i < argc; i++) {
+                        destroyToken(statements[i]);
+                    }
+                    free(statements);
+                    break;
+                }
+                default:
+                    destroyToken((Token*)stored);
+                    break;
+            }
+        }
+    }
+    ht_destroy(token->tokenData);
+    free(token->tokenData);
+    free(token);
+}
+
+void destroyNonLiteralToken(Token* token) {
+    if (token->type != NUMBER && token->type != STRING) {
+        destroyToken(token);
+    }
+}

@@ -24,11 +24,16 @@
 #include <stdlib.h>
 
 #include "hashtable.h"
-#include "token.h"
+#include "error.h"
+
+#define INITIAL_IDENTIFIER_COUNT 10
 
 typedef struct Scope {
 	struct Scope* parentScope;
 	hashtable_t* variables;
+	int storageSize;
+	char** storedIdentifiers;
+	int identifierCount;
 } Scope;
 
 /**

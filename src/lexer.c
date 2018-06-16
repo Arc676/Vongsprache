@@ -182,7 +182,13 @@ char* readEscaped(FILE* fp, char end) {
         char c = next(fp);
         if (pos >= size) {
 			size += 100;
-            str = realloc(str, size);
+            char* new = (char*)realloc(str, size);
+			if (new) {
+				str = new;
+			} else {
+				err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
+				return NULL;
+			}
         }
         if (escaped) {
             str[pos++] = c;
@@ -231,6 +237,10 @@ Token* lexer_next(FILE* fp) {
 		return token;
 	}
     return readNext(fp);
+}
+
+void lexer_discard(FILE* fp) {
+    destroyToken(lexer_next(fp));
 }
 
 int lexer_eof(FILE* fp) {

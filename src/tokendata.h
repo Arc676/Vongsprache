@@ -22,7 +22,6 @@
 #define TOKEN_DATA_H
 
 typedef enum TokenDataType {
-    VALUE,
     ARGUMENTS,
     FUNCTION_BODY,
     FUNCTION_CALL,
@@ -31,7 +30,8 @@ typedef enum TokenDataType {
     ELSE_BLOCK,
     OP,
     LEFT_VAR,
-    RIGHT_VAR
+    RIGHT_VAR,
+    VALUE
 } TokenDataType;
 
 /**

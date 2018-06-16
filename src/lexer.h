@@ -92,6 +92,12 @@ Token* lexer_peek(FILE* fp);
 Token* lexer_next(FILE* fp);
 
 /**
+ * Discards the next token in the stream
+ * @param fp FILE* from which to read
+ */
+void lexer_discard(FILE* fp);
+
+/**
  * Determine whether the token stream has ended
  * @param fp FILE* from which to read
  * @return Whether an EOF has been encountered
