@@ -135,29 +135,6 @@ int evalBool(Token* val) {
 	return ret;
 }
 
-void vongsprache_print(int argc, Token** args, Scope* scope) {
-	for (int i = 0; i < argc; i++) {
-		Token* val = eval(args[i], scope);
-		TokenData* valData = ht_find_token(val->tokenData, VALUE);
-		switch (val->type) {
-			case STRING:
-				printf("%s", valData->charVal);
-				break;
-			case NUMBER:
-				printf("%f", valData->floatVal);
-				break;
-			default:
-			{
-				char msg[100];
-				tokenToString(val, msg);
-				printf("%s", msg);
-				break;
-			}
-		}
-	}
-	printf("\n");
-}
-
 Token* eval(Token* exp, Scope* scope) {
 	switch (exp->type) {
 		case NUMBER:

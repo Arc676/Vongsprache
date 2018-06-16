@@ -26,16 +26,7 @@
 #include <math.h>
 
 #include "parser.h"
-#include "scope.h"
-
-/**
- * Print function for Vongsprache; prints the contents of the passed arguments
- * to the console with a trailing newline
- * @param argc Number of arguments passed to print function
- * @param args Arguments passed to the print function (as tokens)
- * @param scope Scope in which the function was called
- */
-void vongsprache_print(int argc, Token** args, Scope* scope);
+#include "builtins.h"
 
 /**
  * Applies a binary operator
