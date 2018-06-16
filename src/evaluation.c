@@ -160,7 +160,9 @@ Token* eval(Token* exp, Scope* scope) {
 				{
 					TokenData* left = ht_find_token(leftVal->tokenData, VALUE);
 					Token* right = ht_find_token(exp->tokenData, RIGHT_VAR);
+					// identifier lvalues indicate variable assignment
 					if (leftVal->type == IDENTIFIER) {
+						// assignment requires that the variable already exists
 						if (exp->type == ASSIGN) {
 							Token* exists = getVariable(scope, left->charVal);
 							if (!exists) {
@@ -172,10 +174,14 @@ Token* eval(Token* exp, Scope* scope) {
 								err(msg, ASSIGN_FAILED);
 								return NULL;
 							}
+							return setVariable(scope, left->charVal, eval(right, scope));
+						} else {
+							// initialization calls shadow any parent scope variables
+							return defineVariable(scope, left->charVal, eval(right, scope));
 						}
-						return setVariable(scope, left->charVal, eval(right, scope));
 					} else {
-						return setVariable(scope, left->charVal, right);
+						// if assigning a function instead, don't evaluate right side
+						return defineVariable(scope, left->charVal, right);
 					}
 				}
 				default:
@@ -252,85 +258,44 @@ Token* eval(Token* exp, Scope* scope) {
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
 			int argc = (int)data->floatVal;
 
-			if (!strcmp(fID, "drucke") || !strcmp(fID, "gib")) {
-				vongsprache_print(argc, args, scope);
-				if (!strcmp(fID, "gib")) {
-					char* input = malloc(255);
-					fgets(input, 255, stdin);
-					input[strlen(input) - 1] = 0;
-					TokenData* data = createTokenData(STRING, 0, input);
-					Token* token = createToken(STRING);
-					ht_insert_token(token->tokenData, VALUE, data);
-					return token;
-				}
-			} else if (!strcmp(fID, "zuZahl") || !strcmp(fID, "zuZeichenfolge")) {
-				int toString = !strcmp(fID, "zuZeichenfolge");
+			for (int i = 0; i < argc; i++) {
+				args[i] = eval(args[i], scope);
+			}
 
-				// prepare error message
-				char msg[100];
-				if (argc != 1) {
-					sprintf(msg, "1 Argument für Funktion %s erwartet aber %d gefunden",
-							fID, argc);
+			for (int i = 0; i < BUILTIN_COUNT; i++) {
+				if (!strcmp(fID, builtinFunctions[i])) {
+					return builtins[i](argc, args);
+				}
+			}
+
+			Token* func = getVariable(scope, fID);
+			if (func) {
+				TokenData* fArgs = ht_find_token(func->tokenData, VALUE);
+				int req = (int)fArgs->floatVal;
+				// check correct number of arguments given
+				if (argc != req) {
+					char msg[100];
+					sprintf(msg, "%d Argument%s für Funktion %s erwartet aber %d gefunden",
+							req, (req == 1 ? "" : "e"), fID, argc);
 					err(msg, BAD_ARG_COUNT);
 					break;
 				}
-				Token* given = eval(args[0], scope);
+				char** params = ht_find_token(func->tokenData, ARGUMENTS);
 
-				sprintf(msg, "Erwartete %sArgument, %s gefunden",
-						(toString ? "numerisches " : "Zeichenfolge-"),
-						tokenTypeToString(args[0]->type));
+				// create child scope for function evaluation
+				Scope* fScope = createFuncScope(scope);
 
-				TokenData* current = ht_find_token(given->tokenData, VALUE);
-				TokenData* newData;
-				Token* ret = createToken(toString ? STRING : NUMBER);
-				if (toString) {
-					if (given->type != NUMBER) {
-						err(msg, BAD_ARG_TYPE);
-						break;
-					}
-					char* strVal = (char*)malloc(20);
-					sprintf(strVal, "%f", current->floatVal);
-					newData = createTokenData(STRING, 0, strVal);
-				} else {
-					if (given->type != STRING) {
-						err(msg, BAD_ARG_TYPE);
-						break;
-					}
-					float fVal = strtof(current->charVal, (char**)NULL);
-					newData = createTokenData(NUMBER, fVal, NULL);
+				// assign given arguments to parameter names, shadowing
+				// any variables in parent scopes with the same name
+				for (int i = 0; i < argc; i++) {
+					defineVariable(fScope, params[i], eval(args[i], scope));
 				}
-				ht_insert_token(ret->tokenData, VALUE, newData);
+				Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
+				Token* ret = eval(fBody, fScope);
+				destroyScope(fScope);
 				return ret;
-			} else {
-				Token* func = getVariable(scope, fID);
-				if (func) {
-					TokenData* fArgs = ht_find_token(func->tokenData, VALUE);
-					int req = (int)fArgs->floatVal;
-					// check correct number of arguments given
-					if (argc != req) {
-						char msg[100];
-						sprintf(msg, "%d Argument%s für Funktion %s erwartet aber %d gefunden",
-								req, (req == 1 ? "" : "e"), fID, argc);
-						err(msg, BAD_ARG_COUNT);
-						break;
-					}
-					char** params = ht_find_token(func->tokenData, ARGUMENTS);
-
-					// create child scope for function evaluation
-					Scope* fScope = createFuncScope(scope);
-
-					// assign given arguments to parameter names, shadowing
-					// any variables in parent scopes with the same name
-					for (int i = 0; i < argc; i++) {
-						defineVariable(fScope, params[i], eval(args[i], scope));
-					}
-					Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
-					Token* ret = eval(fBody, fScope);
-					destroyScope(fScope);
-					return ret;
-				}
-				undeclaredIDErr(fID);
 			}
+			undeclaredIDErr(fID);
 			break;
 		}
 		case LOOP:

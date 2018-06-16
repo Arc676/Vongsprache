@@ -5,7 +5,7 @@ FLAGS=-c -std=$(STD)
 ODIR=../obj
 
 OBJS=main.o stream.o hashtable.o lexer.o token.o tokendata.o parser.o\
-	scope.o error.o evaluation.o interactive.o
+	scope.o error.o evaluation.o interactive.o builtins.o
 _OBJS=$(patsubst %, $(ODIR)/%, $(OBJS))
 
 OUT=vongsprache

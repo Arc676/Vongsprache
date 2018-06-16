@@ -22,16 +22,23 @@
 #define BUILTINS_H
 
 #include "scope.h"
+#include "error.h"
+
+#define BUILTIN_COUNT 4
+
+const char* builtinFunctions[BUILTIN_COUNT];
+
+typedef Token* BUILTIN(int, Token**);
+BUILTIN *builtins[BUILTIN_COUNT];
 
 /**
  * Builtin print function; prints the contents of the passed arguments
  * to the console with a trailing newline
  * @param argc Number of arguments passed to print function
- * @param args Arguments passed to the print function (as tokens)
- * @param scope Scope in which the function was called
+ * @param args Arguments passed
  * @return NULL
  */
-Token* vongsprache_print(int argc, Token** args, Scope* scope);
+Token* vongsprache_print(int argc, Token** args);
 
 /**
  * Builtin console input function; passes its arguments to
@@ -39,29 +46,39 @@ Token* vongsprache_print(int argc, Token** args, Scope* scope);
  * as a string token
  * @param argc Number of arguments passed
  * @param args Arguments passed
- * @param scope Scope in which the function was called
  * @return User input as a string token
  */
-Token* vongsprache_input(int argc, Token** args, Scope* scope);
+Token* vongsprache_input(int argc, Token** args);
+
+/**
+ * Utility function containing common base code for type conversion functions
+ * @param srcType Expected argument type
+ * @param dstType Token type of return value
+ * @param current Double pointer in which to store the argument's current value
+ * @param ret Double pointer in which to store the newly created token to return
+ * @param given Evaluated argument
+ * @param fID Identifier of called function
+ * @param argc Number of arguments passed
+ */
+void typeConversionUtil(TokenType srcType, TokenType dstType, TokenData** current,
+						Token** ret, Token* given, char* fID, int argc);
 
 /**
  * Builtin string-to-float conversion function; checks argument for
  * a string value and creates a new token with a corresponding float value
  * @param argc Number of arguments passed
  * @param args Arguments passed
- * @param scope Scope in which the function was called
  * @return New token with float value of given argument
  */
-Token* vongsprache_toFloat(int argc, Token** args, Scope* scope);
+Token* vongsprache_toFloat(int argc, Token** args);
 
 /**
  * Builtin float-to-string conversion function; checks argument for
  * a float value and creates a new token with a string containing that value
  * @param argc Number of arguments passed
  * @param args Arguments passed
- * @param scope Scope in which the function was called
  * @return New token with string form of given float argument
  */
-Token* vongsprache_toString(int argc, Token** args, Scope* scope);
+Token* vongsprache_toString(int argc, Token** args);
 
 #endif
