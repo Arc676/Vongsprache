@@ -135,14 +135,6 @@ HASHTABLE_VALUE_TYPE ht_find(hashtable_t* ht, HASHTABLE_KEY_TYPE k);
 HASHTABLE_VALUE_TYPE ht_find_token(hashtable_t* ht, TokenDataType dt);
 
 /**
- * Checks whether an entry is contained in the hash table
- * @param ht Hashtable object
- * @param k Key value
- * @return Whether the key is present in the hashtable
- */
-int ht_contains(hashtable_t* ht, HASHTABLE_KEY_TYPE k);
-
-/**
  * Removes an entry from the hash table
  * @param ht Hashtable object
  * @param k Key value

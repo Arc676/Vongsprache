@@ -229,27 +229,6 @@ HASHTABLE_VALUE_TYPE ht_find(hashtable_t* ht, HASHTABLE_KEY_TYPE key) {
     return 0;
 }
 
-// Checks whether an entry is contained in the hash table.
-int ht_contains(hashtable_t* ht, HASHTABLE_KEY_TYPE key) {
-    // INVARIANT: ht initialized.
-    size_t hash = ht_keyfind(ht, key);
-
-    // Navigate to the correct node.
-    hashtable_node_t* ptr = &(ht->backend[hash]);
-    if (ptr->state == 0) {
-        // Empty bucket -> not found.
-        return 0;
-    }
-    // Advance either to the end or to the correct node.
-    while (ptr-> follow != NULL && !ht->key_check_fun(key, ptr->key)) {
-        ptr = ptr->follow;
-    }
-    if (ht->key_check_fun(key, ptr->key)) {
-        return 1;
-    }
-    return 0;
-}
-
 // Removes an entry from the hash table.
 void ht_remove(hashtable_t* ht, HASHTABLE_KEY_TYPE key) {
     // INVARIANT: ht initialized.
