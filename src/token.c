@@ -76,10 +76,12 @@ char* tokenTypeToString(TokenType type) {
             return "Initialisierung";
         case RETURN:
             return "Rückkehranweisung";
-	case INCLUDE:
-		return "Einfügung";
+    	case INCLUDE:
+    		return "Einfügung";
+        case FUNC_WRAPPER:
+            return "Funktionswrapper";
 		case PROGRAM:
-			return "Anweisungfolge";
+			return "Anweisungsfolge";
 	}
 }
 
@@ -160,7 +162,7 @@ void destroyToken(Token* token) {
                             free(args);
                             break;
                         }
-                        case PROGRAM:
+                        case FUNC_WRAPPER:
                         {
                             char** args = (char**)stored;
                             for (int i = 0; i < argc; i++) {
@@ -176,16 +178,23 @@ void destroyToken(Token* token) {
                     break;
                 }
                 case FUNCTION_BODY:
-                {
-                    TokenData* argCount = ht_find_token(token->tokenData, VALUE);
-                    int argc = (int)argCount->floatVal;
-                    Token** statements = (Token**)stored;
-                    for (int i = 0; i < argc; i++) {
-                        destroyToken(statements[i]);
+                    switch (token->type) {
+                        case PROGRAM:
+                        {
+                            TokenData* argCount = ht_find_token(token->tokenData, VALUE);
+                            int argc = (int)argCount->floatVal;
+                            Token** statements = (Token**)stored;
+                            for (int i = 0; i < argc; i++) {
+                                destroyToken(statements[i]);
+                            }
+                            free(statements);
+                            break;
+                        }
+                        default:
+                            destroyToken((Token*)stored);
+                            break;
                     }
-                    free(statements);
                     break;
-                }
                 default:
                     destroyToken((Token*)stored);
                     break;

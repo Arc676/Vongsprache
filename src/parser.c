@@ -175,7 +175,7 @@ Token* parseAtom(FILE* fp) {
 		if (parser_isValue(fp, KEYWORD, "Funktionigkeit")) {
 			lexer_discard(fp);
 			identifier->type = CALL;
-			Token* function = createToken(PROGRAM);
+			Token* function = createToken(FUNC_WRAPPER);
 			TokenData* fArgs = createTokenData(NUMBER, 0, NULL);
 			if (parser_isValue(fp, KEYWORD, "mit")) {
 				lexer_discard(fp);

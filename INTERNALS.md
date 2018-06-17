@@ -41,6 +41,7 @@ In der Darstellung der abstrakten Syntaxbaum wird jedem Token einen Typ zugewies
 - INIT - initialisiert eine Variable
 - RETURN - bestimmt den Rückgabewert einer Funktion
 - INCLUDE - fügt eine andere Datei ein
+- FUNC_WRAPPER - ein Funktionswrappertoken
 - PROGRAM - eine Folge von Anweisungen
 
 ## Inhalt der Hashtabelle
@@ -67,6 +68,7 @@ Der Schlüssel ist einer der nach oben gegebenen Hashtabellenschlüssel/Token-Da
 Der Wertdatentyp bezeichnet, was für eine Struktur genutzt wird, um den Inhalt zu speichern.
 
 - Zeichenfolge - der `charVal`-Wert eines `TokenData*`-Objekts wird genutzt
+- Zeichenfolgenfeld - ein Feld von Zeichenfolgen (`char**`) wird gespeichert
 - Zahl - der `floatVal`-Wert eines `TokenData*`-Objekts wird genutzt
 - Token - ein `Token*`-Objekt wird gespeichert
 - Tokenfeld - ein Feld von Tokens (`Token**`) wird gespeichert
@@ -200,7 +202,7 @@ Für Funktionanrufe ohne Argumente:
 
 ### Funktionswrappertoken
 
-Tokentyp: `PROGRAM`
+Tokentyp: `FUNC_WRAPPER`
 
 | Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
 | --- | --- | --- |

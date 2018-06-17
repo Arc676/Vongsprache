@@ -42,6 +42,7 @@ typedef enum TokenType {
     INIT,
     RETURN,
     INCLUDE,
+    FUNC_WRAPPER,
 	PROGRAM
 } TokenType;
 
