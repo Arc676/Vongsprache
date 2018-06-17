@@ -24,6 +24,7 @@
 #include <ctype.h>
 
 #include "stream.h"
+#include "util.h"
 
 #define KEYWORD_COUNT 14
 

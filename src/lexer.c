@@ -182,13 +182,7 @@ char* readEscaped(FILE* fp, char end) {
         char c = next(fp);
         if (pos >= size) {
 			size += 100;
-            char* new = (char*)realloc(str, size);
-			if (new) {
-				str = new;
-			} else {
-				err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
-				return NULL;
-			}
+            str = (char*)resize(str, size);
         }
         if (escaped) {
             str[pos++] = c;

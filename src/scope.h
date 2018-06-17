@@ -25,6 +25,7 @@
 
 #include "hashtable.h"
 #include "error.h"
+#include "util.h"
 
 #define INITIAL_IDENTIFIER_COUNT 10
 

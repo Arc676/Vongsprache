@@ -29,13 +29,7 @@ Token* parseTopLevel(FILE* fp) {
 	while (!lexer_eof(fp)) {
 		if (pos >= size / sizeof(Token*)) {
 			size += INITIAL_STATEMENT_COUNT * sizeof(Token*);
-			Token** new = (Token**)realloc(progs, size);
-			if (new) {
-				progs = new;
-			} else {
-				err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
-				return NULL;
-			}
+			progs = (Token**)resize(progs, size);
 		}
 		Token* token = parseExpression(fp);
 		if (token) {
@@ -78,13 +72,7 @@ Token* parseProg(FILE* fp) {
 		}
 		if (pos >= size / sizeof(Token*)) {
 			size += INITIAL_FUNCTION_STATEMENT_COUNT * sizeof(Token*);
-			Token** new = (Token**)realloc(statements, size);
-			if (new) {
-				statements = new;
-			} else {
-				err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
-				return NULL;
-			}
+			statements = (Token**)resize(statements, size);
 		}
 		statements[pos++] = parseExpression(fp);
 	}
@@ -319,13 +307,7 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep, int* count,
 		}
 		if (pos >= size / sizeof(Token*)) {
 			size += INITIAL_DELIM_COUNT * sizeof(Token*);
-			Token** new = (Token**)realloc(tokens, size);
-			if (new) {
-				tokens = new;
-			} else {
-				err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
-				return NULL;
-			}
+			tokens = (Token**)resize(tokens, size);
 		}
 		first ? first = 0 : skipValue(fp, PUNCTUATION, 1, sep);
 		if (parser_isValue(fp, PUNCTUATION, end)) {

@@ -91,13 +91,10 @@ Token* setVariable(Scope* scope, char* identifier, Token* value) {
 	}
 	if (defined->identifierCount > defined->storageSize / sizeof(char*)) {
 		defined->storageSize += INITIAL_IDENTIFIER_COUNT * sizeof(char*);
-		char** new = (char**)realloc(defined->storedIdentifiers, defined->storageSize);
-		if (new) {
-			defined->storedIdentifiers = new;
-		} else {
-			err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
-			return NULL;
-		}
+		defined->storedIdentifiers = (char**)resize(
+			defined->storedIdentifiers,
+			defined->storageSize
+		);
 	}
 	defined->storedIdentifiers[defined->identifierCount++] = identifier;
 	ht_insert(defined->variables, identifier, value);
@@ -107,13 +104,10 @@ Token* setVariable(Scope* scope, char* identifier, Token* value) {
 Token* defineVariable(Scope* scope, char* identifier, Token* value) {
 	if (scope->identifierCount > scope->storageSize / sizeof(char*)) {
 		scope->storageSize += INITIAL_IDENTIFIER_COUNT * sizeof(char*);
-		char** new = (char**)realloc(scope->storedIdentifiers, scope->storageSize);
-		if (new) {
-			scope->storedIdentifiers = new;
-		} else {
-			err("Arbeitsspeicherplatz ungenügend", MEMORY_ERROR);
-			return NULL;
-		}
+		scope->storedIdentifiers = (char**)resize(
+			scope->storedIdentifiers,
+			scope->storageSize
+		);
 	}
 	scope->storedIdentifiers[scope->identifierCount++] = identifier;
 	ht_insert(scope->variables, identifier, value);
