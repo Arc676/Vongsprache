@@ -184,10 +184,8 @@ Token* parseAtom(FILE* fp) {
 				fArgs->floatVal = (float)argc;
 				char** argNames = (char**)malloc(argc * sizeof(char*));
 				for (int i = 0; i < argc; i++) {
-					argNames[i] = (char*)malloc(100);
 					TokenData* data = ht_find_token(args[i]->tokenData, VALUE);
-					char* argName = data->charVal;
-					memcpy(argNames[i], argName, strlen(argName));
+					argNames[i] = copyString(data->charVal);
 					destroyToken(args[i]);
 				}
 				free(args);
@@ -236,9 +234,7 @@ Token* parseAtom(FILE* fp) {
 		TokenData* idVal = ht_find_token(filename->tokenData, VALUE);
 
 		Token* incToken = createToken(INCLUDE);
-		size_t size = strlen(idVal->charVal);
-		char* copy = (char*)malloc(size);
-		memcpy(copy, idVal->charVal, size);
+		char* copy = copyString(idVal->charVal);
 		TokenData* incVal = createTokenData(STRING, 0, copy);
 		ht_insert_token(incToken->tokenData, VALUE, incVal);
 
@@ -310,9 +306,6 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep, int* count,
 			tokens = (Token**)resize(tokens, size);
 		}
 		first ? first = 0 : skipValue(fp, PUNCTUATION, 1, sep);
-		if (parser_isValue(fp, PUNCTUATION, end)) {
-			break;
-		}
 		tokens[pos++] = parse(fp);
 	}
 	skipValue(fp, PUNCTUATION, 1, end);

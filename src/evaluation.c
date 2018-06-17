@@ -162,9 +162,7 @@ Token* eval(Token* exp, Scope* scope) {
 					Token* right = ht_find_token(exp->tokenData, RIGHT_VAR);
 
 					// copy identifier
-					size_t size = strlen(left->charVal);
-					char* id = (char*)malloc(size);
-					memcpy(id, left->charVal, size);
+					char* id = copyString(left->charVal);
 
 					// identifier lvalues indicate variable assignment
 					if (leftVal->type == IDENTIFIER) {
@@ -334,10 +332,7 @@ Token* eval(Token* exp, Scope* scope) {
 				destroyNonLiteralToken(startVal);
 
 				// define loop counter in child scope
-				size_t size = strlen(cID->charVal);
-				char* cIDCopy = (char*)malloc(size);
-				memcpy(cIDCopy, cID->charVal, size);
-				defineVariable(lScope, cIDCopy, startCopy);
+				defineVariable(lScope, copyString(cID->charVal), startCopy);
 			}
 
 			while (1) {
@@ -359,20 +354,20 @@ Token* eval(Token* exp, Scope* scope) {
 		case RETURN:
 		{
 			// can only return if inside a function
-			if (!getVariable(scope, "Funktionigkeit")) {
+			Scope* fFrame = lookupScope(scope, "Funktionigkeit");
+			if (!fFrame) {
 				unexpected(exp);
 			}
-			Token* val = ht_find_token(exp->tokenData, VALUE);
-			Token* ret = eval(val, scope);
 
 			// find the stack frame in which the function started
 			Scope* fScope = scope;
-			while (!isFuncScope(fScope)) {
+			while (fScope->parentScope != fFrame) {
 				fScope = fScope->parentScope;
 			}
-			char* id = (char*)malloc(4);
-			sprintf(id, "hab");
-			setVariable(fScope, id, createToken(IDENTIFIER));
+
+			Token* val = ht_find_token(exp->tokenData, VALUE);
+			Token* ret = eval(val, scope);
+			setVariable(fScope, copyString("hab"), createToken(IDENTIFIER));
 			return ret;
 		}
 		case INCLUDE:
@@ -387,7 +382,7 @@ Token* eval(Token* exp, Scope* scope) {
 			FILE* included = fopen(filename, "r");
 			if (!included) {
 				char msg[300];
-				sprintf(msg, "Zu einfügende Datei %s konnte nicht geöffnet werden",
+				sprintf(msg, "Einzufügende Datei %s konnte nicht geöffnet werden",
 					filename);
 				err(msg, INCLUDE_FAILED);
 				return NULL;

@@ -50,18 +50,14 @@ Scope* createFuncScope(Scope* parent) {
 	// indicate that we are currently in a function call,
 	// shadowing any previous function frames
 	Token* frame = createToken(IDENTIFIER);
-	char* id = (char*)malloc(15);
-	sprintf(id, "Funktionigkeit");
-	defineVariable(fScope, id, frame);
+	defineVariable(fScope, copyString("Funktionigkeit"), frame);
 	return fScope;
 }
 
 Scope* createGlobalScope() {
 	Scope* global = createScope(NULL);
 	Token* token = createToken(IDENTIFIER);
-	char* id = (char*)malloc(2);
-	sprintf(id, "i");
-	defineVariable(global, id, token);
+	defineVariable(global, copyString("i"), token);
 	return global;
 }
 

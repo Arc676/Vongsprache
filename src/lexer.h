@@ -40,11 +40,10 @@
 #define UNGLEICH 8
 #define PLUS 9
 #define MINUS 10
-#define NICHT 11
-#define MAL 12
-#define GETEILT 13
-#define HOCH 14
-#define REST 15
+#define MAL 11
+#define GETEILT 12
+#define HOCH 13
+#define REST 14
 
 /**
  * Non-operator reserved words

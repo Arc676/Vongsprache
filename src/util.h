@@ -22,6 +22,7 @@
 #define UTIL_H
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "error.h"
 
@@ -33,5 +34,12 @@
  * @return Pointer to newly allocated memory
  */
 void* resize(void* ptr, size_t size);
+
+/**
+ * Utility function for allocating strings on the heap
+ * @param str String to copy to heap
+ * @return Pointer to newly allocated string
+ */
+char* copyString(char* str);
 
 #endif
