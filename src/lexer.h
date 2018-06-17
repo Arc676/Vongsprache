@@ -199,7 +199,14 @@ int isDigit(char c);
  * @param c Character to check
  * @return Whether the character is an accepted punctuation mark
  */
- int isPunc(char c);
+int isPunc(char c);
+
+/**
+ * Determines whether a character is a letter
+ * @param c Character to check
+ * @return Whether the character is alphabetical
+ */
+int isAlpha(char c);
 
 /**
  * Determines whether a character appears in a string
@@ -207,6 +214,6 @@ int isDigit(char c);
  * @param str String in which to search
  * @return Whether the character appears in the string
  */
- int charInString(char c, const char* str);
+int charInString(char c, const char* str);
 
 #endif

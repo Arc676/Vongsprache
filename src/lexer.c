@@ -258,11 +258,15 @@ TokenType wordType(char* str, int* index) {
 }
 
 int isValidIDStart(char c) {
-    return c == '_' || isalpha(c);
+    return c == '_' || isAlpha(c);
+}
+
+int isAlpha(char c) {
+    return isalpha(c) || charInString(c, "äöüß");
 }
 
 int isValidIDChar(char c) {
-    return isValidIDStart(c) || isDigit(c) || charInString(c, "äöüß");
+    return isValidIDStart(c) || isDigit(c);
 }
 
 int isWhitespace(char c) {
