@@ -270,7 +270,7 @@ Token* potentialBinary(FILE* fp, Token* left, int prec) {
 		int opType = (int)data->floatVal;
 		int opPrec = getPrecedence(opType);
 		if (opPrec > prec) {
-			lexer_discard(fp);
+			lexer_next(fp);
 			Token* rval = potentialBinary(fp, parseAtom(fp), opPrec);
 			if (!rval) {
 				err("Erwartete Ausdruck", EXPECTED_TOKEN);

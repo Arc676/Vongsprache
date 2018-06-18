@@ -30,8 +30,8 @@ void* resize(void* ptr, size_t size) {
 }
 
 char* copyString(char* str) {
-	size_t size = strlen(str);
+	size_t size = strlen(str) + 1;
 	char* copy = (char*)malloc(size);
-	memcpy(copy, str, size);
+	strcpy(copy, str);
 	return copy;
 }

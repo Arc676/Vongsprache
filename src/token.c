@@ -107,6 +107,8 @@ void tokenToString(Token* token, char* str) {
 }
 
 void destroyToken(Token* token) {
+    // for safety, prevent destruction of any null token or a token
+    // whose token data has already been destroyed
     if (!token || !token->tokenData) {
         return;
     }
@@ -134,7 +136,7 @@ void destroyToken(Token* token) {
                             break;
                         }
                         default:
-                            free(stored);
+                            free((TokenData*)stored);
                             break;
                     }
                     break;
@@ -144,7 +146,7 @@ void destroyToken(Token* token) {
                             destroyToken((Token*)stored);
                             break;
                         default:
-                            free(stored);
+                            free((TokenData*)stored);
                             break;
                     }
                     break;
@@ -203,6 +205,7 @@ void destroyToken(Token* token) {
     }
     ht_destroy(token->tokenData);
     free(token->tokenData);
+    token->tokenData = NULL;
     free(token);
 }
 

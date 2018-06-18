@@ -66,7 +66,7 @@ int getPrecedence(int op) {
         case KLEINER_ALS:
         case KLEINER_ODER_GLEICH:
         case GLEICH:
-	case UNGLEICH:
+        case UNGLEICH:
             return 7;
         case PLUS:
         case MINUS:

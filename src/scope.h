@@ -32,7 +32,7 @@
 typedef struct Scope {
 	struct Scope* parentScope;
 	hashtable_t* variables;
-	int storageSize;
+	size_t storageSize;
 	char** storedIdentifiers;
 	int identifierCount;
 } Scope;

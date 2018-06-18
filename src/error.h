@@ -26,16 +26,17 @@
 
 #include "token.h"
 
-#define PARSE_ERROR 2
-#define EXPECTED_TOKEN 3
-#define UNEXPECTED_TOKEN 4
-#define BAD_ARG_TYPE 5
-#define ASSIGN_FAILED 6
-#define MEMORY_ERROR 7
-#define UNDECLARED_IDENTIFIER 8
-#define BAD_ARG_COUNT 9
-#define OPERATOR_ERROR 10
-#define INCLUDE_FAILED 11
+// use error code range 64-113 to avoid conflict with standard exit codes
+#define PARSE_ERROR 64
+#define EXPECTED_TOKEN 65
+#define UNEXPECTED_TOKEN 66
+#define BAD_ARG_TYPE 67
+#define ASSIGN_FAILED 68
+#define MEMORY_ERROR 69
+#define UNDECLARED_IDENTIFIER 70
+#define BAD_ARG_COUNT 71
+#define OPERATOR_ERROR 72
+#define INCLUDE_FAILED 73
 
 /**
  * Raise an error
