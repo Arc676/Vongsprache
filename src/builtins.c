@@ -21,6 +21,7 @@
 #include "builtins.h"
 
 const char* builtinFunctions[BUILTIN_COUNT] = {
+	"piMalDaumen",
 	"drucke",
 	"gib",
 	"zuZahl",
@@ -28,11 +29,14 @@ const char* builtinFunctions[BUILTIN_COUNT] = {
 };
 
 BUILTIN *builtins[BUILTIN_COUNT] = {
+	vongsprache_rand,
 	vongsprache_print,
 	vongsprache_input,
 	vongsprache_toFloat,
 	vongsprache_toString
 };
+
+int RNGInitialized = 0;
 
 Token* vongsprache_print(int argc, Token** args) {
 	for (int i = 0; i < argc; i++) {
@@ -111,5 +115,30 @@ Token* vongsprache_toString(int argc, Token** args) {
 	sprintf(strVal, "%f", current->floatVal);
 	TokenData* newData = createTokenData(STRING, 0, strVal);
 	ht_insert_token(ret->tokenData, VALUE, newData);
+	return ret;
+}
+
+Token* vongsprache_rand(int argc, Token** args) {
+	if (!RNGInitialized) {
+		srand(time(NULL));
+		RNGInitialized = 1;
+	}
+	char msg[100];
+	if (argc != 1) {
+		sprintf(msg, "1 Argument für Funktion piMalDaumen erwartet aber %d gefunden",
+				argc);
+		err(msg, BAD_ARG_COUNT);
+	}
+	Token* bound = args[0];
+	if (bound->type != NUMBER) {
+		sprintf(msg, "Erwartete Zahl-Argument, %s gefunden",
+				tokenTypeToString(bound->type));
+		err(msg, BAD_ARG_TYPE);
+	}
+	TokenData* data = ht_find_token(bound->tokenData, VALUE);
+	Token* ret = createToken(NUMBER);
+	int rngVal = rand() % (int)data->floatVal;
+	TokenData* retVal = createTokenData(NUMBER, rngVal, NULL);
+	ht_insert_token(ret->tokenData, VALUE, retVal);
 	return ret;
 }

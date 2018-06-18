@@ -21,15 +21,20 @@
 #ifndef BUILTINS_H
 #define BUILTINS_H
 
+#include <stdlib.h>
+#include <time.h>
+
 #include "scope.h"
 #include "error.h"
 
-#define BUILTIN_COUNT 4
+#define BUILTIN_COUNT 5
 
 const char* builtinFunctions[BUILTIN_COUNT];
 
 typedef Token* BUILTIN(int, Token**);
 BUILTIN *builtins[BUILTIN_COUNT];
+
+int RNGInitialized;
 
 /**
  * Builtin print function; prints the contents of the passed arguments
@@ -80,5 +85,14 @@ Token* vongsprache_toFloat(int argc, Token** args);
  * @return New token with string form of given float argument
  */
 Token* vongsprache_toString(int argc, Token** args);
+
+/**
+ * Builtin random number generation function; returns a random integer
+ * between zero and the given numerical argument minus one
+ * @param argc Number of arguments passed
+ * @param args Arguments passed
+ * @return New token with a random number
+ */
+Token* vongsprache_rand(int argc, Token** args);
 
 #endif
