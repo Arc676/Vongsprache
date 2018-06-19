@@ -70,10 +70,11 @@ Token* createToken(TokenType type);
 void destroyToken(Token* token);
 
 /**
- * Frees the memory associated with a given token if it's not a literal token
- * @param token Token to delete
+ * Determines whether a token is a literal
+ * @param token Token to check
+ * @return Whether the token is a string or numerical literal value
  */
-void destroyNonLiteralToken(Token* token);
+int isLiteralToken(Token* token);
 
 /**
  * Utility function for creating token data

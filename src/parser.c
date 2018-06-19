@@ -139,22 +139,18 @@ Token* parseIdentifier(FILE* fp) {
 
 Token* parseCall(FILE* fp) {
 	Token* token = createToken(CALL);
-	Token* funcIdentifier = lexer_next(fp);
-	if (funcIdentifier->type == IDENTIFIER) {
-		ht_insert_token(token->tokenData, FUNCTION_CALL, funcIdentifier);
-		TokenData* data = createTokenData(NUMBER, 0, NULL);
-		if (parser_isValue(fp, KEYWORD, "mit")) {
-			lexer_discard(fp);
-			int argc;
-			Token** args = parseDelimited(fp, "(", ")", ",", &argc, parseExpression);
-			data->floatVal = (float)argc;
-			ht_insert_token(token->tokenData, ARGUMENTS, args);
-		}
-		ht_insert_token(token->tokenData, VALUE, data);
-		return token;
+	Token* funcIdentifier = parseIdentifier(fp);
+	ht_insert_token(token->tokenData, FUNCTION_CALL, funcIdentifier);
+	TokenData* data = createTokenData(NUMBER, 0, NULL);
+	if (parser_isValue(fp, KEYWORD, "mit")) {
+		lexer_discard(fp);
+		int argc;
+		Token** args = parseDelimited(fp, "(", ")", ",", &argc, parseExpression);
+		data->floatVal = (float)argc;
+		ht_insert_token(token->tokenData, ARGUMENTS, args);
 	}
-	err("Erwartete Funktionidentifikator", EXPECTED_TOKEN);
-	return NULL;
+	ht_insert_token(token->tokenData, VALUE, data);
+	return token;
 }
 
 Token* parseExpression(FILE* fp) {
@@ -164,11 +160,7 @@ Token* parseExpression(FILE* fp) {
 Token* parseAtom(FILE* fp) {
 	if (parser_isValue(fp, KEYWORD, "i")) {
 		skipValue(fp, KEYWORD, 2, "i", "bims");
-		Token* identifier = lexer_next(fp);
-		if (identifier->type != IDENTIFIER) {
-			err("Erwartete Identifikator", EXPECTED_TOKEN);
-			return NULL;
-		}
+		Token* identifier = parseIdentifier(fp);
 		skipValue(fp, KEYWORD, 1, "vong");
 		Token* token = createToken(INIT);
 		ht_insert_token(token->tokenData, LEFT_VAR, identifier);

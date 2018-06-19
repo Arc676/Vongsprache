@@ -207,8 +207,6 @@ void destroyToken(Token* token) {
     free(token);
 }
 
-void destroyNonLiteralToken(Token* token) {
-    if (token->type != NUMBER && token->type != STRING) {
-        destroyToken(token);
-    }
+int isLiteralToken(Token* token) {
+    return token->type == NUMBER || token->type == STRING;
 }

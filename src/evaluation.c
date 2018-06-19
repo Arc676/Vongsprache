@@ -215,7 +215,9 @@ Token* eval(Token* exp, Scope* scope) {
 			Token* cond = ht_find_token(exp->tokenData, CONDITION);
 			Token* res = eval(cond, scope);
 			int evalThen = evalBool(res);
-			destroyNonLiteralToken(res);
+			if (!isLiteralToken(cond)) {
+				destroyToken(res);
+			}
 			if (evalThen) {
 				Token* thenblk = ht_find_token(exp->tokenData, THEN_BLOCK);
 				return eval(thenblk, scope);
@@ -260,17 +262,29 @@ Token* eval(Token* exp, Scope* scope) {
 			TokenData* funcIDData = ht_find_token(funcId->tokenData, VALUE);
 			char* fID = funcIDData->charVal;
 
-			Token** args = ht_find_token(exp->tokenData, ARGUMENTS);
+			// obtain arguments given to function
+			Token** givenArgs = ht_find_token(exp->tokenData, ARGUMENTS);
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
 			int argc = (int)data->floatVal;
 
+			// copy function arguments to avoid overwriting originals
+			Token** args = (Token**)malloc(argc * sizeof(Token*));
+
+			// evaluate function arguments before passing to function
 			for (int i = 0; i < argc; i++) {
-				args[i] = eval(args[i], scope);
+				args[i] = eval(givenArgs[i], scope);
 			}
 
 			for (int i = 0; i < BUILTIN_COUNT; i++) {
 				if (!strcmp(fID, builtinFunctions[i])) {
-					return builtins[i](argc, args);
+					// evaluate function
+					Token* ret = builtins[i](argc, args);
+					// tear down copy of arguments
+					for (int i = 0; i < argc; i++) {
+						destroyToken(args[i]);
+					}
+					free(args);
+					return ret;
 				}
 			}
 
@@ -294,10 +308,16 @@ Token* eval(Token* exp, Scope* scope) {
 				// assign given arguments to parameter names, shadowing
 				// any variables in parent scopes with the same name
 				for (int i = 0; i < argc; i++) {
-					defineVariable(fScope, params[i], eval(args[i], scope));
+					defineVariable(fScope, params[i], args[i]);
 				}
 				Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
 				Token* ret = eval(fBody, fScope);
+
+				// tear down child scope and copy of arguments
+				for (int i = 0; i < argc; i++) {
+					destroyToken(args[i]);
+				}
+				free(args);
 				destroyScope(fScope);
 				return ret;
 			}
@@ -329,7 +349,9 @@ Token* eval(Token* exp, Scope* scope) {
 				ht_insert_token(startCopy->tokenData, VALUE, counterVal);
 
 				// if it's NOT a literal, destroy original copy of start value
-				destroyNonLiteralToken(startVal);
+				if (!isLiteralToken(start)) {
+					destroyToken(startVal);
+				}
 
 				// define loop counter in child scope
 				defineVariable(lScope, copyString(cID->charVal), startCopy);
@@ -338,7 +360,9 @@ Token* eval(Token* exp, Scope* scope) {
 			while (1) {
 				Token* res = eval(cond, lScope);
 				int evalBlock = evalBool(res);
-				destroyNonLiteralToken(res);
+				if (!isLiteralToken(cond)) {
+					destroyToken(res);
+				}
 				if (!evalBlock) {
 					break;
 				}
