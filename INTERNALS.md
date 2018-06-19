@@ -128,6 +128,17 @@ Tokentyp: `INCLUDE`
 
 Bei der Einfügung einer Datei wird den Inhalt davon als Wurzel eines neuen Syntaxbaums berechnet, aber im aktuellen Umfang.
 
+Die Standardeinstellung ist, die einzufügende Datei im aktuellen Ordner zu suchen. Sollte aber die Umgebungsvariable `VONGLIB` definiert sein, wird deren Wert als Suchpfad genutzt.
+
+```
+$ cd /pfad/vongsprache/vonglib
+$ export VONGLIB=`pwd`
+$ cd /pfad/.../
+$ vongsprache skript.vong
+```
+
+Sollte eine Datei im Skript eingefügt werden, wenn beispielsweise `benutze larry` im Skript steht, wird der Interpreter nach `/pfad/vongsprache/vonglib/larry.vong` suchen.
+
 ### Bedingte Anweisungsblocktokens
 
 Tokentyp: `IF`
@@ -182,7 +193,7 @@ Die `VALUE`- und `ARGUMENTS`-Werte sind nur für Zählschleifen anwesend.
 Funktionen werden in der Vongsprache als Variablen gespeichert. Um Funktionen zu speichern und anzurufen werden drei unterschiedliche Tokens benutzt:
 - Das Funktionenzuweisungstoken enthält den Identifikator der neuen Funktion und ein Funktionswrappertoken, das als Variable mit dem gegebenen Identifikator im aktuellen Umfang gespeichert wird
 - Das Funktionswrappertoken enthält Informationen über die benötigten Argumente und ein Funktiontoken
-- Das Funktiontoken ist die letzte Darstellung einer Funktion und enthält nur die enthaltenen Anweisungen
+- Das Funktiontoken ist die letzte Darstellung einer Funktion und enthält nur die Anweisungen der Funktion
 
 Bei der Berechnung einer Funktion gibt es auch ein viertes Token, das den Rückgabewert der Funktion enthält. Für Funktionen ohne Rückgabewert ist dies nicht anwesend.
 

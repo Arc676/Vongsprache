@@ -55,6 +55,9 @@ const char* operators[OP_COUNT] = {
     "rest"
 };
 
+const char* punctuation = "(),";
+Token* currentToken = NULL;
+
 int getPrecedence(int op) {
     switch (op) {
         case BIMST:
@@ -80,9 +83,6 @@ int getPrecedence(int op) {
             return 0;
     }
 }
-
-const char* punctuation = "()[]{},";
-Token* currentToken = NULL;
 
 Token* readNext(FILE* fp) {
     readWhile(fp, NULL, 0, isWhitespace);
@@ -133,7 +133,7 @@ Token* readNumber(FILE* fp) {
     int pos = 0;
     while (1) {
     	char c = peek(fp);
-        if (c == '.') {
+        if (c == '.' || c == ',') {
             if (hasDot) {
                 break;
             }

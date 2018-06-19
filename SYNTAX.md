@@ -25,7 +25,7 @@ Diese Tabelle zeigt die eingebildeten Funktionen der Vongsprache und die Argumen
 | `zuZeichenfolge` | Zahl | Zeichenfolge | Gegebenen Argument in Zeichenfolge umwandeln |
 | `zuZahl` | Zeichenfolge | Zahl | Gegebenen Argument in Zahl umwandeln; ergibt null falls keine Zahl gefunden wird |
 | `piMalDaumen` | Zahl | Zahl | Ergibt eine zufällige Zahl zwischen null und den gegebenen Wert minus 1 |
-| `piSaat` | Zahl oder nichts | `NULL` | Setzt den gegebenen Wert als Saat für die Zufallszahlgeneration |
+| `piSaat` | Zahl oder nichts | `NULL` | Setzt den gegebenen Wert als Saat für die Zufallszahlgeneration; benutzt die aktuelle UNIX-Zeit falls kein Wert gegeben wird |
 
 ### Dateieinfügung
 

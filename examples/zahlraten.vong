@@ -1,0 +1,34 @@
+# Generiert zufällige Zahlen und lässt den Benutzer sie raten
+
+bidde drucke mit ("Zahl raten!")
+
+# Saat für Zufallszahlgeneration setzen
+bidde piSaat
+
+i bims renn vong 1 her
+solange renn vong Wahrigkeit
+	i bims min vong bidde zuZahl mit (
+		bidde gib mit ("Niedrigsten Wert eingeben: ")
+	) her
+	i bims max vong bidde zuZahl mit (
+		bidde gib mit ("Höchsten Wert eingeben: ")
+	) her
+	i bims antwort vong bidde piMalDaumen mit (max minus min plus 1) plus min her
+	i bims schätzung vong min minus 1 her
+	solange schätzung ungleich antwort vong Wahrigkeit
+		schätzung bimst bidde zuZahl mit (
+			bidde gib mit ("Schätzung eingeben: ")
+		)
+		bims schätzung gleich antwort vong Wahrigkeit
+			bidde drucke mit ("Richtig!")
+		her am Sonstigkeit
+			bims schätzung größer antwort vong Wahrigkeit
+				bidde drucke mit ("Zu hoch!")
+			her am Sonstigkeit
+				bidde drucke mit ("Zu niedrig!")
+			her
+		her
+	her bims
+	renn bimst bidde gib mit ("Weiter? [y/N]: ") gleich "y"
+her bims
+bidde drucke mit ("Spiel beendet")

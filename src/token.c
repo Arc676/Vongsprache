@@ -19,6 +19,7 @@
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "token.h"
+#include "util.h"
 
 TokenData* createTokenData(TokenType type, float floatVal,
     char* charVal) {
@@ -46,6 +47,26 @@ Token* createToken(TokenType type) {
 	token->tokenData = (hashtable_t*)malloc(sizeof(hashtable_t));
     ht_create(token->tokenData, NULL, NULL);
 	return token;
+}
+
+Token* copyToken(Token* token) {
+    Token* copy = createToken(token->type);
+    TokenData* original = ht_find_token(token->tokenData, VALUE);
+    TokenData* dataCopy;
+    switch (token->type) {
+        case STRING:
+        case KEYWORD:
+        case PUNCTUATION:
+        case IDENTIFIER:
+        case OPERATOR:
+            dataCopy = createTokenData(token->type, 0, copyString(original->charVal));
+            break;
+        default:
+            dataCopy = createTokenData(token->type, original->floatVal, NULL);
+            break;
+    }
+    ht_insert_token(copy->tokenData, VALUE, dataCopy);
+    return copy;
 }
 
 char* tokenTypeToString(TokenType type) {

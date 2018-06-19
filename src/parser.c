@@ -103,7 +103,7 @@ Token* parseFor(FILE* fp) {
 	ht_insert_token(op->tokenData, OP, opType);
 
 	Token* cond = createToken(BINARY);
-	ht_insert_token(cond->tokenData, LEFT_VAR, counter);
+	ht_insert_token(cond->tokenData, LEFT_VAR, copyToken(counter));
 	ht_insert_token(cond->tokenData, OP, op);
 	ht_insert_token(cond->tokenData, RIGHT_VAR, end);
 
@@ -126,15 +126,6 @@ Token* parseWhile(FILE* fp) {
 	ht_insert_token(loop->tokenData, CONDITION, cond);
 	ht_insert_token(loop->tokenData, FUNCTION_BODY, prog);
 	return loop;
-}
-
-Token* parseIdentifier(FILE* fp) {
-	Token* var = lexer_next(fp);
-	if (var->type != IDENTIFIER) {
-		err("Erwartete Identifikator", EXPECTED_TOKEN);
-		return NULL;
-	}
-	return var;
 }
 
 Token* parseCall(FILE* fp) {
@@ -223,16 +214,9 @@ Token* parseAtom(FILE* fp) {
 	if (parser_isValue(fp, KEYWORD, "benutze")) {
 		lexer_discard(fp);
 		Token* filename = parseIdentifier(fp);
-		TokenData* idVal = ht_find_token(filename->tokenData, VALUE);
+		filename->type = INCLUDE;
 
-		Token* incToken = createToken(INCLUDE);
-		char* copy = copyString(idVal->charVal);
-		TokenData* incVal = createTokenData(STRING, 0, copy);
-		ht_insert_token(incToken->tokenData, VALUE, incVal);
-
-		destroyToken(filename);
-
-		return incToken;
+		return filename;
 	}
 	if (parser_isValue(fp, PUNCTUATION, "(")) {
 		lexer_discard(fp);
@@ -279,6 +263,15 @@ Token* potentialBinary(FILE* fp, Token* left, int prec) {
 	}
 	// if no binary expression found, just return token
 	return left;
+}
+
+Token* parseIdentifier(FILE* fp) {
+	Token* var = lexer_next(fp);
+	if (!var || var->type != IDENTIFIER) {
+		err("Erwartete Identifikator", EXPECTED_TOKEN);
+		return NULL;
+	}
+	return var;
 }
 
 Token** parseDelimited(FILE* fp, char* start, char* end, char* sep, int* count,

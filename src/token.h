@@ -64,6 +64,14 @@ typedef union {
 Token* createToken(TokenType type);
 
 /**
+ * Copies a basic token i.e. one that contains TokenData under the VALUE
+ * key and nothing else
+ * @param token Token to copy
+ * @return A new token with a copy of the data
+ */
+Token* copyToken(Token* token);
+
+/**
  * Frees the memory associated with a given token
  * @param token Token to delete
  */

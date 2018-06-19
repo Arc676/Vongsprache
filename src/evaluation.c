@@ -267,7 +267,7 @@ Token* eval(Token* exp, Scope* scope) {
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
 			int argc = (int)data->floatVal;
 
-			// copy function arguments to avoid overwriting originals
+			// store evaluated function arguments separate from originals
 			Token** args = (Token**)malloc(argc * sizeof(Token*));
 
 			// prepare for return
@@ -345,17 +345,13 @@ Token* eval(Token* exp, Scope* scope) {
 			Token* counter = ht_find_token(exp->tokenData, VALUE);
 			TokenData* counterVal;
 			if (counter) {
-				TokenData* cID = ht_find_token(counter->tokenData, VALUE);
-				Token* start = ht_find_token(exp->tokenData, ARGUMENTS);
-
 				// evaluate start value for counter
+				Token* start = ht_find_token(exp->tokenData, ARGUMENTS);
 				Token* startVal = eval(start, scope);
-				TokenData* cVal = ht_find_token(startVal->tokenData, VALUE);
 
 				// copy start value to new token in case it's a literal
-				Token* startCopy = createToken(NUMBER);
-				counterVal = createTokenData(NUMBER, cVal->floatVal, NULL);
-				ht_insert_token(startCopy->tokenData, VALUE, counterVal);
+				Token* startCopy = copyToken(startVal);
+				counterVal = ht_find_token(startCopy->tokenData, VALUE);
 
 				// if it's NOT a literal, destroy original copy of start value
 				if (!isLiteralToken(start)) {
@@ -363,6 +359,7 @@ Token* eval(Token* exp, Scope* scope) {
 				}
 
 				// define loop counter in child scope
+				TokenData* cID = ht_find_token(counter->tokenData, VALUE);
 				defineVariable(lScope, copyString(cID->charVal), startCopy);
 			}
 
