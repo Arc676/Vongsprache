@@ -4,7 +4,7 @@ In diesem Dokument wird die Syntax der Vongsprache erklärt. In den Beispielen s
 
 Bei der Benutzung der Vongsprache ist die Groß- und Kleinschreibung zu beachten. Einrückung der Anweisungen in Blöcken ist für Lesbarkeit empfohlen aber nicht notwendig.
 
-## Eingebildete Funktionen
+## Grundlagen
 
 ### Kommentare
 
@@ -14,36 +14,18 @@ In der Vongsprache gibt es nur Zeilenkommentare. Diese fangen mit `#` an.
 # Und das hier auch
 ```
 
-### Ein-/Ausgabe
+### Eingebildete Funktionen
 
-Die Vongsprache bietet eine Eingabe- und eine Ausgabefunktion an.
+Diese Tabelle zeigt die eingebildeten Funktionen der Vongsprache und die Argumente, die ihnen gegeben werden müssen. Beim Anruf einer Funktion werden diese zuerst gesucht; deshalb ist es unmöglich, eigene Funktionen mit diesen Namen zu schaffen.
 
-```
-# Hallo, Welt! drucken
-bidde drucke mit ("Hallo, Welt!")
-
-# Nach Eingabe fragen, ohne zu speichern
-bidde gib mit ("Diese Eingabe wird nicht gespeichert.")
-
-# Nach dem Namen des Benutzers fragen und dann ihn begrüßen
-i bims Name vong bidde gib mit ("Wie heißt du?") her
-bidde drucke mit ("Hallo, ", Name)
-```
-
-### Typumwandlung
-
-Der Datentyp einer Variable kann mit den folgenden eingebildeten Funktionen umgewandelt werden. Der umgewandelte Wert wird als Rückgabewert gegeben, muss also auch zugewiesen werden, um gespeichert zu werden.
-
-```
-i bims Zeichenfolge vong "12" her
-i bims Zahl vong 14 her
-
-# Zeichenfolge in Zahl umwandeln
-bidde zuZahl mit (Zeichenfolge)
-
-# Zahl in Zeichenfolge umwandeln
-i bims UmgewandelteZeichenfolge vong bidde zuZeichenfolge mit (Zahl) her
-```
+| Funktion | Argumente | Rückgabewerttyp | Beschreibung |
+| --- | --- | --- | --- |
+| `drucke` | Irgendeine Anzahl irgendwelcher Argumente | `NULL` | Ausgabefunktion, druckt die gegebenen Argumente |
+| `gib` | Irgendeine Anzahl irgendwelcher Argumente | Zeichenfolge | Eingabefunktion, druckt die gegebenen Argumente und ergibt den von dem Benutzer eingegebenen Wert |
+| `zuZeichenfolge` | Zahl | Zeichenfolge | Gegebenen Argument in Zeichenfolge umwandeln |
+| `zuZahl` | Zeichenfolge | Zahl | Gegebenen Argument in Zahl umwandeln; ergibt null falls keine Zahl gefunden wird |
+| `piMalDaumen` | Zahl | Zahl | Ergibt eine zufällige Zahl zwischen null und den gegebenen Wert minus 1 |
+| `piSaat` | Zahl oder nichts | `NULL` | Setzt den gegebenen Wert als Saat für die Zufallszahlgeneration |
 
 ### Dateieinfügung
 

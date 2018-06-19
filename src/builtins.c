@@ -21,19 +21,21 @@
 #include "builtins.h"
 
 const char* builtinFunctions[BUILTIN_COUNT] = {
-	"piMalDaumen",
 	"drucke",
 	"gib",
 	"zuZahl",
-	"zuZeichenfolge"
+	"zuZeichenfolge",
+	"piMalDaumen",
+	"piSaat"
 };
 
 BUILTIN *builtins[BUILTIN_COUNT] = {
-	vongsprache_rand,
 	vongsprache_print,
 	vongsprache_input,
 	vongsprache_toFloat,
-	vongsprache_toString
+	vongsprache_toString,
+	vongsprache_rand,
+	vongsprache_srand
 };
 
 int RNGInitialized = 0;
@@ -118,16 +120,37 @@ Token* vongsprache_toString(int argc, Token** args) {
 	return ret;
 }
 
-Token* vongsprache_rand(int argc, Token** args) {
-	if (!RNGInitialized) {
-		srand(time(NULL));
-		RNGInitialized = 1;
+Token* vongsprache_srand(int argc, Token** args) {
+	int seed;
+	char msg[100];
+	if (argc == 0) {
+		seed = time(NULL);
+	} else if (argc == 1) {
+		Token* given = args[0];
+		if (given->type != NUMBER) {
+			sprintf(msg, "Erwartete Zahl-Argument, %s gefunden",
+					tokenTypeToString(given->type));
+			err(msg, BAD_ARG_TYPE);
+			return NULL;
+		}
+		TokenData* data = ht_find_token(given->tokenData, VALUE);
+	} else {
+		sprintf(msg, "0 oder 1 Argument für Funktion piSaat erwartet aber %d gefunden",
+				argc);
+		err(msg, BAD_ARG_COUNT);
+		return NULL;
 	}
+	srand(seed);
+	return NULL;
+}
+
+Token* vongsprache_rand(int argc, Token** args) {
 	char msg[100];
 	if (argc != 1) {
 		sprintf(msg, "1 Argument für Funktion piMalDaumen erwartet aber %d gefunden",
 				argc);
 		err(msg, BAD_ARG_COUNT);
+		return NULL;
 	}
 	Token* bound = args[0];
 	if (bound->type != NUMBER) {

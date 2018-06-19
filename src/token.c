@@ -112,6 +112,8 @@ void destroyToken(Token* token) {
     if (!token || !token->tokenData) {
         return;
     }
+    TokenData* value = ht_find_token(token->tokenData, VALUE);
+    int count = value ? (int)value->floatVal : 0;
     for (int i = 0; i <= VALUE; i++) {
         TokenDataType datatype = (TokenDataType)i;
         void* stored = ht_find_token(token->tokenData, datatype);
@@ -152,13 +154,11 @@ void destroyToken(Token* token) {
                     break;
                 case ARGUMENTS:
                 {
-                    TokenData* argCount = ht_find_token(token->tokenData, VALUE);
-                    int argc = (int)argCount->floatVal;
                     switch (token->type) {
                         case CALL:
                         {
                             Token** args = (Token**)stored;
-                            for (int i = 0; i < argc; i++) {
+                            for (int i = 0; i < count; i++) {
                                 destroyToken(args[i]);
                             }
                             free(args);
@@ -167,7 +167,7 @@ void destroyToken(Token* token) {
                         case FUNC_WRAPPER:
                         {
                             char** args = (char**)stored;
-                            for (int i = 0; i < argc; i++) {
+                            for (int i = 0; i < count; i++) {
                                 free(args[i]);
                             }
                             free(args);
@@ -183,10 +183,8 @@ void destroyToken(Token* token) {
                     switch (token->type) {
                         case PROGRAM:
                         {
-                            TokenData* argCount = ht_find_token(token->tokenData, VALUE);
-                            int argc = (int)argCount->floatVal;
                             Token** statements = (Token**)stored;
-                            for (int i = 0; i < argc; i++) {
+                            for (int i = 0; i < count; i++) {
                                 destroyToken(statements[i]);
                             }
                             free(statements);
