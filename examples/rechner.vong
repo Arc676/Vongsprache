@@ -1,0 +1,30 @@
+# Einfaches Rechnerprogramm, das nur Arithmetik durchführen kann
+
+i bims renn vong 1 her
+solange renn vong Wahrigkeit
+	i bims zahl1 vong bidde zuZahl mit (
+		bidde gib mit ("Erste Zahl eingeben: ")
+	) her
+	i bims zahl2 vong bidde zuZahl mit (
+		bidde gib mit ("Zweite Zahl eingeben: ")
+	) her
+	i bims op vong bidde gib mit ("Operator eingeben: ") her
+	bims op gleich "+" vong Wahrigkeit
+		bidde drucke mit (zahl1 plus zahl2)
+	her am Sonstigkeit
+		bims op gleich "-" vong Wahrigkeit
+			bidde drucke mit (zahl1 minus zahl2)
+		her am Sonstigkeit
+			bims op gleich "*" vong Wahrigkeit
+				bidde drucke mit (zahl1 mal zahl2)
+			her am Sonstigkeit
+				bims op gleich "/" vong Wahrigkeit
+					bidde drucke mit (zahl1 gteild zahl2)
+				her am Sonstigkeit
+					bidde drucke mit ("Unbekanntes Operator ", op)
+				her
+			her
+		her
+	her
+	renn bimst bidde gib mit ("Weiter? [y/N]: ") gleich "y"
+her bims

@@ -1,0 +1,13 @@
+# [Collatz-Problem](https://de.wikipedia.org/wiki/Collatz-Problem)
+
+i bims Zahl vong bidde zuZahl mit (
+	bidde gib mit ("Geben Sie eine Zahl ein")
+) her
+solange Zahl größer 1 vong Wahrigkeit
+	bims Zahl rest 2 gleich 0 vong Wahrigkeit
+		Zahl bimst Zahl gteild 2
+	her am Sonstigkeit
+		Zahl bimst Zahl mal 3 plus 1
+	her
+	bidde drucke mit (Zahl)
+her bims

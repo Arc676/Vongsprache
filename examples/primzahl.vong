@@ -1,0 +1,19 @@
+# Bestimmt, ob eine eingegebene Zahl eine Primzahl ist
+
+i bims bimsPrimzahl vong Funktionigkeit mit (n)
+	i bims Ende vong n hoch 0.5 her
+	mit k vong 2 bis Ende
+		bims n rest k gleich 0 vong Wahrigkeit
+			hab 0
+		her
+	her
+	hab 1
+her
+i bims Zahl vong bidde zuZahl mit (
+	bidde gib mit ("Zahl eingeben: ")
+) her
+bims bidde bimsPrimzahl mit (Zahl) vong Wahrigkeit
+	bidde drucke mit (Zahl, " ist eine Primzahl")
+her am Sonstigkeit
+	bidde drucke mit (Zahl, " ist keine Primzahl")
+her

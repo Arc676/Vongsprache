@@ -270,6 +270,10 @@ Token* eval(Token* exp, Scope* scope) {
 			// copy function arguments to avoid overwriting originals
 			Token** args = (Token**)malloc(argc * sizeof(Token*));
 
+			// prepare for return
+			int hasEvaluated = 0;
+			Token* ret = NULL;
+
 			// evaluate function arguments before passing to function
 			for (int i = 0; i < argc; i++) {
 				args[i] = eval(givenArgs[i], scope);
@@ -277,51 +281,56 @@ Token* eval(Token* exp, Scope* scope) {
 
 			for (int i = 0; i < BUILTIN_COUNT; i++) {
 				if (!strcmp(fID, builtinFunctions[i])) {
-					// evaluate function
-					Token* ret = builtins[i](argc, args);
-					// tear down copy of arguments
-					for (int i = 0; i < argc; i++) {
-						destroyToken(args[i]);
-					}
-					free(args);
-					return ret;
+					ret = builtins[i](argc, args);
+					hasEvaluated = 1;
 				}
 			}
 
-			Token* func = getVariable(scope, fID);
-			if (func) {
-				TokenData* fArgs = ht_find_token(func->tokenData, VALUE);
-				int req = (int)fArgs->floatVal;
-				// check correct number of arguments given
-				if (argc != req) {
-					char msg[100];
-					sprintf(msg, "%d Argument%s für Funktion %s erwartet aber %d gefunden",
-							req, (req == 1 ? "" : "e"), fID, argc);
-					err(msg, BAD_ARG_COUNT);
-					break;
+			if (!hasEvaluated) {
+				Token* func = getVariable(scope, fID);
+				if (func) {
+					TokenData* fArgs = ht_find_token(func->tokenData, VALUE);
+					int req = (int)fArgs->floatVal;
+					// check correct number of arguments given
+					if (argc != req) {
+						char msg[100];
+						sprintf(msg, "%d Argument%s für Funktion %s erwartet aber %d gefunden",
+								req, (req == 1 ? "" : "e"), fID, argc);
+						err(msg, BAD_ARG_COUNT);
+						break;
+					}
+					char** params = ht_find_token(func->tokenData, ARGUMENTS);
+
+					// create child scope for function evaluation
+					Scope* fScope = createFuncScope(scope);
+
+					// assign given arguments to parameter names, shadowing
+					// any variables in parent scopes with the same name
+					for (int i = 0; i < argc; i++) {
+						defineVariable(fScope, params[i], args[i]);
+					}
+					Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
+					Token* ret = eval(fBody, fScope);
+
+					// tear down child scope
+					destroyScope(fScope);
+					hasEvaluated = 1;
 				}
-				char** params = ht_find_token(func->tokenData, ARGUMENTS);
+			}
 
-				// create child scope for function evaluation
-				Scope* fScope = createFuncScope(scope);
-
-				// assign given arguments to parameter names, shadowing
-				// any variables in parent scopes with the same name
-				for (int i = 0; i < argc; i++) {
-					defineVariable(fScope, params[i], args[i]);
-				}
-				Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
-				Token* ret = eval(fBody, fScope);
-
-				// tear down child scope and copy of arguments
-				for (int i = 0; i < argc; i++) {
+			// tear down copy of arguments
+			for (int i = 0; i < argc; i++) {
+				if (!isLiteralToken(args[i])) {
 					destroyToken(args[i]);
 				}
-				free(args);
-				destroyScope(fScope);
-				return ret;
 			}
-			undeclaredIDErr(fID);
+			free(args);
+
+			if (hasEvaluated) {
+				return ret;
+			} else {
+				undeclaredIDErr(fID);
+			}
 			break;
 		}
 		case LOOP:
