@@ -26,7 +26,7 @@ const char* builtinFunctions[BUILTIN_COUNT] = {
 	"zuZahl",
 	"zuZeichenfolge",
 	"piMalDaumen",
-	"piSaat"
+	"samen"
 };
 
 BUILTIN *builtins[BUILTIN_COUNT] = {
@@ -84,12 +84,7 @@ void typeConversionUtil(TokenType srcType, TokenType dstType, TokenData** curren
 		err(msg, BAD_ARG_COUNT);
 	}
 
-	if (given->type != srcType) {
-		sprintf(msg, "Erwartete %s-Argument, %s gefunden",
-				tokenTypeToString(srcType),
-				tokenTypeToString(given->type));
-		err(msg, BAD_ARG_TYPE);
-	}
+	argTypeChk(srcType, given->type);
 
 	*current = ht_find_token(given->tokenData, VALUE);
 	*ret = createToken(dstType);
@@ -127,15 +122,10 @@ Token* vongsprache_srand(int argc, Token** args) {
 		seed = time(NULL);
 	} else if (argc == 1) {
 		Token* given = args[0];
-		if (given->type != NUMBER) {
-			sprintf(msg, "Erwartete Zahl-Argument, %s gefunden",
-					tokenTypeToString(given->type));
-			err(msg, BAD_ARG_TYPE);
-			return NULL;
-		}
+		argTypeChk(NUMBER, given->type);
 		TokenData* data = ht_find_token(given->tokenData, VALUE);
 	} else {
-		sprintf(msg, "0 oder 1 Argument für Funktion piSaat erwartet aber %d gefunden",
+		sprintf(msg, "0 oder 1 Argument für Funktion samen erwartet aber %d gefunden",
 				argc);
 		err(msg, BAD_ARG_COUNT);
 		return NULL;
@@ -153,11 +143,7 @@ Token* vongsprache_rand(int argc, Token** args) {
 		return NULL;
 	}
 	Token* bound = args[0];
-	if (bound->type != NUMBER) {
-		sprintf(msg, "Erwartete Zahl-Argument, %s gefunden",
-				tokenTypeToString(bound->type));
-		err(msg, BAD_ARG_TYPE);
-	}
+	argTypeChk(NUMBER, bound->type);
 	TokenData* data = ht_find_token(bound->tokenData, VALUE);
 	Token* ret = createToken(NUMBER);
 	int rngVal = rand() % (int)data->floatVal;

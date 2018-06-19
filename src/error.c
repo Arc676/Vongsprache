@@ -46,3 +46,13 @@ void undeclaredIDErr(char* ID) {
 	sprintf(msg, "Undefinierter Identifikator: %s", ID);
 	err(msg, UNDECLARED_IDENTIFIER);
 }
+
+void argTypeChk(TokenType expected, TokenType found) {
+    if (expected != found) {
+        char msg[100];
+        sprintf(msg, "Erwartete %s-Argument, %s gefunden",
+                tokenTypeToString(expected),
+                tokenTypeToString(found));
+        err(msg, BAD_ARG_TYPE);
+    }
+}

@@ -57,4 +57,12 @@ void unexpected(Token* token);
  */
 void undeclaredIDErr(char* ID);
 
+/**
+ * Raise an error if the wrong data type was passed for an argument
+ * to a function
+ * @param expected Expected token type
+ * @param found Given token type
+ */
+void argTypeChk(TokenType expected, TokenType found);
+
 #endif
