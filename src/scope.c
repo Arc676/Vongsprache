@@ -46,20 +46,26 @@ void destroyScope(Scope* scope) {
 	free(scope);
 }
 
-Scope* createFuncScope(Scope* parent) {
+Scope* createFrameScope(Scope* parent, TokenType type) {
 	Scope* fScope = createScope(parent);
-	// indicate that we are currently in a function call,
-	// shadowing any previous function frames
 	Token* frame = createToken(IDENTIFIER);
-	defineVariable(fScope, copyString("Funktionigkeit"), frame);
+	char* id;
+	switch (type) {
+		case CALL:
+			id = copyString("Funktionigkeit");
+			break;
+		case LOOP:
+			id = copyString("solange");
+			break;
+		case PROGRAM:
+			id = copyString("i");
+			break;
+		default:
+			err("Ungültiger Umfangstyp", BAD_ARG_TYPE);
+			break;
+	}
+	defineVariable(fScope, id, frame);
 	return fScope;
-}
-
-Scope* createGlobalScope() {
-	Scope* global = createScope(NULL);
-	Token* token = createToken(IDENTIFIER);
-	defineVariable(global, copyString("i"), token);
-	return global;
 }
 
 Scope* lookupScope(Scope* scope, char* identifier) {
@@ -104,6 +110,16 @@ Token* defineVariable(Scope* scope, char* identifier, Token* value) {
 	}
 	ht_insert(scope->variables, identifier, value);
 	return value;
+}
+
+int deleteVariable(Scope* scope, char* identifier) {
+	if (lookupScope(scope, identifier) == scope) {
+		Token* val = ht_find(scope->variables, identifier);
+		destroyToken(val);
+		ht_remove(scope->variables, identifier);
+		return 1;
+	}
+	return 0;
 }
 
 int isGlobalScope(Scope* scope) {

@@ -107,6 +107,10 @@ char* tokenTypeToString(TokenType type) {
 }
 
 void tokenToString(Token* token, char* str) {
+    if (!token) {
+        sprintf(str, "(null)");
+        return;
+    }
     char s[50];
 	sprintf(s, "%s-Token", tokenTypeToString(token->type));
 	TokenData* data = ht_find_token(token->tokenData, VALUE);

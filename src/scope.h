@@ -50,9 +50,10 @@ void destroyScope(Scope* scope);
 /**
  * Utility function to create a new function scope
  * @param parent Parent scope
+ * @param type Toke type of scope spawning token
  * @return Newly created and appropriately initialized scope object
  */
-Scope* createFuncScope(Scope* parent);
+Scope* createFrameScope(Scope* parent, TokenType type);
 
 /**
  * Utility function to create a new global scope
@@ -93,6 +94,15 @@ Token* setVariable(Scope* scope, char* identifier, Token* value);
  * @return Value of the new variable, NULL if the variable already existed
  */
 Token* defineVariable(Scope* scope, char* identifier, Token* value);
+
+/**
+ * Removes a variable from the given scope if it's defined in that scope
+ * and not a parent scope
+ * @param scope Scope from which to delete the variable
+ * @param identifier Variable identifier
+ * @return Whether the variable was successfully deleted
+ */
+int deleteVariable(Scope* scope, char* identifier);
 
 /**
  * Determine if the given scope is the global scope

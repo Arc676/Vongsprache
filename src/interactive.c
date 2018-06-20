@@ -32,7 +32,7 @@ parsen - ein Programm bis EOF parsen\n\
 
 void interactiveMode() {
 	isInteractive = 1;
-	Scope* global = createGlobalScope();
+	Scope* global = createFrameScope(NULL, PROGRAM);
 	char input[100];
 	while (1) {
 		printf("> ");
@@ -43,7 +43,7 @@ void interactiveMode() {
 		} else if (!strncmp(input, "bidde was", 9)) {
 			printHelp();
 		} else if (!strcmp(input, "parsen")) {
-			// create a new FIFO to read the program
+			// create a new pipe to read the program
 			int fd[2];
 			pipe(fd);
 
@@ -54,18 +54,22 @@ void interactiveMode() {
 				// close write end
 				close(fd[1]);
 
-				// open the FIFO for reading
+				// open the pipe for reading
 				FILE* rd = fdopen(fd[0], "r");
 				Token* ast = parseTopLevel(rd);
-				eval(ast, global);
+				Token* ret = eval(ast, global);
+				ret = copyToken(ret);
 				destroyToken(ast);
+				char token[100];
+				tokenToString(ret, token);
+				printf("Rückgabewert: %s\n", token);
 				close(fd[0]);
 			} else {
 				// child process
 				// close read end
 				close(fd[0]);
 
-				// open the FIFO for writing
+				// open the pipe for writing
 				FILE* wr = fdopen(fd[1], "w");
 				while (1) {
 					fgets(input, 100, stdin);
