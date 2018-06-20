@@ -21,10 +21,15 @@
 #include "interactive.h"
 
 int isInteractive = 0;
+char* libpath;
 
 int main(int argc, char* argv[]) {
 	FILE* file;
 	if (argc == 2) {
+		libpath = getenv("VONGLIB");
+		if (!libpath || strlen(libpath) == 0) {
+			libpath = ".";
+		}
 		if (!strcmp(argv[1], "-i")) {
 			printf("Interaktivmodus beginnt\n");
 			interactiveMode();

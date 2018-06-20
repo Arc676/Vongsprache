@@ -21,10 +21,7 @@
 #ifndef SCOPE_H
 #define SCOPE_H
 
-#include <stdlib.h>
-
 #include "hashtable.h"
-#include "error.h"
 #include "util.h"
 
 #define INITIAL_IDENTIFIER_COUNT 10

@@ -20,6 +20,8 @@
 
 #include "evaluation.h"
 
+extern char* libpath;
+
 Token* applyOp(Token* op, Token* left, Token* right) {
 	TokenData* lData = ht_find_token(left->tokenData, VALUE);
 	TokenData* rData = ht_find_token(right->tokenData, VALUE);
@@ -404,10 +406,6 @@ Token* eval(Token* exp, Scope* scope) {
 		{
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
 			char filename[100];
-			char* libpath = getenv("VONGLIB");
-			if (!libpath || strlen(libpath) == 0) {
-				libpath = ".";
-			}
 			sprintf(filename, "%s/%s.vong", libpath, data->charVal);
 			FILE* included = fopen(filename, "r");
 			if (!included) {

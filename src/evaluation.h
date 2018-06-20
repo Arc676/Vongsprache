@@ -21,9 +21,6 @@
 #ifndef EVALUATION_H
 #define EVALUATION_H
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "parser.h"
 #include "builtins.h"
 
