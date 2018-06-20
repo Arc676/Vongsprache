@@ -49,8 +49,15 @@ Token* vongsprache_print(int argc, Token** args) {
 				printf("%s", valData->charVal);
 				break;
 			case NUMBER:
-				printf("%f", valData->floatVal);
+			{
+				float integral;
+				if (modff(valData->floatVal, &integral) == 0) {
+					printf("%d", (int)valData->floatVal);
+				} else {
+					printf("%f", valData->floatVal);
+				}
 				break;
+			}
 			default:
 			{
 				char msg[100];

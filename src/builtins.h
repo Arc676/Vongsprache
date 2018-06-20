@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #include "scope.h"
 #include "error.h"
