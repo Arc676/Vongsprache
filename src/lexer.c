@@ -33,6 +33,8 @@ const char* keywords[KEYWORD_COUNT] = {
     "Sonstigkeit",
     "solange",
     "hab",
+    "aufgeben",
+    "durchmarsch",
 	"benutze",
 	"bidde"
 };

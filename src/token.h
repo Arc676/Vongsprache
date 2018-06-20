@@ -41,6 +41,8 @@ typedef enum TokenType {
     ASSIGN,
     INIT,
     RETURN,
+    BREAK,
+    CONTINUE,
     INCLUDE,
     FUNC_WRAPPER,
 	PROGRAM

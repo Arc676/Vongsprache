@@ -97,6 +97,10 @@ char* tokenTypeToString(TokenType type) {
             return "Initialisierung";
         case RETURN:
             return "Rückkehranweisung";
+        case CONTINUE:
+            return "Iterationsabbruch";
+        case BREAK:
+            return "Schleifenabbruch";
     	case INCLUDE:
     		return "Einfügung";
         case FUNC_WRAPPER:

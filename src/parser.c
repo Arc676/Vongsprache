@@ -211,6 +211,14 @@ Token* parseAtom(FILE* fp) {
 		ht_insert_token(retToken->tokenData, VALUE, retVal);
 		return retToken;
 	}
+	if (parser_isValue(fp, KEYWORD, "aufgeben")) {
+		lexer_discard(fp);
+		return createToken(BREAK);
+	}
+	if (parser_isValue(fp, KEYWORD, "durchmarsch")) {
+		lexer_discard(fp);
+		return createToken(CONTINUE);
+	}
 	if (parser_isValue(fp, KEYWORD, "benutze")) {
 		lexer_discard(fp);
 		Token* filename = parseIdentifier(fp);

@@ -254,15 +254,19 @@ Bei der Berechnung eines `PROGRAM`-Tokens wird ein neuer Unterumfang geschafft. 
 
 Beim Anruf einer Funktion werden **zwei** neue Unterumfänge geschafft. Im ersten werden die zur Funktion gegebenen Argumente gespeichert und der zweite wird beim Berechnung der Anweisungsblock der Funktion geschafft.
 
+Am Anfang einer Schleife werden auch **zwei** neue Unterumfänge geschafft.
+
 ### Besondere Variablen
 
 In bestimmten Umfängen werden besondere Variablen mit Schlüsselwörtern als Identifikatoren gespeichert. Die Benutzung von Schlüsselwörtern als Identifikatoren verhindert, dass von dem Benutzer definierte Variablen damit verwechselt werden könnten.
 
+Diese besonderen Variablen bezeichnen den Anfang einer Struktur beispielsweise eine Funktion oder eine Schleife. Dies hilft bei der Bestimmung des Kontrollflusses.
+
 Besondere Variablen entstehen alle aus leeren Identifikatortokens.
 
-#### Funktionen
+#### Funktionen und Schleifen
 
-Bevor der Anweisungsblock einer Funktion berechnet wird, wird eine besondere Variable mit dem Identifikator „Funktionigkeit“ im zuerst geschafften Unterumfang gespeichert.
+Bevor der Anweisungsblock einer Funktion oder Schleife berechnet wird, wird eine besondere Variable mit dem Identifikator „Funktionigkeit“ für Funktionen oder „solange“ für Schleifen im zuerst geschafften Unterumfang gespeichert.
 
 #### Rückgabewert
 

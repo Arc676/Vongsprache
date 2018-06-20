@@ -66,6 +66,8 @@ Wahrigkeit
 Sonstigkeit
 solange
 hab
+aufgeben
+durchmarsch
 bidde
 benutze
 ```
@@ -99,6 +101,18 @@ i bims <Identifikator> vong Funktionigkeit [mit (Parameter1, Parameter2, ...)]
 her
 ```
 
+Darauf muss geachtet werden, dass Zeilenumbrüche zwischen Wörtern in der Vongsprache ignoriert werden. Sollte die erste Anweisung in einer Funktion eine Zählschleife sein, welche mit dem Schlüsselwort `mit` anfängt, muss die andernfalls unnötige Argumentenliste unbedingt angegeben werden, um zu verhindern, dass der Anfang der Zählschleife mit einer Argumentenliste verwechselt wird. Wenn die Funktion keine Argumente braucht, muss eine leere Argumentenliste angegeben werden. Dies wird im folgenden Beispiel gezeigt.
+
+```
+i bims eineFunktion vong Funktionigkeit mit ()
+	mit j vong 0 bis 10
+		bidde drucke mit (j)
+	her
+her
+```
+
+### Kontrollfluss
+
 #### Rückkehranweisungen
 
 Das Schlüsselwort `hab` bezeichnet den Rückgabewert der Funktion.
@@ -108,6 +122,10 @@ i bims Doppel vong Funktionigkeit mit (x)
     hab x mal 2
 her
 ```
+
+#### Schleifenabbruch und Iterationsabbruche
+
+Die Schlüsselwörter `aufgeben` und `durchmarsch` brechen die aktuelle Schleife beziehungsweise nur die aktuelle Iteration der Schleife ab.
 
 ## Anweisungen
 

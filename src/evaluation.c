@@ -138,18 +138,21 @@ int evalBool(Token* val) {
 }
 
 Token* eval(Token* exp, Scope* scope) {
+	Token* returnValue = NULL;
 	switch (exp->type) {
 		case NUMBER:
 		case STRING:
-			return exp;
+			returnValue = exp;
+			break;
 		case IDENTIFIER:
 		{
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
 			Token* val = getVariable(scope, data->charVal);
 			if (val) {
-				return val;
+				returnValue = val;
+			} else {
+				undeclaredIDErr(data->charVal);
 			}
-			undeclaredIDErr(data->charVal);
 			break;
 		}
 		case INIT:
@@ -171,24 +174,25 @@ Token* eval(Token* exp, Scope* scope) {
 						// assignment requires that the variable already exists
 						if (exp->type == ASSIGN) {
 							Token* exists = getVariable(scope, id);
-							if (!exists) {
+							if (exists) {
+								returnValue = setVariable(scope, id, eval(right, scope));
+							} else {
 								char msg[100];
 								char token[100];
 								tokenToString(leftVal, token);
 								sprintf(msg, "Undeklariertes Token %s kann nicht zugewiesen werden",
 										token);
 								err(msg, ASSIGN_FAILED);
-								return NULL;
 							}
-							return setVariable(scope, id, eval(right, scope));
 						} else {
 							// initialization calls shadow any parent scope variables
-							return defineVariable(scope, id, eval(right, scope));
+							returnValue = defineVariable(scope, id, eval(right, scope));
 						}
 					} else {
 						// if assigning a function instead, don't evaluate right side
-						return defineVariable(scope, id, right);
+						returnValue = defineVariable(scope, id, right);
 					}
+					break;
 				}
 				default:
 				{
@@ -200,17 +204,19 @@ Token* eval(Token* exp, Scope* scope) {
 					break;
 				}
 			}
+			break;
 		}
 		case BINARY:
 		{
 			Token* op = ht_find_token(exp->tokenData, OP);
 			Token* left = ht_find_token(exp->tokenData, LEFT_VAR);
 			Token* right = ht_find_token(exp->tokenData, RIGHT_VAR);
-			return applyOp(
+			returnValue = applyOp(
 				op,
 				eval(left, scope),
 				eval(right, scope)
 			);
+			break;
 		}
 		case IF:
 		{
@@ -222,14 +228,14 @@ Token* eval(Token* exp, Scope* scope) {
 			}
 			if (evalThen) {
 				Token* thenblk = ht_find_token(exp->tokenData, THEN_BLOCK);
-				return eval(thenblk, scope);
+				returnValue = eval(thenblk, scope);
 			} else {
 				Token* elseblk = ht_find_token(exp->tokenData, ELSE_BLOCK);
 				if (elseblk) {
-					return eval(elseblk, scope);
+					returnValue = eval(elseblk, scope);
 				}
-				return NULL;
 			}
+			break;
 		}
 		case PROGRAM:
 		{
@@ -238,7 +244,6 @@ Token* eval(Token* exp, Scope* scope) {
 			if (!isGlobalScope(scope)) {
 				childScope = createScope(scope);
 			}
-			Token* val = NULL;
 
 			TokenData* data = ht_find_token(exp->tokenData, VALUE);
 			int count = (int)data->floatVal;
@@ -246,17 +251,24 @@ Token* eval(Token* exp, Scope* scope) {
 			Token** statements = ht_find_token(exp->tokenData, FUNCTION_BODY);
 
 			for (int i = 0; i < count; i++) {
-				val = eval(statements[i], childScope);
-				// stop evaluating block if a return statement has been given
-				if (getVariable(childScope, "hab")) {
+				returnValue = eval(statements[i], childScope);
+				// stop evaluating block if any control flow statement has been given
+				if (getVariable(childScope, "hab") ||
+					getVariable(childScope, "aufgeben") ||
+					getVariable(childScope, "durchmarsch")) {
 					break;
 				}
 			}
 			// destroy child scope unless it's the global scope
 			if (childScope != scope) {
+				// if present, copy the return value so it doesn't get
+				// destroyed with the scope
+				if (returnValue) {
+					returnValue = copyToken(returnValue);
+				}
 				destroyScope(childScope);
 			}
-			return val;
+			break;
 		}
 		case CALL:
 		{
@@ -274,7 +286,6 @@ Token* eval(Token* exp, Scope* scope) {
 
 			// prepare for return
 			int hasEvaluated = 0;
-			Token* ret = NULL;
 
 			// evaluate function arguments before passing to function
 			for (int i = 0; i < argc; i++) {
@@ -283,7 +294,7 @@ Token* eval(Token* exp, Scope* scope) {
 
 			for (int i = 0; i < BUILTIN_COUNT; i++) {
 				if (!strcmp(fID, builtinFunctions[i])) {
-					ret = builtins[i](argc, args);
+					returnValue = builtins[i](argc, args);
 					hasEvaluated = 1;
 				}
 			}
@@ -304,7 +315,7 @@ Token* eval(Token* exp, Scope* scope) {
 					char** params = ht_find_token(func->tokenData, ARGUMENTS);
 
 					// create child scope for function evaluation
-					Scope* fScope = createFuncScope(scope);
+					Scope* fScope = createFrameScope(scope, CALL);
 
 					// assign given arguments to parameter names, shadowing
 					// any variables in parent scopes with the same name
@@ -312,7 +323,7 @@ Token* eval(Token* exp, Scope* scope) {
 						defineVariable(fScope, params[i], args[i]);
 					}
 					Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
-					Token* ret = eval(fBody, fScope);
+					returnValue = eval(fBody, fScope);
 
 					// tear down child scope
 					destroyScope(fScope);
@@ -328,9 +339,7 @@ Token* eval(Token* exp, Scope* scope) {
 			}
 			free(args);
 
-			if (hasEvaluated) {
-				return ret;
-			} else {
+			if (!hasEvaluated) {
 				undeclaredIDErr(fID);
 			}
 			break;
@@ -341,7 +350,7 @@ Token* eval(Token* exp, Scope* scope) {
 			Token* prog = ht_find_token(exp->tokenData, FUNCTION_BODY);
 
 			// create child scope for loop
-			Scope* lScope = createScope(scope);
+			Scope* lScope = createFrameScope(scope, LOOP);
 
 			// determine if loop has a loop counter
 			Token* counter = ht_find_token(exp->tokenData, VALUE);
@@ -374,12 +383,24 @@ Token* eval(Token* exp, Scope* scope) {
 				if (!evalBlock) {
 					break;
 				}
-				eval(prog, lScope);
+				returnValue = eval(prog, lScope);
+				// stop loop if a break or return statement has been given
+				if (getVariable(lScope, "aufgeben") ||
+					getVariable(lScope, "hab")) {
+					break;
+				}
+				// finishing stages of loop
 				if (counter) {
 					counterVal->floatVal += 1;
 				}
+				// if a CONTINUE statement has been given, erase
+				// if before the next iteration
+				deleteVariable(lScope, "durchmarsch");
 			}
 
+			if (returnValue) {
+				returnValue = copyToken(returnValue);
+			}
 			destroyScope(lScope);
 			break;
 		}
@@ -398,9 +419,25 @@ Token* eval(Token* exp, Scope* scope) {
 			}
 
 			Token* val = ht_find_token(exp->tokenData, VALUE);
-			Token* ret = eval(val, scope);
+			returnValue = eval(val, scope);
 			setVariable(fScope, copyString("hab"), createToken(IDENTIFIER));
-			return ret;
+			break;
+		}
+		case BREAK:
+		case CONTINUE:
+		{
+			// can only break/continue if inside a loop
+			Scope* lFrame = lookupScope(scope, "solange");
+			if (!lFrame) {
+				unexpected(exp);
+			}
+
+			if (exp->type == BREAK) {
+				setVariable(lFrame, copyString("aufgeben"), createToken(IDENTIFIER));
+			} else {
+				setVariable(lFrame, copyString("durchmarsch"), createToken(IDENTIFIER));
+			}
+			break;
 		}
 		case INCLUDE:
 		{
@@ -413,16 +450,16 @@ Token* eval(Token* exp, Scope* scope) {
 				sprintf(msg, "Einzufügende Datei %s konnte nicht geöffnet werden",
 					filename);
 				err(msg, INCLUDE_FAILED);
-				return NULL;
+				break;
 			}
 			Token* ast = parseTopLevel(included);
 			fclose(included);
-			Token* ret = eval(ast, scope);
-			return ret;
+			returnValue = eval(ast, scope);
+			break;
 		}
 		default:
 			unexpected(exp);
 			break;
 	}
-	return NULL;
+	return returnValue;
 }
