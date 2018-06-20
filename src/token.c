@@ -229,5 +229,5 @@ void destroyToken(Token* token) {
 }
 
 int isLiteralToken(Token* token) {
-    return token->type == NUMBER || token->type == STRING;
+    return token && (token->type == NUMBER || token->type == STRING);
 }

@@ -86,16 +86,7 @@ Token* setVariable(Scope* scope, char* identifier, Token* value) {
 	if (!defined) {
 		defined = scope;
 	}
-	if (defined->identifierCount > defined->storageSize / sizeof(char*)) {
-		defined->storageSize += INITIAL_IDENTIFIER_COUNT * sizeof(char*);
-		defined->storedIdentifiers = (char**)resize(
-			defined->storedIdentifiers,
-			defined->storageSize
-		);
-	}
-	defined->storedIdentifiers[defined->identifierCount++] = identifier;
-	ht_insert(defined->variables, identifier, value);
-	return value;
+	return defineVariable(defined, identifier, value);
 }
 
 Token* defineVariable(Scope* scope, char* identifier, Token* value) {
@@ -107,6 +98,10 @@ Token* defineVariable(Scope* scope, char* identifier, Token* value) {
 		);
 	}
 	scope->storedIdentifiers[scope->identifierCount++] = identifier;
+	Token* existed = ht_find(scope->variables, identifier);
+	if (existed) {
+		destroyToken(existed);
+	}
 	ht_insert(scope->variables, identifier, value);
 	return value;
 }

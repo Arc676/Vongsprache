@@ -38,8 +38,6 @@ BUILTIN *builtins[BUILTIN_COUNT] = {
 	vongsprache_srand
 };
 
-int RNGInitialized = 0;
-
 Token* vongsprache_print(int argc, Token** args) {
 	for (int i = 0; i < argc; i++) {
 		Token* val = args[i];
