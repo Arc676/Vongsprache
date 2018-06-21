@@ -10,18 +10,18 @@ solange renn vong Wahrigkeit
 	) her
 	i bims op vong bidde gib mit ("Operator eingeben: ") her
 	bims op gleich "+" vong Wahrigkeit
-		bidde drucke mit (zahl1 plus zahl2)
+		bidde drucke mit (zahl1 plus zahl2, "\n")
 	her am Sonstigkeit
 		bims op gleich "-" vong Wahrigkeit
-			bidde drucke mit (zahl1 minus zahl2)
+			bidde drucke mit (zahl1 minus zahl2, "\n")
 		her am Sonstigkeit
 			bims op gleich "*" vong Wahrigkeit
-				bidde drucke mit (zahl1 mal zahl2)
+				bidde drucke mit (zahl1 mal zahl2, "\n")
 			her am Sonstigkeit
 				bims op gleich "/" vong Wahrigkeit
-					bidde drucke mit (zahl1 gteild zahl2)
+					bidde drucke mit (zahl1 gteild zahl2, "\n")
 				her am Sonstigkeit
-					bidde drucke mit ("Unbekanntes Operator ", op)
+					bidde drucke mit ("Unbekanntes Operator ", op, "\n")
 				her
 			her
 		her

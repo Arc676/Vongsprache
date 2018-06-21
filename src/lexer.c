@@ -187,7 +187,26 @@ char* readEscaped(FILE* fp, char end) {
             str = (char*)resize(str, size);
         }
         if (escaped) {
-            str[pos++] = c;
+            switch (c) {
+                case 'n':
+                    str[pos++] = '\n';
+                    break;
+                case 't':
+                    str[pos++] = '\t';
+                    break;
+                case 'b':
+                    str[pos++] = '\b';
+                    break;
+                case 'r':
+                    str[pos++] = '\r';
+                    break;
+                case 'v':
+                    str[pos++] = '\v';
+                    break;
+                default:
+                    str[pos++] = c;
+                    break;
+            }
 			escaped = 0;
         } else if (c == '\\') {
             escaped = 1;

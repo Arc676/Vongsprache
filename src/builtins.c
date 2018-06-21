@@ -65,7 +65,6 @@ Token* vongsprache_print(int argc, Token** args) {
 			}
 		}
 	}
-	printf("\n");
 	return NULL;
 }
 

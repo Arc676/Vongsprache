@@ -1,7 +1,8 @@
 # Druckt eine von dem Benutzer eingegebene Anzahl vong Sternzeichen
 
-i bims Anzahl vong bidde gib mit ("Wie viele Sterne möchten Sie?") her
+i bims Anzahl vong bidde gib mit ("Wie viele Sterne möchten Sie? ") her
 Anzahl bimst bidde zuZahl mit (Anzahl)
 mit j vong 1 bis Anzahl
 	bidde drucke mit ("*")
 her
+bidde drucke mit ("\n")

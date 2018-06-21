@@ -1,6 +1,6 @@
 # Generiert zufällige Zahlen und lässt den Benutzer sie raten
 
-bidde drucke mit ("Zahl raten!")
+bidde drucke mit ("Zahl raten!\n")
 
 # Saat für Zufallszahlgeneration setzen
 bidde samen
@@ -20,15 +20,15 @@ solange renn vong Wahrigkeit
 			bidde gib mit ("Schätzung eingeben: ")
 		)
 		bims schätzung gleich antwort vong Wahrigkeit
-			bidde drucke mit ("Richtig!")
+			bidde drucke mit ("Richtig!\n")
 		her am Sonstigkeit
 			bims schätzung größer antwort vong Wahrigkeit
-				bidde drucke mit ("Zu hoch!")
+				bidde drucke mit ("Zu hoch!\n")
 			her am Sonstigkeit
-				bidde drucke mit ("Zu niedrig!")
+				bidde drucke mit ("Zu niedrig!\n")
 			her
 		her
 	her bims
 	renn bimst bidde gib mit ("Weiter? [y/N]: ") gleich "y"
 her bims
-bidde drucke mit ("Spiel beendet")
+bidde drucke mit ("Spiel beendet\n")
