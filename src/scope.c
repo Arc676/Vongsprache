@@ -36,7 +36,9 @@ void destroyScope(Scope* scope) {
 		char* identifier = scope->storedIdentifiers[i];
 		if (identifier) {
 			Token* token = ht_find(scope->variables, identifier);
-			destroyToken(token);
+			if (token->type != FUNC_WRAPPER) {
+				destroyToken(token);
+			}
 			free(identifier);
 		}
 	}

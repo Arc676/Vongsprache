@@ -289,13 +289,20 @@ Token* eval(Token* exp, Scope* scope) {
 
 			// evaluate function arguments before passing to function
 			for (int i = 0; i < argc; i++) {
-				args[i] = eval(givenArgs[i], scope);
+				args[i] = copyToken(eval(givenArgs[i], scope));
 			}
 
 			for (int i = 0; i < BUILTIN_COUNT; i++) {
 				if (!strcmp(fID, builtinFunctions[i])) {
 					returnValue = builtins[i](argc, args);
 					hasEvaluated = 1;
+
+					// tear down copy of arguments
+					for (int i = 0; i < argc; i++) {
+						if (!isLiteralToken(args[i])) {
+							destroyToken(args[i]);
+						}
+					}
 				}
 			}
 
@@ -320,23 +327,17 @@ Token* eval(Token* exp, Scope* scope) {
 					// assign given arguments to parameter names, shadowing
 					// any variables in parent scopes with the same name
 					for (int i = 0; i < argc; i++) {
-						defineVariable(fScope, params[i], args[i]);
+						defineVariable(fScope, copyString(params[i]), args[i]);
 					}
 					Token* fBody = ht_find_token(func->tokenData, FUNCTION_BODY);
 					returnValue = eval(fBody, fScope);
 
-					// tear down child scope
+					// tear down child scope and arguments contained within it
 					destroyScope(fScope);
 					hasEvaluated = 1;
 				}
 			}
 
-			// tear down copy of arguments
-			for (int i = 0; i < argc; i++) {
-				if (!isLiteralToken(args[i])) {
-					destroyToken(args[i]);
-				}
-			}
 			free(args);
 
 			if (!hasEvaluated) {
