@@ -39,6 +39,7 @@ void destroyScope(Scope* scope) {
 			if (token->type != FUNC_WRAPPER) {
 				destroyToken(token);
 			}
+			ht_remove(scope->variables, identifier);
 			free(identifier);
 		}
 	}
@@ -118,6 +119,15 @@ int deleteVariable(Scope* scope, char* identifier) {
 	if (lookupScope(scope, identifier) == scope) {
 		Token* val = ht_find(scope->variables, identifier);
 		destroyToken(val);
+		for (int i = 0; i < scope->identifierCount; i++) {
+			char* stored = scope->storedIdentifiers[i];
+			if (stored) {
+				if (!strcmp(stored, identifier)) {
+					free(stored);
+					scope->storedIdentifiers[i] = NULL;
+				}
+			}
+		}
 		ht_remove(scope->variables, identifier);
 		return 1;
 	}
