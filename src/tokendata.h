@@ -31,6 +31,8 @@ typedef enum TokenDataType {
     OP,
     LEFT_VAR,
     RIGHT_VAR,
+    LINE_NUM,
+    COL_NUM,
     VALUE
 } TokenDataType;
 

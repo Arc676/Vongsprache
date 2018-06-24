@@ -26,7 +26,7 @@ extern int currentlyParsingLine;
 extern int isInteractive;
 
 void err(char* message, int code) {
-    fprintf(stderr, "%s: Zeile %d, Spalte %d\n", message,
+    fprintf(stderr, "%s: in der Nähe von Zeile %d, Spalte %d\n", message,
             currentlyParsingLine, currentlyParsingCol);
     if (!isInteractive) {
         exit(code);

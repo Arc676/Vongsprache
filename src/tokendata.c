@@ -22,25 +22,29 @@
 
 char* tokenDataTypeToString(TokenDataType type) {
     switch (type) {
-        case VALUE:
-            return "Wert";
         case ARGUMENTS:
             return "Argumente";
         case FUNCTION_BODY:
-            return "Funktionkörper";
+            return "Anweisungsblock";
         case FUNCTION_CALL:
             return "Funktionanruf";
         case CONDITION:
             return "Bedingung";
         case THEN_BLOCK:
-            return "DannBlk";
+            return "Ja-Fall-Block";
         case ELSE_BLOCK:
-            return "SonstBlk";
+            return "Nein-Fall-Block";
         case OP:
             return "Operator";
         case LEFT_VAR:
             return "LinkeVariable";
         case RIGHT_VAR:
             return "RechteVariable";
+        case LINE_NUM:
+            return "Zeilennummer";
+        case COL_NUM:
+            return "Spaltennummer";
+        case VALUE:
+            return "Wert";
     }
 }
