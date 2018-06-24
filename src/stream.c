@@ -20,8 +20,8 @@
 
 #include "stream.h"
 
-int currentlyParsingLine = 1;
-int currentlyParsingCol = 0;
+int currentLine = 1;
+int currentCol = 0;
 
 int peek(FILE* fp) {
     int c = fgetc(fp);
@@ -31,10 +31,10 @@ int peek(FILE* fp) {
 char next(FILE* fp) {
     char c = fgetc(fp);
     if (c == '\n') {
-        currentlyParsingLine++;
-        currentlyParsingCol = 0;
+        currentLine++;
+        currentCol = 0;
     } else {
-        currentlyParsingCol++;
+        currentCol++;
     }
     return c;
 }

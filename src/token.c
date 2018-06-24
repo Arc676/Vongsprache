@@ -21,8 +21,8 @@
 #include "token.h"
 #include "util.h"
 
-extern int currentlyParsingCol;
-extern int currentlyParsingLine;
+extern int currentCol;
+extern int currentLine;
 
 TokenData* createTokenData(TokenType type, float floatVal,
     char* charVal) {
@@ -52,8 +52,8 @@ Token* createToken(TokenType type) {
 	token->tokenData = (hashtable_t*)malloc(sizeof(hashtable_t));
     ht_create(token->tokenData, NULL, NULL);
     // store line and column number at which token was created
-    TokenData* line = createTokenData(NUMBER, currentlyParsingLine, NULL);
-    TokenData* col = createTokenData(NUMBER, currentlyParsingCol, NULL);
+    TokenData* line = createTokenData(NUMBER, currentLine, NULL);
+    TokenData* col = createTokenData(NUMBER, currentCol, NULL);
     ht_insert_token(token->tokenData, LINE_NUM, line);
     ht_insert_token(token->tokenData, COL_NUM, col);
 	return token;

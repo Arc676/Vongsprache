@@ -20,6 +20,9 @@
 
 #include "evaluation.h"
 
+extern int currentCol;
+extern int currentLine;
+
 extern char* libpath;
 
 Token* applyOp(Token* op, Token* left, Token* right) {
@@ -138,6 +141,11 @@ int evalBool(Token* val) {
 }
 
 Token* eval(Token* exp, Scope* scope) {
+	TokenData* position;
+	position = ht_find_token(exp->tokenData, LINE_NUM);
+	currentLine = (int)position->floatVal;
+	position = ht_find_token(exp->tokenData, COL_NUM);
+	currentCol = (int)position->floatVal;
 	Token* returnValue = NULL;
 	switch (exp->type) {
 		case NUMBER:

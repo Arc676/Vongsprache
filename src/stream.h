@@ -28,12 +28,12 @@
 /**
  * Number of line being parsed
  */
-int currentlyParsingLine;
+int currentLine;
 
 /**
  * Number of column being parsed
  */
-int currentlyParsingCol;
+int currentCol;
 
 /**
  * Peek at the next character in the stream without

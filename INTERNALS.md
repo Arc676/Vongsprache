@@ -48,7 +48,6 @@ In der Darstellung der abstrakten Syntaxbaum wird jedem Token einen Typ zugewies
 
 Die Schlüssel der Hashtabelle sind einer der folgenden Werte und bezeichnen, was das dem Schlüssel entsprechende Element für das Token bedeutet.
 
-- VALUE - der Wert des Tokens; meistens mit Literal-Tokens benutzt, kann aber andere Bedeutungen haben
 - ARGUMENTS - Argumente, die einer Funktion gegeben werden
 - FUNCTION_BODY - Anweisungen, die eine Funktion bilden
 - FUNCTION_CALL - enthält den Identifikator der Funktion, die angerufen wird
@@ -58,6 +57,9 @@ Die Schlüssel der Hashtabelle sind einer der folgenden Werte und bezeichnen, wa
 - OP - Operator eines Ausdrucks
 - LEFT_VAR - die linke Variable eines Zuweisungausdrucks
 - RIGHT_VAR - der rechte Wert eines Zuweisungausdrucks
+- LINE_NUM - die Zeile, an der das Token geschafft wurde
+- COL_NUM - die Spalte, an der das Token geschafft wurde
+- VALUE - der Wert des Tokens; meistens mit Literal-Tokens benutzt, kann aber andere Bedeutungen haben
 
 ## Inhalt der Tokens
 
@@ -74,6 +76,13 @@ Der Wertdatentyp bezeichnet, was für eine Struktur genutzt wird, um den Inhalt 
 - Tokenfeld - ein Feld von Tokens (`Token**`) wird gespeichert
 
 Tokens, die bei dem Anruf und der Darstellung von Funktionen genutzt werden, sind ganz nach unten beschrieben.
+
+Jedes Token enthält die folgenden Dateien. Diese helfen dabei, den richtigen Ursprungsort eines Fehlers festzustellen.
+
+| Schlüssel (Token-Datei-Typ) | Wertdatentyp | Inhalt |
+| --- | --- | --- |
+| `LINE_NUM` | Zahl | Zeile, an der das Token geschafft wurde |
+| `COL_NUM` | Zahl | Spalte, an der das Token geschafft wurde |
 
 ### Satzzeichentokens
 

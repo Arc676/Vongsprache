@@ -20,14 +20,14 @@
 
 #include "error.h"
 
-extern int currentlyParsingCol;
-extern int currentlyParsingLine;
+extern int currentCol;
+extern int currentLine;
 
 extern int isInteractive;
 
 void err(char* message, int code) {
     fprintf(stderr, "%s: in der Nähe von Zeile %d, Spalte %d\n", message,
-            currentlyParsingLine, currentlyParsingCol);
+            currentLine, currentCol);
     if (!isInteractive) {
         exit(code);
     }
