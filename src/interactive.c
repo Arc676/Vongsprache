@@ -84,6 +84,7 @@ void interactiveMode() {
 			}
 		} else if (!strcmp(input, "testparsen")) {
 			Token* ast = parseTopLevel(stdin);
+			next(stdin);
 			Token* ret = eval(ast, global);
 			ret = copyToken(ret);
 			destroyToken(ast);

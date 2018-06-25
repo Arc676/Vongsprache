@@ -51,9 +51,8 @@ char next(FILE* fp) {
 
 int eof(FILE* fp) {
     int c = peek(fp);
-    int isEOF = c == EOF;
-    if (isInteractive && !isEOF) {
-        isEOF |= lastChar == '\n' && c == '\n';
+    if (isInteractive) {
+        return lastChar == '\n' && c == '\n';
     }
-    return isEOF;
+    return c == EOF;
 }

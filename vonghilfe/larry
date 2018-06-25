@@ -1,0 +1,10 @@
+[Lesen]
+Trigonometrische Funktionen:
+sinus, kosinus, tangens, kosekans, sekans, kotangens
+Diese nehmen einen in Radianten ausgedrückten Winkel als Argument und ergeben den zu rechnenden Wert als Rückgabewert.
+
+Andere Funktionen, die auch ein numerisches Argument nehmen
+absolutwert - ergibt abs(x)
+fakultät - ergibt x!
+bimsPrimzahl - bestimmt, ob das Argument eine Primzahl ist
+logarithmus - ergibt ln(x)

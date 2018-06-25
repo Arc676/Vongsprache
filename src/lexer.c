@@ -114,7 +114,7 @@ Token* readNext(FILE* fp) {
         ht_insert_token(token->tokenData, VALUE, data);
         return token;
     }
-    char msg[30];
+    char msg[50];
     sprintf(msg, "Parsenversäumnis aufgrund von Zeichen '%c'", current);
     err(msg, PARSE_ERROR);
 	return NULL;

@@ -24,10 +24,11 @@
 #include <time.h>
 #include <math.h>
 
+#include "parser.h"
 #include "scope.h"
 #include "error.h"
 
-#define BUILTIN_COUNT 6
+#define BUILTIN_COUNT 7
 
 const char* builtinFunctions[BUILTIN_COUNT];
 
@@ -83,6 +84,16 @@ Token* vongsprache_toFloat(int argc, Token** args);
  * @return New token with string form of given float argument
  */
 Token* vongsprache_toString(int argc, Token** args);
+
+/**
+ * Builtin help function; launches an interactive help shell if no arguments
+ * are given or attempts to find a help file whose name matches the given
+ * single argument
+ * @param argc Number of arguments passed
+ * @param args Arguments passed
+ * @return A numerical token indicating whether the operation succeeded
+ */
+Token* vongsprache_help(int argc, Token** args);
 
 /**
  * Builtin RNG seed setting function; sets the seed for random number

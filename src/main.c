@@ -22,14 +22,16 @@
 
 int isInteractive = 0;
 char* libpath;
+char* helppath;
 
 int main(int argc, char* argv[]) {
 	FILE* file;
 	if (argc == 2) {
-		libpath = getenv("VONGLIB");
+		libpath = getenv("VONGBIBLIOTHEK");
 		if (!libpath || strlen(libpath) == 0) {
 			libpath = ".";
 		}
+		helppath = getenv("VONGHILFE");
 		if (!strcmp(argv[1], "-i")) {
 			printf("Interaktivmodus beginnt\n");
 			interactiveMode();
