@@ -23,12 +23,21 @@
 int currentLine = 1;
 int currentCol = 0;
 
+int currentChar = 0;
+int lastChar = 0;
+
+extern int isInteractive;
+
 int peek(FILE* fp) {
     int c = fgetc(fp);
+    currentChar = c;
     return c == EOF ? EOF : ungetc(c, fp);
 }
 
 char next(FILE* fp) {
+    if (currentChar) {
+        lastChar = currentChar;
+    }
     char c = fgetc(fp);
     if (c == '\n') {
         currentLine++;
@@ -36,9 +45,15 @@ char next(FILE* fp) {
     } else {
         currentCol++;
     }
+    currentChar = c;
     return c;
 }
 
 int eof(FILE* fp) {
-    return peek(fp) == EOF;
+    int c = peek(fp);
+    int isEOF = c == EOF;
+    if (isInteractive && !isEOF) {
+        isEOF |= lastChar == '\n' && c == '\n';
+    }
+    return isEOF;
 }

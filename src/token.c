@@ -60,6 +60,9 @@ Token* createToken(TokenType type) {
 }
 
 Token* copyToken(Token* token) {
+    if (!token) {
+        return NULL;
+    }
     Token* copy = createToken(token->type);
     TokenData* original = ht_find_token(token->tokenData, VALUE);
     TokenData* dataCopy;

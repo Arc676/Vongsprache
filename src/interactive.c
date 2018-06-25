@@ -27,6 +27,7 @@ void printHelp() {
 beenden - Interaktivmodus beenden\n\
 bidde was [Befehl] - Hilfe [über 'Befehl'] bekommen\n\
 parsen - ein Programm bis EOF parsen\n\
+testparsen - ein Programm bis EOF parsen, ohne einen Kindprozess zu schaffen (experimentell)\n\
 ");
 }
 
@@ -81,6 +82,14 @@ void interactiveMode() {
 				close(fd[1]);
 				exit(0);
 			}
+		} else if (!strcmp(input, "testparsen")) {
+			Token* ast = parseTopLevel(stdin);
+			Token* ret = eval(ast, global);
+			ret = copyToken(ret);
+			destroyToken(ast);
+			char token[100];
+			tokenToString(ret, token);
+			printf("Rückgabewert: %s\n", token);
 		} else {
 			printf("Unbekannter Befehl: %s\n", input);
 		}

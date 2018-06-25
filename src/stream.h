@@ -36,6 +36,16 @@ int currentLine;
 int currentCol;
 
 /**
+ * The current character in the stream
+ */
+int currentChar;
+
+/**
+ * The previous character in the stream
+ */
+int lastChar;
+
+/**
  * Peek at the next character in the stream without
  * removing it
  * @param fp FILE* from which to peek
