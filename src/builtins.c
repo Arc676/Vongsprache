@@ -27,6 +27,7 @@ const char* builtinFunctions[BUILTIN_COUNT] = {
 	"zuZahl",
 	"zuZeichenfolge",
 	"was",
+	"beenden",
 	"piMalDaumen",
 	"samen"
 };
@@ -37,6 +38,7 @@ BUILTIN *builtins[BUILTIN_COUNT] = {
 	vongsprache_toFloat,
 	vongsprache_toString,
 	vongsprache_help,
+	vongsprache_exit,
 	vongsprache_rand,
 	vongsprache_srand
 };
@@ -186,6 +188,24 @@ Token* vongsprache_help(int argc, Token** args) {
 	TokenData* data = createTokenData(NUMBER, success, NULL);
 	ht_insert_token(ret->tokenData, VALUE, data);
 	return ret;
+}
+
+Token* vongsprache_exit(int argc, Token** args) {
+	int code = 0;
+	if (argc == 1) {
+		Token* given = args[0];
+		argTypeChk(NUMBER, given->type);
+		TokenData* data = ht_find_token(given->tokenData, VALUE);
+		code = (int)data->floatVal;
+	} else if (argc > 1) {
+		char msg[100];
+		sprintf(msg, "0 oder 1 Argument für Funktion beenden erwartet aber %d gefunden",
+				argc);
+		err(msg, BAD_ARG_COUNT);
+		return NULL;
+	}
+	exit(code);
+	return NULL;
 }
 
 Token* vongsprache_srand(int argc, Token** args) {

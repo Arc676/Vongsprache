@@ -28,7 +28,7 @@
 #include "scope.h"
 #include "error.h"
 
-#define BUILTIN_COUNT 7
+#define BUILTIN_COUNT 8
 
 const char* builtinFunctions[BUILTIN_COUNT];
 
@@ -94,6 +94,15 @@ Token* vongsprache_toString(int argc, Token** args);
  * @return A numerical token indicating whether the operation succeeded
  */
 Token* vongsprache_help(int argc, Token** args);
+
+/**
+ * Builtin program termination function; optionally takes an exit code
+ * as argument
+ * @param argc Number of arguments passed
+ * @param args Arguments passed
+ * @return NULL
+ */
+Token* vongsprache_exit(int argc, Token** args);
 
 /**
  * Builtin RNG seed setting function; sets the seed for random number
