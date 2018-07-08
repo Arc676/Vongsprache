@@ -290,7 +290,7 @@ Token* eval(Token* exp, Scope* scope) {
 			int argc = (int)data->floatVal;
 
 			// store evaluated function arguments separate from originals
-			Token** args = (Token**)malloc(argc * sizeof(Token*));
+			Token** args = malloc(argc * sizeof(Token*));
 
 			// prepare for return
 			int hasEvaluated = 0;

@@ -21,13 +21,13 @@
 #include "scope.h"
 
 Scope* createScope(Scope* parent) {
-	Scope* scope = (Scope*)malloc(sizeof(Scope));
+	Scope* scope = malloc(sizeof(Scope));
 	scope->parentScope = parent;
-	scope->variables = (hashtable_t*)malloc(sizeof(hashtable_t));
+	scope->variables = malloc(sizeof(hashtable_t));
 	ht_create(scope->variables, NULL, NULL);
 	scope->identifierCount = 0;
 	scope->storageSize = INITIAL_IDENTIFIER_COUNT * sizeof(char*);
-	scope->storedIdentifiers = (char**)malloc(scope->storageSize);
+	scope->storedIdentifiers = malloc(scope->storageSize);
 	return scope;
 }
 

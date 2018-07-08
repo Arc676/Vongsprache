@@ -106,7 +106,7 @@ Token* readNext(FILE* fp) {
         return readIdentifier(fp);
     }
     if (isPunc(current)) {
-        char* str = (char*)malloc(2);
+        char* str = malloc(2);
         sprintf(str, "%c", current);
         next(fp);
         TokenData* data = createTokenData(PUNCTUATION, 0, str);
@@ -130,7 +130,7 @@ Token* readString(FILE* fp) {
 
 Token* readNumber(FILE* fp) {
     int hasDot = 0, hasMinus = 0;
-    char* literal = (char*)malloc(100);
+    char* literal = malloc(100);
     memset(literal, 0, 100);
     int pos = 0;
     while (1) {
@@ -160,7 +160,7 @@ Token* readNumber(FILE* fp) {
 }
 
 Token* readIdentifier(FILE* fp) {
-    char* str = (char*)malloc(100);
+    char* str = malloc(100);
     readWhile(fp, str, 100, isValidIDChar);
     int index;
     TokenType type = wordType(str, &index);
@@ -178,7 +178,7 @@ char* readEscaped(FILE* fp, char end) {
     next(fp);
     int escaped = 0;
 	size_t size = 100;
-    char* str = (char*)malloc(size);
+    char* str = malloc(size);
     int pos = 0;
     while (!eof(fp)) {
         char c = next(fp);

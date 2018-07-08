@@ -23,7 +23,7 @@
 Token* parseTopLevel(FILE* fp) {
 	Token* program = createToken(PROGRAM);
 	size_t size = INITIAL_STATEMENT_COUNT * sizeof(Token*);
-	Token** progs = (Token**)malloc(size);
+	Token** progs = malloc(size);
 
 	int pos = 0;
 	while (!lexer_eof(fp)) {
@@ -59,7 +59,7 @@ Token* parseIf(FILE* fp) {
 
 Token* parseProg(FILE* fp) {
 	size_t size = INITIAL_FUNCTION_STATEMENT_COUNT * sizeof(Token*);
-	Token** statements = (Token**)malloc(size);
+	Token** statements = malloc(size);
 	memset(statements, 0, size);
 
 	int pos = 0;
@@ -165,7 +165,7 @@ Token* parseAtom(FILE* fp) {
 				int argc;
 				Token** args = parseDelimited(fp, "(", ")", ",", &argc, parseIdentifier);
 				fArgs->floatVal = (float)argc;
-				char** argNames = (char**)malloc(argc * sizeof(char*));
+				char** argNames = malloc(argc * sizeof(char*));
 				for (int i = 0; i < argc; i++) {
 					TokenData* data = ht_find_token(args[i]->tokenData, VALUE);
 					argNames[i] = copyString(data->charVal);
@@ -286,7 +286,7 @@ Token** parseDelimited(FILE* fp, char* start, char* end, char* sep, int* count,
 	Token* (*parse)(FILE*)) {
 	int first = 1;
 	size_t size = INITIAL_DELIM_COUNT * sizeof(Token*);
-	Token** tokens = (Token**)malloc(size);
+	Token** tokens = malloc(size);
 
 	int pos = 0;
 	skipValue(fp, PUNCTUATION, 1, start);

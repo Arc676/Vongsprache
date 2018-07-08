@@ -26,7 +26,7 @@ extern int currentLine;
 
 TokenData* createTokenData(TokenType type, float floatVal,
     char* charVal) {
-    TokenData* data = (TokenData*)malloc(sizeof(TokenData));
+    TokenData* data = malloc(sizeof(TokenData));
     switch (type) {
         case NUMBER:
             data->floatVal = floatVal;
@@ -46,10 +46,10 @@ TokenData* createTokenData(TokenType type, float floatVal,
 
 Token* createToken(TokenType type) {
     // allocate memory for new token
-	Token* token = (Token*)malloc(sizeof(Token));
+	Token* token = malloc(sizeof(Token));
     // initialize token type and hashtable
     token->type = type;
-	token->tokenData = (hashtable_t*)malloc(sizeof(hashtable_t));
+	token->tokenData = malloc(sizeof(hashtable_t));
     ht_create(token->tokenData, NULL, NULL);
     // store line and column number at which token was created
     TokenData* line = createTokenData(NUMBER, currentLine, NULL);

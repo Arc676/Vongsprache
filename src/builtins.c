@@ -77,7 +77,7 @@ Token* vongsprache_print(int argc, Token** args) {
 
 Token* vongsprache_input(int argc, Token** args) {
 	vongsprache_print(argc, args);
-	char* input = (char*)malloc(255);
+	char* input = malloc(255);
 	fgets(input, 255, stdin);
 	input[strlen(input) - 1] = 0;
 	TokenData* data = createTokenData(STRING, 0, input);
@@ -119,7 +119,7 @@ Token* vongsprache_toString(int argc, Token** args) {
 	typeConversionUtil(NUMBER, STRING, &current, &ret,
 						args[0], "zuZeichenfolge", argc);
 
-	char* strVal = (char*)malloc(20);
+	char* strVal = malloc(20);
 	sprintf(strVal, "%f", current->floatVal);
 	TokenData* newData = createTokenData(STRING, 0, strVal);
 	ht_insert_token(ret->tokenData, VALUE, newData);
