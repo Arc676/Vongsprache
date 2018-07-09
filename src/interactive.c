@@ -20,81 +20,28 @@
 
 #include "interactive.h"
 
-extern int isInteractive;
-
-void printHelp() {
-	printf("Interaktivmodus läuft. Verfügbare Befehle:\n\
-beenden - Interaktivmodus beenden\n\
-bidde was [Befehl] - Hilfe [über 'Befehl'] bekommen\n\
-parsen - ein Programm bis EOF parsen\n\
-testparsen - ein Programm bis EOF parsen, ohne einen Kindprozess zu schaffen (experimentell)\n\
-");
-}
+int isInteractive = 0;
+Scope* global;
 
 void interactiveMode() {
 	isInteractive = 1;
-	Scope* global = createFrameScope(NULL, PROGRAM);
+	global = createFrameScope(NULL, PROGRAM);
 	char input[100];
 	while (1) {
-		printf("> ");
-		fgets(input, 100, stdin);
-		input[strlen(input) - 1] = 0;
-		if (!strcmp(input, "beenden")) {
-			break;
-		} else if (!strncmp(input, "bidde was", 9)) {
-			printHelp();
-		} else if (!strcmp(input, "parsen")) {
-			// create a new pipe to read the program
-			int fd[2];
-			pipe(fd);
-
-			int isReading = fork();
-
-			if (isReading) {
-				// parent process
-				// close write end
-				close(fd[1]);
-
-				// open the pipe for reading
-				FILE* rd = fdopen(fd[0], "r");
-				Token* ast = parseTopLevel(rd);
-				Token* ret = eval(ast, global);
-				ret = copyToken(ret);
-				destroyToken(ast);
-				char token[100];
-				tokenToString(ret, token);
-				printf("Rückgabewert: %s\n", token);
-				close(fd[0]);
-			} else {
-				// child process
-				// close read end
-				close(fd[0]);
-
-				// open the pipe for writing
-				FILE* wr = fdopen(fd[1], "w");
-				while (1) {
-					fgets(input, 100, stdin);
-					if (input[0] == '\n') {
-						break;
-					}
-					write(fd[1], input, strlen(input));
-				}
-				close(fd[1]);
-				exit(0);
-			}
-		} else if (!strcmp(input, "testparsen")) {
-			Token* ast = parseTopLevel(stdin);
-			next(stdin);
-			Token* ret = eval(ast, global);
-			ret = copyToken(ret);
-			destroyToken(ast);
-			char token[100];
-			tokenToString(ret, token);
-			printf("Rückgabewert: %s\n", token);
-		} else {
-			printf("Unbekannter Befehl: %s\n", input);
-		}
+		Token* ast = parseTopLevel(stdin);
+		next(stdin);
+		Token* ret = eval(ast, global);
+		destroyToken(ast);
+		char token[100];
+		tokenToString(ret, token);
+		printf("\n=> Rückgabewert: %s\n", token);
 	}
-	destroyScope(global);
+}
+
+void exitInteractive(int code) {
+	if (global) {
+		destroyScope(global);
+	}
 	isInteractive = 0;
+	exit(code);
 }

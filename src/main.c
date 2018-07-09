@@ -20,7 +20,6 @@
 
 #include "interactive.h"
 
-int isInteractive = 0;
 char* libpath;
 char* helppath;
 

@@ -33,8 +33,9 @@
 void interactiveMode();
 
 /**
- * Print help
+ * Exits interactive mode and the program
+ * @param code Exit code
  */
-void printHelp();
+void exitInteractive(int code);
 
 #endif

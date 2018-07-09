@@ -19,7 +19,7 @@
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "builtins.h"
-#include "evaluation.h"
+#include "interactive.h"
 
 const char* builtinFunctions[BUILTIN_COUNT] = {
 	"drucke",
@@ -43,6 +43,7 @@ BUILTIN *builtins[BUILTIN_COUNT] = {
 	vongsprache_srand
 };
 
+extern int isInteractive;
 extern char* helppath;
 
 Token* vongsprache_print(int argc, Token** args) {
@@ -131,7 +132,7 @@ Token* vongsprache_help(int argc, Token** args) {
 	if (argc == 0) {
 		char input[100];
 		while (1) {
-			printf("> ");
+			printf("hilfe> ");
 			fgets(input, 100, stdin);
 			input[strlen(input) - 1] = 0;
 			if (!strcmp(input, "beenden")) {
@@ -204,7 +205,11 @@ Token* vongsprache_exit(int argc, Token** args) {
 		err(msg, BAD_ARG_COUNT);
 		return NULL;
 	}
-	exit(code);
+	if (isInteractive) {
+		exitInteractive(code);
+	} else {
+		exit(code);
+	}
 	return NULL;
 }
 
