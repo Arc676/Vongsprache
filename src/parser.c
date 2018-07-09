@@ -20,6 +20,8 @@
 
 #include "parser.h"
 
+int blockDepth = 0;
+
 Token* parseTopLevel(FILE* fp) {
 	Token* program = createToken(PROGRAM);
 	size_t size = INITIAL_STATEMENT_COUNT * sizeof(Token*);
@@ -43,6 +45,7 @@ Token* parseTopLevel(FILE* fp) {
 }
 
 Token* parseIf(FILE* fp) {
+	blockDepth++;
 	Token* cond = parseExpression(fp);
 	skipValue(fp, KEYWORD, 2, "vong", "Wahrigkeit");
 	Token* then = parseProg(fp);
@@ -50,6 +53,7 @@ Token* parseIf(FILE* fp) {
 	ht_insert_token(ret->tokenData, CONDITION, cond);
 	ht_insert_token(ret->tokenData, THEN_BLOCK, then);
 	if (parser_isValue(fp, KEYWORD, "am")) {
+		blockDepth++;
 		skipValue(fp, KEYWORD, 2, "am", "Sonstigkeit");
 		Token* els = parseProg(fp);
 		ht_insert_token(ret->tokenData, ELSE_BLOCK, els);
@@ -68,6 +72,7 @@ Token* parseProg(FILE* fp) {
 		if (parser_isValue(fp, KEYWORD, "her")) {
 			lexer_discard(fp);
 			blockClosed = 1;
+			blockDepth--;
 			break;
 		}
 		if (pos >= size / sizeof(Token*)) {
@@ -88,6 +93,7 @@ Token* parseProg(FILE* fp) {
 }
 
 Token* parseFor(FILE* fp) {
+	blockDepth++;
 	Token* counter = parseIdentifier(fp);
 
 	skipValue(fp, KEYWORD, 1, "vong");
@@ -116,6 +122,7 @@ Token* parseFor(FILE* fp) {
 }
 
 Token* parseWhile(FILE* fp) {
+	blockDepth++;
 	Token* cond = parseExpression(fp);
 	skipValue(fp, KEYWORD, 2, "vong", "Wahrigkeit");
 
@@ -157,6 +164,7 @@ Token* parseAtom(FILE* fp) {
 		ht_insert_token(token->tokenData, LEFT_VAR, identifier);
 		if (parser_isValue(fp, KEYWORD, "Funktionigkeit")) {
 			lexer_discard(fp);
+			blockDepth++;
 			identifier->type = CALL;
 			Token* function = createToken(FUNC_WRAPPER);
 			TokenData* fArgs = createTokenData(NUMBER, 0, NULL);

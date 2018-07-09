@@ -29,6 +29,8 @@
 #define INITIAL_DELIM_COUNT 10
 #define INITIAL_FUNCTION_STATEMENT_COUNT 10
 
+int blockDepth;
+
 /**
  * Top-level parse function to parse the whole script
  * @param fp FILE* from which to read

@@ -24,6 +24,8 @@
 extern int currentCol;
 extern int currentLine;
 
+extern int isInteractive;
+
 TokenData* createTokenData(TokenType type, float floatVal,
     char* charVal) {
     TokenData* data = malloc(sizeof(TokenData));
@@ -154,6 +156,12 @@ void destroyToken(Token* token) {
     if (!token || !token->tokenData) {
         return;
     }
+    // in interactive mode, don't destroy function wrapper or literal tokens
+    if (isInteractive) {
+        if (isLiteralToken(token) || token->type == FUNC_WRAPPER) {
+            return;
+        }
+    }
     TokenData* value = ht_find_token(token->tokenData, VALUE);
     int count = value ? (int)value->floatVal : 0;
     for (int i = 0; i <= VALUE; i++) {
@@ -177,12 +185,7 @@ void destroyToken(Token* token) {
                         case IDENTIFIER:
                         case KEYWORD:
                         case INCLUDE:
-                        {
-                            TokenData* data = (TokenData*)stored;
-                            free(data->charVal);
-                            free(data);
-                            break;
-                        }
+                            free(((TokenData*)stored)->charVal);
                         default:
                             free((TokenData*)stored);
                             break;

@@ -27,6 +27,7 @@ int currentChar = 0;
 int lastChar = 0;
 
 extern int isInteractive;
+extern int blockDepth;
 
 int peek(FILE* fp) {
     int c = fgetc(fp);
@@ -52,7 +53,12 @@ char next(FILE* fp) {
 int eof(FILE* fp) {
     int c = peek(fp);
     if (isInteractive) {
-        return lastChar == '\n' && c == '\n';
+        if (c == '\n') {
+            if (blockDepth == 0) {
+                return 1;
+            }
+            return lastChar == '\n';
+        }
     }
     return c == EOF;
 }
