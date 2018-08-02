@@ -46,6 +46,12 @@ int currentChar;
 int lastChar;
 
 /**
+ * Indicate that parsing has restarted and reset the current line
+ * and column
+ */
+void restart();
+
+/**
  * Peek at the next character in the stream without
  * removing it
  * @param fp FILE* from which to peek

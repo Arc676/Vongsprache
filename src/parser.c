@@ -23,6 +23,7 @@
 int blockDepth = 0;
 
 Token* parseTopLevel(FILE* fp) {
+	restart();
 	Token* program = createToken(PROGRAM);
 	size_t size = INITIAL_STATEMENT_COUNT * sizeof(Token*);
 	Token** progs = malloc(size);

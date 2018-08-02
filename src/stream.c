@@ -29,6 +29,11 @@ int lastChar = 0;
 extern int isInteractive;
 extern int blockDepth;
 
+void restart() {
+    currentLine = 1;
+    currentCol = 0;
+}
+
 int peek(FILE* fp) {
     int c = fgetc(fp);
     currentChar = c;
