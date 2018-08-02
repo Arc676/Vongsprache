@@ -24,11 +24,14 @@ extern int currentCol;
 extern int currentLine;
 
 extern int isInteractive;
+extern jmp_buf intEnv;
 
 void err(char* message, int code) {
     fprintf(stderr, "%s: in der Nähe von Zeile %d, Spalte %d\n", message,
             currentLine, currentCol);
-    if (!isInteractive) {
+    if (isInteractive) {
+        longjmp(intEnv, 1);
+    } else {
         exit(code);
     }
 }

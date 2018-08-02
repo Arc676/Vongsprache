@@ -27,6 +27,10 @@
 
 #include "evaluation.h"
 
+#define FAILED 0
+#define PARSED 1
+#define EVALED 2
+
 /**
  * Enter interactive mode
  */

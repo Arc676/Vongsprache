@@ -22,19 +22,39 @@
 
 int isInteractive = 0;
 Scope* global;
+jmp_buf intEnv;
 
 void interactiveMode() {
 	isInteractive = 1;
 	global = createFrameScope(NULL, PROGRAM);
 	char input[100];
 	while (1) {
-		Token* ast = parseTopLevel(stdin);
-		next(stdin);
-		Token* ret = eval(ast, global);
-		destroyToken(ast);
-		char token[100];
-		tokenToString(ret, token);
-		printf("\n=> Rückgabewert: %s\n", token);
+		Token* ast = NULL;
+		Token* ret = NULL;
+		int state = FAILED;
+		if (!setjmp(intEnv)) {
+			ast = parseTopLevel(stdin);
+			next(stdin);
+			state = PARSED;
+
+			ret = eval(ast, global);
+			state = EVALED;
+
+			char token[100];
+			tokenToString(ret, token);
+			printf("\n=> Rückgabewert: %s\n", token);
+		}
+		switch (state) {
+			case EVALED:
+				destroyToken(ret);
+			case PARSED:
+				destroyToken(ast);
+				break;
+			default:
+			case FAILED:
+				next(stdin);
+				break;
+		}
 	}
 }
 
