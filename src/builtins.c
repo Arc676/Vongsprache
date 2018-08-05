@@ -27,7 +27,7 @@ const char* builtinFunctions[BUILTIN_COUNT] = {
 	"zuZahl",
 	"zuZeichenfolge",
 	"was",
-	"beenden",
+	"raus",
 	"piMalDaumen",
 	"samen"
 };
@@ -200,7 +200,7 @@ Token* vongsprache_exit(int argc, Token** args) {
 		code = (int)data->floatVal;
 	} else if (argc > 1) {
 		char msg[100];
-		sprintf(msg, "0 oder 1 Argument für Funktion beenden erwartet aber %d gefunden",
+		sprintf(msg, "0 oder 1 Argument für Funktion raus erwartet aber %d gefunden",
 				argc);
 		err(msg, BAD_ARG_COUNT);
 		return NULL;
