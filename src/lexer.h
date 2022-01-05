@@ -1,5 +1,5 @@
 //Vongsprache interpreter
-//Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-22  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 ///Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -48,27 +48,27 @@
 /**
  * Non-operator reserved words
  */
-const char* keywords[KEYWORD_COUNT];
+extern const char* keywords[KEYWORD_COUNT];
 
 /**
  * Acceptable punctuation characters
  */
-const char* punctuation;
+extern const char* punctuation;
 
 /**
  * Recognized operators
  */
-const char* operators[OP_COUNT];
+extern const char* operators[OP_COUNT];
 
 /**
  * Precedence values for operators
  */
-const hashtable_t* opPrec;
+extern const hashtable_t* opPrec;
 
 /**
  * Token currently being parsed
  */
-Token* currentToken;
+extern Token* currentToken;
 
 /**
  * Obtain operator precedence

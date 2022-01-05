@@ -1,5 +1,5 @@
 //Vongsprache interpreter
-//Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-22  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 ///Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -29,7 +29,7 @@
 #define INITIAL_DELIM_COUNT 10
 #define INITIAL_FUNCTION_STATEMENT_COUNT 10
 
-int blockDepth;
+extern int blockDepth;
 
 /**
  * Top-level parse function to parse the whole script

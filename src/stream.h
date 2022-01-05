@@ -1,5 +1,5 @@
 //Vongsprache interpreter
-//Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-22  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 ///Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -28,22 +28,22 @@
 /**
  * Number of line being parsed
  */
-int currentLine;
+extern int currentLine;
 
 /**
  * Number of column being parsed
  */
-int currentCol;
+extern int currentCol;
 
 /**
  * The current character in the stream
  */
-int currentChar;
+extern int currentChar;
 
 /**
  * The previous character in the stream
  */
-int lastChar;
+extern int lastChar;
 
 /**
  * Indicate that parsing has restarted and reset the current line

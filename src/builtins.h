@@ -1,5 +1,5 @@
 //Vongsprache interpreter
-//Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-22  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 ///Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -30,10 +30,10 @@
 
 #define BUILTIN_COUNT 8
 
-const char* builtinFunctions[BUILTIN_COUNT];
+extern const char* builtinFunctions[BUILTIN_COUNT];
 
 typedef Token* BUILTIN(int, Token**);
-BUILTIN *builtins[BUILTIN_COUNT];
+extern BUILTIN *builtins[BUILTIN_COUNT];
 
 /**
  * Builtin print function; prints the contents of the passed arguments
