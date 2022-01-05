@@ -1,5 +1,5 @@
 //Vongsprache interpreter
-//Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-22  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 ///Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -22,18 +22,18 @@
 #define TOKEN_DATA_H
 
 typedef enum TokenDataType {
-    ARGUMENTS,
-    FUNCTION_BODY,
-    FUNCTION_CALL,
-    CONDITION,
-    THEN_BLOCK,
-    ELSE_BLOCK,
-    OP,
-    LEFT_VAR,
-    RIGHT_VAR,
-    LINE_NUM,
-    COL_NUM,
-    VALUE
+	ARGUMENTS,
+	FUNCTION_BODY,
+	FUNCTION_CALL,
+	CONDITION,
+	THEN_BLOCK,
+	ELSE_BLOCK,
+	OP,
+	LEFT_VAR,
+	RIGHT_VAR,
+	LINE_NUM,
+	COL_NUM,
+	VALUE
 } TokenDataType;
 
 /**

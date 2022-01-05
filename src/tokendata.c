@@ -1,5 +1,5 @@
 //Vongsprache interpreter
-//Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-22  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 ///Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -21,30 +21,30 @@
 #include "tokendata.h"
 
 char* tokenDataTypeToString(TokenDataType type) {
-    switch (type) {
-        case ARGUMENTS:
-            return "Argumente";
-        case FUNCTION_BODY:
-            return "Anweisungsblock";
-        case FUNCTION_CALL:
-            return "Funktionanruf";
-        case CONDITION:
-            return "Bedingung";
-        case THEN_BLOCK:
-            return "Ja-Fall-Block";
-        case ELSE_BLOCK:
-            return "Nein-Fall-Block";
-        case OP:
-            return "Operator";
-        case LEFT_VAR:
-            return "LinkeVariable";
-        case RIGHT_VAR:
-            return "RechteVariable";
-        case LINE_NUM:
-            return "Zeilennummer";
-        case COL_NUM:
-            return "Spaltennummer";
-        case VALUE:
-            return "Wert";
-    }
+	switch (type) {
+		case ARGUMENTS:
+			return "Argumente";
+		case FUNCTION_BODY:
+			return "Anweisungsblock";
+		case FUNCTION_CALL:
+			return "Funktionanruf";
+		case CONDITION:
+			return "Bedingung";
+		case THEN_BLOCK:
+			return "Ja-Fall-Block";
+		case ELSE_BLOCK:
+			return "Nein-Fall-Block";
+		case OP:
+			return "Operator";
+		case LEFT_VAR:
+			return "LinkeVariable";
+		case RIGHT_VAR:
+			return "RechteVariable";
+		case LINE_NUM:
+			return "Zeilennummer";
+		case COL_NUM:
+			return "Spaltennummer";
+		case VALUE:
+			return "Wert";
+	}
 }

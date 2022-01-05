@@ -1,5 +1,5 @@
 //Vongsprache interpreter
-//Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-22  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 ///Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -30,40 +30,40 @@ extern int isInteractive;
 extern int blockDepth;
 
 void restart() {
-    currentLine = 1;
-    currentCol = 0;
+	currentLine = 1;
+	currentCol = 0;
 }
 
 int peek(FILE* fp) {
-    int c = fgetc(fp);
-    currentChar = c;
-    return c == EOF ? EOF : ungetc(c, fp);
+	int c = fgetc(fp);
+	currentChar = c;
+	return c == EOF ? EOF : ungetc(c, fp);
 }
 
 char next(FILE* fp) {
-    if (currentChar) {
-        lastChar = currentChar;
-    }
-    char c = fgetc(fp);
-    if (c == '\n') {
-        currentLine++;
-        currentCol = 0;
-    } else {
-        currentCol++;
-    }
-    currentChar = c;
-    return c;
+	if (currentChar) {
+		lastChar = currentChar;
+	}
+	char c = fgetc(fp);
+	if (c == '\n') {
+		currentLine++;
+		currentCol = 0;
+	} else {
+		currentCol++;
+	}
+	currentChar = c;
+	return c;
 }
 
 int eof(FILE* fp) {
-    int c = peek(fp);
-    if (isInteractive) {
-        if (c == '\n') {
-            if (blockDepth == 0) {
-                return 1;
-            }
-            return lastChar == '\n';
-        }
-    }
-    return c == EOF;
+	int c = peek(fp);
+	if (isInteractive) {
+		if (c == '\n') {
+			if (blockDepth == 0) {
+				return 1;
+			}
+			return lastChar == '\n';
+		}
+	}
+	return c == EOF;
 }

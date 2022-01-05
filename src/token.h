@@ -1,5 +1,5 @@
 //Vongsprache interpreter
-//Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-22  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 ///Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -28,34 +28,34 @@
 #include "tokendata.h"
 
 typedef enum TokenType {
-    PUNCTUATION,
-    NUMBER,
-    STRING,
-    KEYWORD,
-    IDENTIFIER,
+	PUNCTUATION,
+	NUMBER,
+	STRING,
+	KEYWORD,
+	IDENTIFIER,
 	OPERATOR,
-    CALL,
-    BINARY,
-    IF,
-    LOOP,
-    ASSIGN,
-    INIT,
-    RETURN,
-    BREAK,
-    CONTINUE,
-    INCLUDE,
-    FUNC_WRAPPER,
+	CALL,
+	BINARY,
+	IF,
+	LOOP,
+	ASSIGN,
+	INIT,
+	RETURN,
+	BREAK,
+	CONTINUE,
+	INCLUDE,
+	FUNC_WRAPPER,
 	PROGRAM
 } TokenType;
 
 typedef struct {
-    TokenType type;
-    hashtable_t* tokenData;
+	TokenType type;
+	hashtable_t* tokenData;
 } Token;
 
 typedef union {
-    float floatVal;
-    char* charVal;
+	float floatVal;
+	char* charVal;
 } TokenData;
 
 /**
@@ -94,7 +94,7 @@ int isLiteralToken(Token* token);
  * @return A token with the specified data
  */
 TokenData* createTokenData(TokenType type, float floatVal,
-    char* charVal);
+	char* charVal);
 
 /**
  * Obtain a human readable string for a token type
@@ -108,6 +108,6 @@ char* tokenTypeToString(TokenType type);
  * @param token Relevant token
  * @param str String into which the description should be stored
  */
- void tokenToString(Token* token, char* str);
+void tokenToString(Token* token, char* str);
 
 #endif

@@ -1,5 +1,5 @@
 //Vongsprache interpreter
-//Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-22  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 ///Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -27,13 +27,13 @@ extern int isInteractive;
 extern jmp_buf intEnv;
 
 void err(char* message, int code) {
-    fprintf(stderr, "%s: in der Nähe von Zeile %d, Spalte %d\n", message,
-            currentLine, currentCol);
-    if (isInteractive) {
-        longjmp(intEnv, 1);
-    } else {
-        exit(code);
-    }
+	fprintf(stderr, "%s: in der Nähe von Zeile %d, Spalte %d\n", message,
+			currentLine, currentCol);
+	if (isInteractive) {
+		longjmp(intEnv, 1);
+	} else {
+		exit(code);
+	}
 }
 
 void unexpected(Token* token) {
@@ -51,11 +51,11 @@ void undeclaredIDErr(char* ID) {
 }
 
 void argTypeChk(TokenType expected, TokenType found) {
-    if (expected != found) {
-        char msg[100];
-        sprintf(msg, "Erwartete %s-Argument, %s gefunden",
-                tokenTypeToString(expected),
-                tokenTypeToString(found));
-        err(msg, BAD_ARG_TYPE);
-    }
+	if (expected != found) {
+		char msg[100];
+		sprintf(msg, "Erwartete %s-Argument, %s gefunden",
+				tokenTypeToString(expected),
+				tokenTypeToString(found));
+		err(msg, BAD_ARG_TYPE);
+	}
 }
