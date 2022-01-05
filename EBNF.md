@@ -12,10 +12,10 @@
 | Wert | `Funktion \| Ausdruck` |
 | Programm | `Ausdruck { Ausdruck }` |
 | Funktion | `"Funktionigkeit" [ "mit (" Identifikator { "," Identifikator } ")" ] Programm "her"` |
-| Fallunterscheidung | `"bims" Ausdruck "vong Wahrigkeit" Programm [ "am Sonstigkeit" Programm ]` |
+| Fallunterscheidung | `"bims" Ausdruck "vong Wahrigkeit" Programm "her" [ "am Sonstigkeit" Programm "her" ]` |
 | Funktionsaufruf | `"bidde" Identifikator [ "mit (" Ausdruck { "," Ausdruck } ")" ]` |
 | Schleife | `Zählschleife \| Kopfgesteuerte_Schleife` |
-| Zählschleife | `"mit" Identifikator "vong" Ausdruck "bis" Ausdruck Programm` |
+| Zählschleife | `"mit" Identifikator "vong" Ausdruck "bis" Ausdruck Programm "her"` |
 | Kopfgesteuerte_Schleife | `"solange" Ausdruck "vong Wahrigkeit" Programm "her bims"` |
 | Kontrollflussbefehl | `"hab" Ausdruck \| "aufgeben" \| "durchmarsch"` |
 | Bibliothekinklusion | `"benutze" Identifikator` |
